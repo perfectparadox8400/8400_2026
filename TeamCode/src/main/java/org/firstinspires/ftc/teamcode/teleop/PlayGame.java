@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.toRadians;
 
@@ -19,8 +18,6 @@ public class PlayGame extends LinearOpMode {
     //wrist 2
     private Servo wrist2;
 
-    boolean rightBumperPressed = false;
-    boolean leftBumperPressed = false;
     public DcMotor mainBoom = null;
     public DcMotor slide = null;
 
@@ -46,30 +43,23 @@ public class PlayGame extends LinearOpMode {
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double Kp = 0;
-        double Kd = 0;
-        double m_Kp = 0;
-        double m_Kd = 0;
-
         double angle;
         double position;
         //Power to hold Main Boom when Jib Boom is at 90 Degrees
         double c1 = .001;
-        //Power to hold Main Boom when Jib Boom is fully extended
-        double c2 = .005;
 
         double c1Tmp;
-        double c2Tmp;
 
         double Pa = 0;
 
         double holdTorque;
 
-        double wristP = .15;
-        wrist1.setPosition(wristP);
-        wrist2.setPosition(wristP);
+        wrist1.setPosition(0);
+        wrist2.setPosition(1);
         double mainBoomTicks = 28 * 125; //ticks per revolution
         double slideTicks = 28 * 125;
+        double slidePosition = 0;
+        double slideLimit = -590; //Max -590
 
         //WHEELS
         right_front = hardwareMap.get(DcMotor.class, "right_front");
@@ -90,28 +80,22 @@ public class PlayGame extends LinearOpMode {
                 //ARM
                 angle = mainBoom.getCurrentPosition() * 360/mainBoomTicks;
                 position = slide.getCurrentPosition() * 360/slideTicks;
-                angle += 24;
+                angle += 40;
 
-                if (angle < 0) {
-                    angle = 360+angle;
-                }
-
-                if (gamepad2.dpad_up && (wristP < 0.99)) {
+                if (gamepad2.dpad_up) {
                     wrist1.setPosition(wrist1.getPosition() + .005);
                     wrist2.setPosition(wrist2.getPosition() - .005);
-                    wristP = wristP + .005;
                 }
-                if (gamepad2.dpad_down && (wristP > 0.01)) {
+                if (gamepad2.dpad_down) {
                     wrist1.setPosition(wrist1.getPosition() - .005);
                     wrist2.setPosition(wrist2.getPosition() + .005);
-                    wristP = wristP - .005;
                 }
 
                 c1Tmp = c1;
 
                 holdTorque = c1Tmp * cos(toRadians(angle));
 
-                Pa = (-gamepad2.left_stick_y * .5);
+                Pa = (-gamepad2.left_stick_y * 1);
                 if (Pa < 0) {
                     Pa -= holdTorque;
                 } else {
@@ -126,12 +110,20 @@ public class PlayGame extends LinearOpMode {
                     intake.setPower(0);
                 }
 
-                if (gamepad2.left_bumper) {
+                if (gamepad2.left_bumper && (position <= 0)) {
                     slide.setPower(1);
-                } else if (gamepad2.right_bumper) {
+                    slidePosition = position;
+                } else if (gamepad2.right_bumper && (position >= slideLimit)) { //max -592
                     slide.setPower(-1);
+                    slidePosition = position;
                 } else {
-                    slide.setPower(0);
+                    if ((slidePosition > position) && (position <= 0)) {
+                        slide.setPower(0.001);
+                    } else if ((slidePosition < position) && (position >= slideLimit)) {
+                        slide.setPower(-0.001);
+                    } else {
+                        slide.setPower(0);
+                    }
                 }
 
                 //WHEELS
