@@ -41,6 +41,8 @@ public class PlayGame extends OpMode {
     public double slidePosition = 0;
     public double DrivePower = 2.5;
     public double DriveSlowPower = 3;
+    public double turnFactor;
+    public double strafeFactor;
 
     @Override
     public void init() {
@@ -54,7 +56,7 @@ public class PlayGame extends OpMode {
         mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         wrist1.setPosition(0);
@@ -95,15 +97,6 @@ public class PlayGame extends OpMode {
             target += (int) (joystickInput * 10);
         }
 
-        target = Math.max(0, Math.min(1150, target));
-
-        // Smooth target transition
-        if (Math.abs(target - currentTarget) > RAMP_RATE) {
-            currentTarget += Math.signum(target - currentTarget) * RAMP_RATE;
-        } else {
-            currentTarget = target;
-        }
-
         f = fStart + (position / slideLimit) * (fEnd - fStart);
 
         f = Math.max(fStart, Math.min(fEnd, f));
@@ -114,7 +107,6 @@ public class PlayGame extends OpMode {
         double ticksPerDeg = mainBoomTicks / 360.0;
         double ff = Math.cos(Math.toRadians(currentTarget / ticksPerDeg)) * f;
         double power = pid + ff;
-        mainBoom.setPower(power);
 
         //Controller1 Buttons
         DrivePower = 2.5;
@@ -132,14 +124,36 @@ public class PlayGame extends OpMode {
             wrist2.setPosition(wrist2.getPosition() + .005);
         }
         if (gamepad2.a) {
-            intake.setPower(1);
+            wrist1.setPosition(0);
+            wrist2.setPosition(1);
         } else if (gamepad2.b) {
+            wrist1.setPosition(0.5);
+            wrist2.setPosition(0.5);
+        }
+        if (gamepad2.right_stick_y > 0.05) {
+            intake.setPower(1);
+        } else if (gamepad2.right_stick_y < -0.05) {
             intake.setPower(-1);
         } else {
             intake.setPower(0);
         }
+        if (gamepad2.x) {
+            target = 100;
+        } else if (gamepad2.y) {
+            target = 1000;
+        }
 
-        //Drive
+        //Arm Power
+        target = Math.max(0, Math.min(1150, target));
+        // Smooth target transition
+        if (Math.abs(target - currentTarget) > RAMP_RATE) {
+            currentTarget += Math.signum(target - currentTarget) * RAMP_RATE;
+        } else {
+            currentTarget = target;
+        }
+        mainBoom.setPower(power);
+
+        //Drive Power
         left_front.setPower(-gamepad1.left_stick_y/DrivePower + gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower);
         right_front.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower - gamepad1.right_stick_x/DrivePower);
         left_back.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower);
