@@ -37,14 +37,20 @@ public class PlayGame extends OpMode {
 
     public final double mainBoomTicks = 28 * 125; //ticks per revolution
     public final double slideTicks = 1425.1; //ticks per revolution
-    public final double slideLimit = -5550; //limit -5650
+    public final double slideLimit = 5550; //limit 5650
+    public double armTolerance = 50;
     public double slidePosition = 0;
-    public double DrivePower = 2.5;
+    public double slideTargetPosition = 0;
+    public double slideTolerance = 5;
+    public double slideError = 0;
+    public double DrivePower = 2;
     public double DriveSlowPower = 3;
     public double turnFactor;
     public double strafeFactor;
     public boolean toggleWrist;
     public boolean isBack;
+    public boolean goUp;
+    public boolean goDown;
 
     @Override
     public void init() {
@@ -76,62 +82,53 @@ public class PlayGame extends OpMode {
 
         right_back.setDirection(DcMotorSimple.Direction.REVERSE);
         left_front.setDirection(DcMotorSimple.Direction.REVERSE);
+        slide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         toggleWrist = false;
         isBack = false;
+        goUp = false;
+        goDown = false;
     }
 
     @Override
     public void loop() {
-        //Arm Boom & Slide
-        double position = slide.getCurrentPosition();
-        if (isBack && (position <= 0)) {
-            slide.setPower(1);
-            slidePosition = position;
-        } else if (gamepad2.left_bumper && (position <= 0)) {
-            slide.setPower(1);
-            slidePosition = position;
-        } else if (gamepad2.right_bumper && (position >= slideLimit)) {
-            slide.setPower(-1);
-            slidePosition = position;
-        } else {
-            if ((slidePosition > position) && (position <= 0)) {
-                slide.setPower(0.0001);
-            } else if ((slidePosition < position) && (position >= slideLimit)) {
-                slide.setPower(-0.0001);
-            } else {
-                slide.setPower(0);
-            }
-        }
-
-        double joystickInput = -gamepad2.left_stick_y;
-        if (Math.abs(joystickInput) > 0.1) { // Dead zone
-            target += (int) (joystickInput * 10);
-        }
-
-        f = fStart + (position / slideLimit) * (fEnd - fStart);
-
-        f = Math.max(fStart, Math.min(fEnd, f));
-
-        controller.setPID(p, i, d);
+        //Arm
+        slidePosition = slide.getCurrentPosition();
         int armPos = mainBoom.getCurrentPosition();
-        double pid = controller.calculate(armPos, currentTarget);
-        double ticksPerDeg = mainBoomTicks / 360.0;
-        double ff = Math.cos(Math.toRadians(currentTarget / ticksPerDeg)) * f;
-        double power = pid + ff;
+        slideError = slideTargetPosition - slidePosition;
+        if (Math.abs(slidePosition - slideTargetPosition) > slideTolerance) {
+            double error = slideTargetPosition - slidePosition; // Calculate the error
+            double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 400.0)); // Scale power based on error
+
+            if (slidePosition < slideTargetPosition && slidePosition <= slideLimit) {
+                slide.setPower(proportionalPower); // Move out with scaled power
+            } else if (slidePosition > slideTargetPosition && slidePosition >= 0) {
+                slide.setPower(-proportionalPower); // Move in with scaled power
+            } else {
+                slide.setPower(0); // Safety stop if limits are exceeded
+            }
+        } else {
+            slide.setPower(0); // Stop within tolerance
+        }
 
         //Controller Button
         boolean change = !gamepad1.start && !gamepad2.start;
 
         //Controller1 Buttons
-        DrivePower = 2.5;
-        if (change && gamepad1.b){
+        DrivePower = 2;
+        if ((change && gamepad1.b) || gamepad1.right_bumper){
             DrivePower = 1;
         }
 
         //Controller2 Buttons
+        if (gamepad2.left_bumper) {
+            slideTargetPosition = Math.min(slideTargetPosition - 35, slideLimit);
+        } else if (gamepad2.right_bumper) {
+            slideTargetPosition = Math.max(slideTargetPosition + 35, 0);
+        }
         if (gamepad2.back) {
             isBack = true;
+            slideTargetPosition = 0;
             wrist1.setPosition(0);
             wrist2.setPosition(1);
         }
@@ -156,14 +153,28 @@ public class PlayGame extends OpMode {
             toggleWrist = false;
         }
         if (change && gamepad2.b) {
-           slide.setPower(0.1);
-           target = 500;
+           target = 900;
            wrist1.setPosition(0.5);
            wrist2.setPosition(0.5);
         }
-        if (gamepad2.right_stick_y > 0.05) {
+        double armInput = -gamepad2.left_stick_y;
+        if (gamepad2.left_stick_button) {
+            target = 1000;
+            slideTargetPosition = 2000;
+            goDown = true;
+        } else if (Math.abs(armInput) > 0.05) {
+            target += (int) (armInput * 10);
+        }
+        if (gamepad2.right_stick_button) {
+            slideTargetPosition = 80;
+            goUp = true;
+        } else if (gamepad2.right_stick_x > 0.2) {
+            //spin wrist right
+        } else if (gamepad2.right_stick_x < -0.2) {
+            //spin wrist left
+        } else if (gamepad2.right_stick_y > 0.2) {
             intake.setPower(1);
-        } else if (gamepad2.right_stick_y < -0.05) {
+        } else if (gamepad2.right_stick_y < -0.2) {
             intake.setPower(-1);
         } else {
             intake.setPower(0);
@@ -174,19 +185,46 @@ public class PlayGame extends OpMode {
             wrist2.setPosition(0.5);
         } else if (gamepad2.y) {
             target = 900;
+            slideTargetPosition = slideLimit;
             wrist1.setPosition(0.2);
             wrist2.setPosition(0.8);
         }
+        turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
+        strafeFactor = 0.0;
+        if (gamepad2.dpad_left) {
+            strafeFactor = -1.0 / DriveSlowPower; // Strafe left
+        } else if (gamepad2.dpad_right) {
+            strafeFactor = 1.0 / DriveSlowPower; // Strafe right
+        }
+
+        //Go Up
+        if (goUp) {
+            target = 85;
+            goUp = false;
+        }
+
+        //Go Down
+        if (goDown && Math.abs(armPos - target) <= armTolerance) {
+            slideTargetPosition = 0;
+            isBack = true;
+            goDown = false;
+        }
 
         //Go Home
-        if (isBack && position >= 0) {
+        if (isBack && Math.abs(slidePosition) <= slideTolerance) {
             target = 0;
             isBack = false;
         }
 
         //Arm Power
+        f = fStart + (slidePosition / slideLimit) * (fEnd - fStart);
+        f = Math.max(fStart, Math.min(fEnd, f));
+        controller.setPID(p, i, d);
+        double pid = controller.calculate(armPos, currentTarget);
+        double ticksPerDeg = mainBoomTicks / 360.0;
+        double ff = Math.cos(Math.toRadians(currentTarget / ticksPerDeg)) * f;
+        double power = pid + ff;
         target = Math.max(0, Math.min(1150, target));
-        // Smooth target transition
         if (Math.abs(target - currentTarget) > RAMP_RATE) {
             currentTarget += Math.signum(target - currentTarget) * RAMP_RATE;
         } else {
@@ -195,10 +233,10 @@ public class PlayGame extends OpMode {
         mainBoom.setPower(power);
 
         //Drive Power
-        left_front.setPower(-gamepad1.left_stick_y/DrivePower + gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower);
-        right_front.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower - gamepad1.right_stick_x/DrivePower);
-        left_back.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower);
-        right_back.setPower(-gamepad1.left_stick_y/DrivePower + gamepad1.left_stick_x/DrivePower - gamepad1.right_stick_x/DrivePower);
+        left_front.setPower(-gamepad1.left_stick_y/DrivePower + gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower + turnFactor + strafeFactor);
+        right_front.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower - gamepad1.right_stick_x/DrivePower - turnFactor - strafeFactor);
+        left_back.setPower(-gamepad1.left_stick_y/DrivePower - gamepad1.left_stick_x/DrivePower + gamepad1.right_stick_x/DrivePower + turnFactor - strafeFactor);
+        right_back.setPower(-gamepad1.left_stick_y/DrivePower + gamepad1.left_stick_x/DrivePower - gamepad1.right_stick_x/DrivePower - turnFactor + strafeFactor);
 
         //Wheel Telemetry
         telemetry.addData("LF POW", left_front.getPower());
@@ -209,7 +247,8 @@ public class PlayGame extends OpMode {
         //Arm Telemetry
         telemetry.addData("Main Boom Position", armPos);
         telemetry.addData("Main Boom Target", target);
-        telemetry.addData("Slide Position", position);
+        telemetry.addData("Slide Position", slidePosition);
+        telemetry.addData("Slide Target", slideTargetPosition);
         telemetry.addData("F Value", f);
 
         //Intake Telemetry
