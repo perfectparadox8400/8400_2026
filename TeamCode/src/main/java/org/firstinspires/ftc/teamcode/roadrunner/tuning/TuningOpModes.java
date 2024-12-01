@@ -35,7 +35,7 @@ public final class TuningOpModes {
     // TODO: change this to TankDrive.class if you're using tank
     public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
 
-    public static final String GROUP = "quickstart";
+    public static final String GROUP = "Z. quickstart";
     public static final boolean DISABLED = false;
 
     private TuningOpModes() {}

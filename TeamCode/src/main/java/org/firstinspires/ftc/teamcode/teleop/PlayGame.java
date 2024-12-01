@@ -37,13 +37,14 @@ public class PlayGame extends OpMode {
 
     public final double mainBoomTicks = 28 * 125; //ticks per revolution
     public final double slideTicks = 1425.1; //ticks per revolution
-    public final double slideLimit = 5550; //limit 5650
+    public final double slideLimit = 5600; //limit 5650
+    public int armLimit = 1250;
     public double armTolerance = 50;
     public double slidePosition = 0;
     public double slideTargetPosition = 0;
     public double slideTolerance = 5;
     public double slideError = 0;
-    public double DrivePower = 2;
+    public double DrivePower = 2.5;
     public double DriveSlowPower = 3;
     public double turnFactor;
     public double strafeFactor;
@@ -51,6 +52,8 @@ public class PlayGame extends OpMode {
     public boolean isBack;
     public boolean goUp;
     public boolean goDown;
+    public boolean goX;
+    public boolean goY;
 
     @Override
     public void init() {
@@ -88,6 +91,8 @@ public class PlayGame extends OpMode {
         isBack = false;
         goUp = false;
         goDown = false;
+        goX = false;
+        goY = false;
     }
 
     @Override
@@ -98,7 +103,7 @@ public class PlayGame extends OpMode {
         slideError = slideTargetPosition - slidePosition;
         if (Math.abs(slidePosition - slideTargetPosition) > slideTolerance) {
             double error = slideTargetPosition - slidePosition; // Calculate the error
-            double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 400.0)); // Scale power based on error
+            double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 500.0)); // Scale power based on error
 
             if (slidePosition < slideTargetPosition && slidePosition <= slideLimit) {
                 slide.setPower(proportionalPower); // Move out with scaled power
@@ -119,12 +124,15 @@ public class PlayGame extends OpMode {
         if ((change && gamepad1.b) || gamepad1.right_bumper){
             DrivePower = 1;
         }
+        if ((change && gamepad1.a) || gamepad1.left_bumper){
+            DrivePower = DriveSlowPower;
+        }
 
         //Controller2 Buttons
         if (gamepad2.left_bumper) {
-            slideTargetPosition = Math.min(slideTargetPosition - 35, slideLimit);
+            slideTargetPosition = Math.max(slideTargetPosition - 35, 0);
         } else if (gamepad2.right_bumper) {
-            slideTargetPosition = Math.max(slideTargetPosition + 35, 0);
+            slideTargetPosition = Math.min(slideTargetPosition + 35, slideLimit);
         }
         if (gamepad2.back) {
             isBack = true;
@@ -169,8 +177,10 @@ public class PlayGame extends OpMode {
             slideTargetPosition = 80;
             goUp = true;
         } else if (gamepad2.right_stick_x > 0.2) {
+            //TODO
             //spin wrist right
         } else if (gamepad2.right_stick_x < -0.2) {
+            //TODO
             //spin wrist left
         } else if (gamepad2.right_stick_y > 0.2) {
             intake.setPower(1);
@@ -180,14 +190,16 @@ public class PlayGame extends OpMode {
             intake.setPower(0);
         }
         if (gamepad2.x) {
-            target = 100;
-            wrist1.setPosition(0.5);
-            wrist2.setPosition(0.5);
+            goX = true;
+            slideTargetPosition = 0;
+            wrist1.setPosition(0.4);
+            wrist2.setPosition(0.6);
         } else if (gamepad2.y) {
-            target = 900;
-            slideTargetPosition = slideLimit;
-            wrist1.setPosition(0.2);
-            wrist2.setPosition(0.8);
+            goY = true;
+            slideTargetPosition = 1500;
+            target = 1100;
+            wrist1.setPosition(0.7);
+            wrist2.setPosition(0.3);
         }
         turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
         strafeFactor = 0.0;
@@ -205,9 +217,23 @@ public class PlayGame extends OpMode {
 
         //Go Down
         if (goDown && Math.abs(armPos - target) <= armTolerance) {
-            slideTargetPosition = 0;
-            isBack = true;
+            //TODO
+            //slideTargetPosition = 0;
+            //isBack = true;
             goDown = false;
+        }
+
+        //Go X
+        if (goX && (slidePosition <= 1500)) {
+            target = 200;
+            goX = false;
+        }
+
+        //Go Y
+        if (goY && Math.abs(armPos - target) <= armTolerance) {
+            slideTargetPosition = slideLimit;
+            target = 1200;
+            goY = false;
         }
 
         //Go Home
@@ -224,7 +250,7 @@ public class PlayGame extends OpMode {
         double ticksPerDeg = mainBoomTicks / 360.0;
         double ff = Math.cos(Math.toRadians(currentTarget / ticksPerDeg)) * f;
         double power = pid + ff;
-        target = Math.max(0, Math.min(1150, target));
+        target = Math.max(0, Math.min(armLimit, target));
         if (Math.abs(target - currentTarget) > RAMP_RATE) {
             currentTarget += Math.signum(target - currentTarget) * RAMP_RATE;
         } else {
