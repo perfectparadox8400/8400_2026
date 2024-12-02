@@ -35,7 +35,9 @@ public class Arm {
 
     //Slide
     public static final double slideTicks = 1425.1; //ticks per revolution
-    public static final double slideLimit = 5600; //limit 5650
+    public static final double slideMaxLimit = 5600; //limit 5650
+    public static final double slideShortLimit = 3900;
+    public static double slideLimit = slideMaxLimit;
     public static double slideTarget = 0;
     public static double slidePosition;
     public static double slideTolerance = 5;
@@ -75,6 +77,11 @@ public class Arm {
 
     public static void slide() {
         slideError = slideTarget - slidePosition;
+        if (armPosition > 900) {
+            slideLimit = slideMaxLimit;
+        } else {
+            slideLimit = slideShortLimit;
+        }
         if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
             double error = slideTarget - slidePosition; // Calculate the error
             double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 500.0)); // Scale power based on error

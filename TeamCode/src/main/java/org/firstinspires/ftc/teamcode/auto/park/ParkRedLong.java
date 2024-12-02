@@ -15,7 +15,7 @@ public class ParkRedLong extends OpMode {
 
     @Override
     public void init() {
-        start = new Pose2d(-32.5, -63, Math.toRadians(90));
+        start = new Pose2d(-16, -63, Math.toRadians(90));
         drive = new MecanumDrive(hardwareMap, start);
     }
 
@@ -23,9 +23,9 @@ public class ParkRedLong extends OpMode {
     public void loop() {
         Actions.runBlocking(
                 drive.actionBuilder(start)
+                        .waitSeconds(Wait.None)
                         .lineToY(-55)
                         .turnTo(Math.toRadians(0))
-                        .waitSeconds(Wait.Long)
                         .strafeTo(new Vector2d(48, -63))
                         .build());
     }

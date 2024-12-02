@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Go Forward", group = "inspect")
+@Autonomous(name="Go Forward", group = "z_inspect")
 public class GoForward extends OpMode {
     private MecanumDrive drive;
     private Pose2d start;
