@@ -10,16 +10,22 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
+        Pose2d start = new Pose2d(31, -63, Math.toRadians(90));
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(50, 50, Math.PI, Math.PI, 12)
+                .setDimensions(15, 18)
+                .setColorScheme(PPColor.perfectParadox)
+                .setStartPose(start)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, 0))
-                .setTangent(0)
-                .splineToConstantHeading(new Vector2d(20, 20), Math.PI / 2)
-                .turn(Math.toRadians(90))
-                .lineToY(0)
-                .build());
+
+        //Center of bot is w = 7.5 & h = = 9
+        myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
+                .waitSeconds(5)
+                .lineToY(-55)
+                .turnTo(Math.toRadians(0))
+                .strafeTo(new Vector2d(48, -63))
+                .build()); //Put Code above this
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)

@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 @TeleOp(name = "! Play Game")
 public class PlayGame extends OpMode {
     public boolean toggleWrist;
@@ -29,8 +30,8 @@ public class PlayGame extends OpMode {
 
     @Override
     public void loop() {
-        //Slide Code
-        slide();
+        //Arm Loop
+        arm_loop();
 
         //Controller Button
         boolean change = !gamepad1.start && !gamepad2.start;
@@ -159,6 +160,9 @@ public class PlayGame extends OpMode {
             armTarget = 0;
             isBack = false;
         }
+
+        //Slide Power
+        slide();
 
         //Arm Power
         arm();

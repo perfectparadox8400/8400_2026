@@ -67,9 +67,13 @@ public class Arm {
         intake.setPower(0);
         isBack = false;
     }
-    public static void slide() {
+
+    public static void arm_loop() {
         slidePosition = slide.getCurrentPosition();
         armPosition = mainBoom.getCurrentPosition();
+    }
+
+    public static void slide() {
         slideError = slideTarget - slidePosition;
         if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
             double error = slideTarget - slidePosition; // Calculate the error
@@ -104,10 +108,14 @@ public class Arm {
     }
     public static void arm_telemetry(Telemetry telemetry) {
         //Arm Telemetry
-        telemetry.addData("Main Boom Position", armPosition);
-        telemetry.addData("Main Boom Target", armTarget);
+        telemetry.addData("Arm Position", armPosition);
+        telemetry.addData("Arm Target", armTarget);
+        telemetry.addData("Arm Ticks", armTicks);
+
+        //Slide Telemetry
         telemetry.addData("Slide Position", slidePosition);
         telemetry.addData("Slide Target", slideTarget);
+        telemetry.addData("Slide Ticks", slideTicks);
         telemetry.addData("F Value", f);
 
         //Intake Telemetry
