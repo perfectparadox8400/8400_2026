@@ -32,6 +32,7 @@ public class Arm {
     public static int armPosition;
     public static double armSpeed = 10;
     public static double armTolerance = 50;
+    public static boolean armHome = false;
 
     //Slide
     public static final double slideTicks = 1425.1; //ticks per revolution
@@ -68,6 +69,10 @@ public class Arm {
         wrist2.setPosition(1);
         intake.setPower(0);
         isBack = false;
+    }
+
+    public static void arm_reset() {
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public static void arm_loop() {

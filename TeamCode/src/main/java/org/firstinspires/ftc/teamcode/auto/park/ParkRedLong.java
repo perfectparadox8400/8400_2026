@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class ParkRedLong extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(-16, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         waitForStart();
         Actions.runBlocking(

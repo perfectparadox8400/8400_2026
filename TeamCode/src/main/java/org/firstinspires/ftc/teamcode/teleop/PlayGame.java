@@ -46,8 +46,9 @@ public class PlayGame extends OpMode {
         }
 
         //Controller2 Buttons
-        if (gamepad2.guide) {
-
+        if (gamepad2.guide && !armHome) {
+            armHome = true;
+            //arm_reset();
         }
         if (gamepad2.left_bumper) {
             slideTarget = Math.max(slideTarget - 35, 0);
