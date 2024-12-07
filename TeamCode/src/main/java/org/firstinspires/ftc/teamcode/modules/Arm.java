@@ -26,7 +26,7 @@ public class Arm {
 
     //Arm
     public static final double armTicks = 28 * 125; //ticks per revolution
-    public static final int armLimit = 1250;
+    public static final int armLimit = 1200;
     public static int armTarget = 0;
     public static double armTargetPosition = 0;
     public static int armPosition;

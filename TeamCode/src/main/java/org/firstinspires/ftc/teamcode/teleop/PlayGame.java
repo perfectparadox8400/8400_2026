@@ -46,6 +46,9 @@ public class PlayGame extends OpMode {
         }
 
         //Controller2 Buttons
+        if (gamepad2.guide) {
+
+        }
         if (gamepad2.left_bumper) {
             slideTarget = Math.max(slideTarget - 35, 0);
         } else if (gamepad2.right_bumper) {
@@ -102,9 +105,9 @@ public class PlayGame extends OpMode {
             // spin wrist left
             telemetry.addData("Spin Wrist","Left No");
         } else if (gamepad2.right_stick_y > 0.2) {
-            intake.setPower(1);
-        } else if (gamepad2.right_stick_y < -0.2) {
             intake.setPower(-1);
+        } else if (gamepad2.right_stick_y < -0.2) {
+            intake.setPower(1);
         } else {
             intake.setPower(0);
         }
