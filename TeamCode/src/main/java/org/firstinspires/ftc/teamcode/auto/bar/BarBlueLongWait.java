@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.bar;
 
+import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,9 +19,21 @@ public class BarBlueLongWait extends LinearOpMode {
         Actions.runBlocking(
                 drive.actionBuilder(start)
                         .waitSeconds(Wait.Long)
+                        .lineToY(55)
+                        .turnTo(Math.toRadians(0))
+                        .lineToX(33)
+                        .turnTo(Math.toRadians(270))
                         .lineToY(10)
                         .turnTo(Math.toRadians(180))
                         .lineToX(25)
                         .build());
+        init_arm(hardwareMap);
+        armTarget = 800;
+        wrist1.setPosition(0.9);
+        wrist2.setPosition(0.1);
+        while (opModeIsActive()) {
+            arm_loop();
+            arm();
+        }
     }
 }

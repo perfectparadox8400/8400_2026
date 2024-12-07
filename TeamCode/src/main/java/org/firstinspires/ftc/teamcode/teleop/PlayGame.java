@@ -26,6 +26,14 @@ public class PlayGame extends OpMode {
         goDown = false;
         goX = false;
         goY = false;
+
+        armTarget = 0;
+        slideTarget = 0;
+    }
+
+    @Override
+    public void start() {
+        arm_reset();
     }
 
     @Override
@@ -48,7 +56,7 @@ public class PlayGame extends OpMode {
         //Controller2 Buttons
         if (gamepad2.guide && !armHome) {
             armHome = true;
-            //arm_reset();
+            arm_reset();
         }
         if (gamepad2.left_bumper) {
             slideTarget = Math.max(slideTarget - 35, 0);
@@ -119,7 +127,6 @@ public class PlayGame extends OpMode {
             wrist2.setPosition(0.6);
         } else if (gamepad2.y) {
             goY = true;
-            slideTarget = 1500;
             armTarget = 1100;
             wrist1.setPosition(0.7);
             wrist2.setPosition(0.3);

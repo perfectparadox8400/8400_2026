@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.park;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -20,7 +19,9 @@ public class ParkRedShort extends LinearOpMode {
                         .waitSeconds(Wait.None)
                         .lineToY(-55)
                         .turnTo(Math.toRadians(0))
-                        .strafeTo(new Vector2d(48, -63))
+                        .lineToX(48)
+                        .turnTo(Math.toRadians(90))
+                        .lineToY(-63)
                         .build());
     }
 }

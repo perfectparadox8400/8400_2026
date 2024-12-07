@@ -59,6 +59,7 @@ public class Arm {
         mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -72,7 +73,10 @@ public class Arm {
     }
 
     public static void arm_reset() {
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public static void arm_loop() {
