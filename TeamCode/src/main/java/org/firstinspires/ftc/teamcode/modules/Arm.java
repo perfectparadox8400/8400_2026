@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Arm {
     public static CRServo intake = null;
+    public static CRServo intakeOther = null;
     public static Servo wrist1 = null;
     public static Servo wrist2 = null;
 
@@ -55,6 +56,7 @@ public class Arm {
         wrist1 = hardwareMap.get(Servo.class, "wrist1");
         wrist2 = hardwareMap.get(Servo.class, "wrist2");
         intake = hardwareMap.get(CRServo.class, "intake");
+        intakeOther = hardwareMap.get(CRServo.class, "intake2");
 
         mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -69,6 +71,7 @@ public class Arm {
         wrist1.setPosition(0);
         wrist2.setPosition(1);
         intake.setPower(0);
+        intakeOther.setPower(0);
         isBack = false;
     }
 

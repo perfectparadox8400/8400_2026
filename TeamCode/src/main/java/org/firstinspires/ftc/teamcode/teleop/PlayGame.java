@@ -115,10 +115,13 @@ public class PlayGame extends OpMode {
             telemetry.addData("Spin Wrist","Left No");
         } else if (gamepad2.right_stick_y > 0.2) {
             intake.setPower(-1);
+            intakeOther.setPower(1);
         } else if (gamepad2.right_stick_y < -0.2) {
             intake.setPower(1);
+            intakeOther.setPower(-1);
         } else {
             intake.setPower(0);
+            intakeOther.setPower(0);
         }
         if (gamepad2.x) {
             goX = true;
