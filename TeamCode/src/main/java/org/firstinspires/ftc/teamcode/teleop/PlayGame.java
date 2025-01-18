@@ -13,6 +13,7 @@ public class PlayGame extends OpMode {
     public boolean goDown;
     public boolean goX;
     public boolean goY;
+    public boolean armInput;
 
     @Override
     public void init() {
@@ -29,11 +30,13 @@ public class PlayGame extends OpMode {
 
         armTarget = 0;
         slideTarget = 0;
+        armInput = false;
     }
 
     @Override
     public void start() {
-        arm_reset();
+        arm_reset(false); //true = reset arm with switch's
+        armInput = true;
     }
 
     @Override
@@ -54,85 +57,88 @@ public class PlayGame extends OpMode {
         }
 
         //Controller2 Buttons
-        if (gamepad2.guide && !armHome) {
-            armHome = true;
-            arm_reset();
-        }
-        if (gamepad2.left_bumper) {
-            slideTarget = Math.max(slideTarget - 35, 0);
-        } else if (gamepad2.right_bumper) {
-            slideTarget = Math.min(slideTarget + 35, slideLimit);
-        }
-        if (gamepad2.back) {
-            isBack = true;
-            slideTarget = 0;
-            wrist1.setPosition(0);
-            wrist2.setPosition(1);
-        }
-        if (gamepad2.dpad_up) {
-            wrist1.setPosition(wrist1.getPosition() + .005);
-            wrist2.setPosition(wrist2.getPosition() - .005);
-        }
-        if (gamepad2.dpad_down) {
-            wrist1.setPosition(wrist1.getPosition() - .005);
-            wrist2.setPosition(wrist2.getPosition() + .005);
-        }
-        if (change && gamepad2.a && !toggleWrist) {
-            if(wrist1.getPosition() != 0) {
+        if (armInput) {
+            if (gamepad2.guide && !armHome) {
+                armHome = true;
+                arm_reset(false);
+            }
+            if (gamepad2.left_bumper) {
+                slideTarget = Math.max(slideTarget - 35, 0);
+            } else if (gamepad2.right_bumper) {
+                slideTarget = Math.min(slideTarget + 35, slideLimit);
+            }
+            if (gamepad2.back) {
+                isBack = true;
+                slideTarget = 0;
                 wrist1.setPosition(0);
                 wrist2.setPosition(1);
-            } else {
+            }
+            if (gamepad2.dpad_up) {
+                wrist1.setPosition(wrist1.getPosition() + .005);
+                wrist2.setPosition(wrist2.getPosition() - .005);
+            }
+            if (gamepad2.dpad_down) {
+                wrist1.setPosition(wrist1.getPosition() - .005);
+                wrist2.setPosition(wrist2.getPosition() + .005);
+            }
+            if (change && gamepad2.a && !toggleWrist) {
+                if (wrist1.getPosition() != 0) {
+                    wrist1.setPosition(0);
+                    wrist2.setPosition(1);
+                } else {
+                    wrist1.setPosition(0.5);
+                    wrist2.setPosition(0.5);
+                }
+                toggleWrist = true;
+            } else if (!gamepad2.a) {
+                toggleWrist = false;
+            }
+            if (change && gamepad2.b) {
+                armTarget = 900;
                 wrist1.setPosition(0.5);
                 wrist2.setPosition(0.5);
             }
-            toggleWrist = true;
-        } else if (!gamepad2.a) {
-            toggleWrist = false;
-        }
-        if (change && gamepad2.b) {
-           armTarget = 900;
-           wrist1.setPosition(0.5);
-           wrist2.setPosition(0.5);
-        }
-        double armInput = -gamepad2.left_stick_y;
-        if (gamepad2.left_stick_button) {
-            armTarget = 1000;
-            slideTarget = 2000;
-            goDown = true;
-        } else if (Math.abs(armInput) > 0.05) {
-            armTarget += (int) (armInput * 10);
-        }
-        if (gamepad2.right_stick_button) {
-            slideTarget = 80;
-            goUp = true;
-        } else if (gamepad2.right_stick_x > 0.2) {
-            //TODO
-            // spin wrist right
-            telemetry.addData("Spin Wrist","Right No");
-        } else if (gamepad2.right_stick_x < -0.2) {
-            //TODO
-            // spin wrist left
-            telemetry.addData("Spin Wrist","Left No");
-        } else if (gamepad2.right_stick_y > 0.2) {
-            intake.setPower(-1);
-            intakeOther.setPower(1);
-        } else if (gamepad2.right_stick_y < -0.2) {
-            intake.setPower(1);
-            intakeOther.setPower(-1);
-        } else {
-            intake.setPower(0);
-            intakeOther.setPower(0);
-        }
-        if (gamepad2.x) {
-            goX = true;
-            slideTarget = 0;
-            wrist1.setPosition(0.4);
-            wrist2.setPosition(0.6);
-        } else if (gamepad2.y) {
-            goY = true;
-            armTarget = 1100;
-            wrist1.setPosition(0.7);
-            wrist2.setPosition(0.3);
+            double armInput = -gamepad2.left_stick_y;
+            if (gamepad2.left_stick_button) {
+                armTarget = 1000;
+                slideTarget = 2000;
+                goDown = true;
+            } else if (Math.abs(armInput) > 0.05) {
+                armTarget += (int) (armInput * 10);
+            }
+            if (gamepad2.right_stick_button) {
+                slideTarget = 80;
+                goUp = true;
+            } else if (gamepad2.right_stick_x > 0.2) {
+                //TODO
+                // spin wrist right
+                telemetry.addData("Spin Wrist", "Right No");
+            } else if (gamepad2.right_stick_x < -0.2) {
+                //TODO
+                // spin wrist left
+                telemetry.addData("Spin Wrist", "Left No");
+            } else if (gamepad2.right_stick_y > 0.2) {
+                intake.setPower(-1);
+                intakeOther.setPower(1);
+            } else if (gamepad2.right_stick_y < -0.2) {
+                intake.setPower(1);
+                intakeOther.setPower(-1);
+            } else {
+                intake.setPower(0);
+                intakeOther.setPower(0);
+            }
+            if (gamepad2.x) {
+                goX = true;
+                slideTarget = 0;
+                wrist1.setPosition(0.4);
+                wrist2.setPosition(0.6);
+            } else if (gamepad2.y) {
+                goY = true;
+                armTarget = 1100;
+                wrist1.setPosition(0.7);
+                wrist2.setPosition(0.3);
+            }
+
         }
         turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
         strafeFactor = 0.0;
@@ -186,6 +192,8 @@ public class PlayGame extends OpMode {
 
         drive_telemetry(telemetry);
         arm_telemetry(telemetry);
+
+        telemetry.addData("Arm Input", armInput);
 
         telemetry.update();
     }

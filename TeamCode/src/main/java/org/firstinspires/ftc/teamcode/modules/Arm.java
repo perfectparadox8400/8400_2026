@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -17,6 +18,10 @@ public class Arm {
 
     public static DcMotor mainBoom = null;
     public static DcMotor slide = null;
+
+    public static TouchSensor armDown = null;
+    public static TouchSensor armUp = null;
+    public static TouchSensor slideBack = null;
 
     //PID For Arm
     public static PIDController controller;
@@ -57,16 +62,12 @@ public class Arm {
         wrist2 = hardwareMap.get(Servo.class, "wrist2");
         intake = hardwareMap.get(CRServo.class, "intake");
         intakeOther = hardwareMap.get(CRServo.class, "intake2");
+        armDown = hardwareMap.get(TouchSensor.class, "switch1");
+        armUp = hardwareMap.get(TouchSensor.class, "switch2");
+        slideBack = hardwareMap.get(TouchSensor.class, "switch3");
 
-        mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm_reset(false);
+        slide_reset(false);
 
         wrist1.setPosition(0);
         wrist2.setPosition(1);
@@ -75,11 +76,26 @@ public class Arm {
         isBack = false;
     }
 
-    public static void arm_reset() {
-        mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
+    public static void arm_reset(boolean limit) {
+        if (limit) {
+
+        } else {
+            mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+    }
+
+    public static void slide_reset(boolean limit) {
+        if (limit) {
+
+        } else {
+            slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            slide.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
     }
 
     public static void arm_loop() {
