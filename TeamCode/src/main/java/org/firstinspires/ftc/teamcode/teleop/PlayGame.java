@@ -14,6 +14,13 @@ public class PlayGame extends OpMode {
     public boolean goX;
     public boolean goY;
     public boolean armInput;
+    public boolean continuousIntakeToggle;
+    public enum IntakeDirection {
+        IN,
+        OUT
+    };
+    public IntakeDirection continousIntakeDirection;
+    public boolean start;
 
     @Override
     public void init() {
@@ -27,6 +34,8 @@ public class PlayGame extends OpMode {
         goDown = false;
         goX = false;
         goY = false;
+        continuousIntakeToggle = false;
+        continousIntakeDirection = IntakeDirection.IN;
 
         armTarget = 0;
         slideTarget = 0;
@@ -35,12 +44,36 @@ public class PlayGame extends OpMode {
 
     @Override
     public void start() {
-        arm_reset(false); //true = reset arm with switch's
-        armInput = true;
+        start = true;
     }
 
     @Override
     public void loop() {
+        if (start) {
+            slideZeroing = true;
+            if (!slideBack.isPressed()) {
+                slide_reset(true);
+                if (slidePosition <= slideTarget) {
+                    slide_reset(false);
+                } else {
+                    telemetry.addData("Slide is zeroing", slidePosition);
+                }
+            }
+            armZeroing = true;
+            if (!armDown.isPressed()) {
+                arm_reset(true);
+                if (armPosition == armTarget) {
+                    arm_reset(false);
+                } else {
+                    telemetry.addData("Arm is zeroing", armPosition);
+                }
+            }
+            if (armHome && slideIsBack) {
+                start = false;
+                armInput = true;
+            }
+        }
+
         //Arm Loop
         arm_loop();
 
@@ -57,11 +90,11 @@ public class PlayGame extends OpMode {
         }
 
         //Controller2 Buttons
+        if (gamepad2.guide) {
+            start = false;
+            armInput = true;
+        }
         if (armInput) {
-            if (gamepad2.guide && !armHome) {
-                armHome = true;
-                arm_reset(false);
-            }
             if (gamepad2.left_bumper) {
                 slideTarget = Math.max(slideTarget - 35, 0);
             } else if (gamepad2.right_bumper) {
@@ -72,6 +105,7 @@ public class PlayGame extends OpMode {
                 slideTarget = 0;
                 wrist1.setPosition(0);
                 wrist2.setPosition(1);
+                armInput = false;
             }
             if (gamepad2.dpad_up) {
                 wrist1.setPosition(wrist1.getPosition() + .005);
@@ -109,18 +143,19 @@ public class PlayGame extends OpMode {
             if (gamepad2.right_stick_button) {
                 slideTarget = 80;
                 goUp = true;
-            } else if (gamepad2.right_stick_x > 0.2) {
-                //TODO
-                // spin wrist right
-                telemetry.addData("Spin Wrist", "Right No");
-            } else if (gamepad2.right_stick_x < -0.2) {
-                //TODO
-                // spin wrist left
-                telemetry.addData("Spin Wrist", "Left No");
-            } else if (gamepad2.right_stick_y > 0.2) {
+            }
+            if (gamepad2.right_stick_button) {
+                continuousIntakeToggle = !continuousIntakeToggle;
+            }
+            if (gamepad2.right_stick_y > 0.2){
+                continousIntakeDirection = IntakeDirection.IN;
+            } else if (gamepad2.right_stick_y < -0.2){
+                continousIntakeDirection = IntakeDirection.OUT;
+            }
+            if (continuousIntakeToggle && continousIntakeDirection == IntakeDirection.IN) {
                 intake.setPower(-1);
                 intakeOther.setPower(1);
-            } else if (gamepad2.right_stick_y < -0.2) {
+            } else if (continuousIntakeToggle && continousIntakeDirection == IntakeDirection.OUT) {
                 intake.setPower(1);
                 intakeOther.setPower(-1);
             } else {
@@ -138,7 +173,6 @@ public class PlayGame extends OpMode {
                 wrist1.setPosition(0.7);
                 wrist2.setPosition(0.3);
             }
-
         }
         turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
         strafeFactor = 0.0;
@@ -178,7 +212,12 @@ public class PlayGame extends OpMode {
         //Go Home
         if (isBack && Math.abs(slidePosition) <= slideTolerance) {
             armTarget = 0;
+        }
+        if (isBack && Math.abs(armPosition) <= armTolerance && Math.abs(slidePosition) <= slideTolerance) {
             isBack = false;
+            arm_reset(true);
+            slide_reset(true);
+            armInput = true;
         }
 
         //Slide Power

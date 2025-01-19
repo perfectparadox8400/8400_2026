@@ -135,9 +135,6 @@ public final class MecanumDrive {
             rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
 
             imu = lazyImu.get();
-
-            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override

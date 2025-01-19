@@ -23,9 +23,6 @@ public class Drive {
         left_front = hardwareMap.get(DcMotor.class, "left_front");
         left_back = hardwareMap.get(DcMotor.class, "left_back");
         right_back = hardwareMap.get(DcMotor.class, "right_back");
-
-        right_back.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_front.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public static void drive(Gamepad gamepad) {
