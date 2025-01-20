@@ -13,8 +13,9 @@ public class PlayGame extends OpMode {
     public boolean goDown;
     public boolean goX;
     public boolean goY;
-    public boolean armInput;
+    public boolean allowArmInput;
     public boolean continuousIntakeToggle;
+    public boolean lastContinuousIntakeToggle;
     public enum IntakeDirection {
         IN,
         OUT
@@ -35,11 +36,12 @@ public class PlayGame extends OpMode {
         goX = false;
         goY = false;
         continuousIntakeToggle = false;
+        lastContinuousIntakeToggle = false;
         continousIntakeDirection = IntakeDirection.IN;
 
         armTarget = 0;
         slideTarget = 0;
-        armInput = false;
+        allowArmInput = false;
     }
 
     @Override
@@ -53,24 +55,22 @@ public class PlayGame extends OpMode {
             slideZeroing = true;
             if (!slideBack.isPressed()) {
                 slide_reset(true);
-                if (slidePosition <= slideTarget) {
-                    slide_reset(false);
-                } else {
-                    telemetry.addData("Slide is zeroing", slidePosition);
-                }
+                telemetry.addData("Slide is zeroing", "");
+            } else if (slideBack.isPressed()) {
+                slide_reset(false);
             }
             armZeroing = true;
             if (!armDown.isPressed()) {
                 arm_reset(true);
-                if (armPosition == armTarget) {
-                    arm_reset(false);
-                } else {
+                if (!(armPosition <= armTarget)) {
                     telemetry.addData("Arm is zeroing", armPosition);
                 }
+            } else if (slideBack.isPressed()) {
+                arm_reset(false);
             }
             if (armHome && slideIsBack) {
                 start = false;
-                armInput = true;
+                allowArmInput = true;
             }
         }
 
@@ -92,9 +92,11 @@ public class PlayGame extends OpMode {
         //Controller2 Buttons
         if (gamepad2.guide) {
             start = false;
-            armInput = true;
+            allowArmInput = true;
+            armZeroing = false;
+            slideZeroing = false;
         }
-        if (armInput) {
+        if (allowArmInput) {
             if (gamepad2.left_bumper) {
                 slideTarget = Math.max(slideTarget - 35, 0);
             } else if (gamepad2.right_bumper) {
@@ -105,7 +107,7 @@ public class PlayGame extends OpMode {
                 slideTarget = 0;
                 wrist1.setPosition(0);
                 wrist2.setPosition(1);
-                armInput = false;
+                allowArmInput = false;
             }
             if (gamepad2.dpad_up) {
                 wrist1.setPosition(wrist1.getPosition() + .005);
@@ -141,11 +143,11 @@ public class PlayGame extends OpMode {
                 armTarget += (int) (armInput * 10);
             }
             if (gamepad2.right_stick_button) {
-                slideTarget = 80;
-                goUp = true;
-            }
-            if (gamepad2.right_stick_button) {
-                continuousIntakeToggle = !continuousIntakeToggle;
+                if (continuousIntakeToggle == lastContinuousIntakeToggle) {
+                    continuousIntakeToggle = !continuousIntakeToggle;
+                }
+            } else{
+                lastContinuousIntakeToggle = continuousIntakeToggle;
             }
             if (gamepad2.right_stick_y > 0.2){
                 continousIntakeDirection = IntakeDirection.IN;
@@ -213,11 +215,11 @@ public class PlayGame extends OpMode {
         if (isBack && Math.abs(slidePosition) <= slideTolerance) {
             armTarget = 0;
         }
-        if (isBack && Math.abs(armPosition) <= armTolerance && Math.abs(slidePosition) <= slideTolerance) {
+        if (isBack && slideBack.isPressed() && armDown.isPressed()) {
             isBack = false;
-            arm_reset(true);
-            slide_reset(true);
-            armInput = true;
+            arm_reset(false);
+            slide_reset(false);
+            allowArmInput = true;
         }
 
         //Slide Power
@@ -232,7 +234,7 @@ public class PlayGame extends OpMode {
         drive_telemetry(telemetry);
         arm_telemetry(telemetry);
 
-        telemetry.addData("Arm Input", armInput);
+        telemetry.addData("Allow Arm Input", allowArmInput);
 
         telemetry.update();
     }

@@ -69,8 +69,15 @@ public class Arm {
         armUp = hardwareMap.get(TouchSensor.class, "arm_limit");
         slideBack = hardwareMap.get(TouchSensor.class, "slide_limit");
 
-        arm_reset(false);
-        slide_reset(false);
+        mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         wrist1.setPosition(0);
         wrist2.setPosition(1);
@@ -95,15 +102,15 @@ public class Arm {
 
     public static void slide_reset(boolean limit) {
         if (limit) {
-            slideTarget = slideTarget - 5;
+            slide.setPower(-0.3);
         } else {
+            slideZeroing = false;
             slideTarget = 0;
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setDirection(DcMotorSimple.Direction.REVERSE);
             slideIsBack = true;
-            slideZeroing = false;
         }
     }
 
@@ -122,25 +129,20 @@ public class Arm {
         } else {
             slideLimit = slideShortLimit;
         }
-        if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
-            double error = slideTarget - slidePosition; // Calculate the error
-            double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 500.0)); // Scale power based on error
-            int negative;
-            if (slideZeroing) {
-                negative = armTarget;
+        if (!slideZeroing) {
+            if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
+                double error = slideTarget - slidePosition; // Calculate the error
+                double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 500.0)); // Scale power based on error
+                if (slidePosition < slideTarget && slidePosition <= slideLimit) {
+                    slide.setPower(proportionalPower); // Move out with scaled power
+                } else if (slidePosition > slideTarget && slidePosition >= 0) {
+                    slide.setPower(-proportionalPower); // Move in with scaled power
+                } else {
+                    slide.setPower(0); // Safety stop if limits are exceeded
+                }
             } else {
-                negative = 0;
+                slide.setPower(0);
             }
-            if (slidePosition < slideTarget && slidePosition <= slideLimit) {
-                slide.setPower(proportionalPower); // Move out with scaled power
-            } else if (slidePosition > slideTarget && slidePosition >= negative) {
-                slide.setPower(-proportionalPower); // Move in with scaled power
-            } else {
-                slide.setPower(0); // Safety stop if limits are exceeded
-            }
-
-        } else {
-            slide.setPower(0);
         }
     }
     public static void arm() {
@@ -148,7 +150,7 @@ public class Arm {
             armTarget = armPosition;
         }
         if (armUp.isPressed() && armTarget >= armPosition) {
-            armTarget = armPosition;
+            armTarget = armPosition + 30;
         }
         f = fStart + (slidePosition / slideLimit) * (fEnd - fStart);
         f = Math.max(fStart, Math.min(fEnd, f));
