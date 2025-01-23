@@ -41,6 +41,51 @@ public class PlayGame extends OpMode {
 
     @Override
     public void loop() {
+        //Arm Loop
+        arm_loop();
+
+        //Controller Button
+        boolean change = !gamepad1.start && !gamepad2.start;
+
+        //Controller1 Buttons
+        DrivePower = 2;
+        if ((change && gamepad1.b) || gamepad1.right_bumper){
+            DrivePower = 1;
+        }
+        if ((change && gamepad1.a) || gamepad1.left_bumper){
+            DrivePower = DriveSlowPower;
+        }
+
+        //Drive Power
+        drive(gamepad1);
+
+        drive_telemetry(telemetry);
+        arm_telemetry(telemetry);
+
+       // telemetry.addData("Allow Arm Input", allowArmInput);
+
+        telemetry.update();
+
+        if (gamepad2.guide) {
+            start = false;
+        }
+
+        if(start) {
+         if (slideBack.isPressed()){
+             slide_reset(false);
+
+             if(armDown.isPressed()){
+                 arm_reset(false);
+                 start = false;
+             } else {
+                 arm_reset(true);
+                 arm();
+             }
+         } else {
+             slide_reset(true);
+         }
+         return;
+        }
 //        if (start) {
 //            slideZeroing = true;
 //            if (!slideBack.isPressed()) {
@@ -64,28 +109,9 @@ public class PlayGame extends OpMode {
 //            }
 //        }
 
-        //Arm Loop
-        arm_loop();
 
-        //Controller Button
-        boolean change = !gamepad1.start && !gamepad2.start;
-
-        //Controller1 Buttons
-        DrivePower = 2;
-        if ((change && gamepad1.b) || gamepad1.right_bumper){
-            DrivePower = 1;
-        }
-        if ((change && gamepad1.a) || gamepad1.left_bumper){
-            DrivePower = DriveSlowPower;
-        }
 
         //Controller2 Buttons
-//        if (gamepad2.guide) {
-//            start = false;
-//            allowArmInput = true;
-//            armZeroing = false;
-//            slideZeroing = false;
-//        }
         //if (allowArmInput) {
 
             /* ------ SLIDE LOGIC ------ */
@@ -97,14 +123,11 @@ public class PlayGame extends OpMode {
                 slideTarget = slideTarget + 35;
             }
 
+            /* ------ RESET ------ */
+            if (gamepad2.back) {
+                start = true;
+            }
 
-//            if (gamepad2.back) {
-//                isBack = true;
-//                slideTarget = 0;
-//                wrist1.setPosition(0);
-//                wrist2.setPosition(1);
-//                allowArmInput = false;
-//            }
             /* ------WRIST LOGIC------ */
             if (gamepad2.dpad_up) {
                 wrist1.setPosition(wrist1.getPosition() + .007);
@@ -223,15 +246,5 @@ public class PlayGame extends OpMode {
 
         //Arm Power
         arm();
-
-        //Drive Power
-        drive(gamepad1);
-
-        drive_telemetry(telemetry);
-        arm_telemetry(telemetry);
-
-        telemetry.addData("Allow Arm Input", allowArmInput);
-
-        telemetry.update();
     }
 }

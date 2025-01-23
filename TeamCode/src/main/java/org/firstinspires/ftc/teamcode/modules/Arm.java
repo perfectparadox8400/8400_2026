@@ -41,7 +41,7 @@ public class Arm {
     public static boolean armHome = false;
     public static boolean armZeroing = false;
 
-    public static boolean previousArmDown = true;
+    public static boolean previousArmDown = false;
 
     //Slide
     public static final double slideTicks = 1425.1; //ticks per revolution
@@ -54,7 +54,7 @@ public class Arm {
     public static double slideError = 0;
     public static boolean slideIsBack = false;
     public static boolean slideZeroing = false;
-    public static boolean previousSlideBack = true;
+    public static boolean previousSlideBack = false;
 
     //Home
 //    public static boolean isBack;
@@ -72,12 +72,10 @@ public class Arm {
         armUp = hardwareMap.get(TouchSensor.class, "arm_limit");
         slideBack = hardwareMap.get(TouchSensor.class, "slide_limit");
 
-        mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slide.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -93,13 +91,9 @@ public class Arm {
         if (limit) {
             armTarget = armTarget - 5;
         } else {
-            armTarget = 0;
             mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            mainBoom.setDirection(DcMotorSimple.Direction.REVERSE);
-            armHome = true;
-            armZeroing = false;
+            mainBoom.setPower(0);
         }
     }
 
@@ -107,13 +101,9 @@ public class Arm {
         if (limit) {
             slide.setPower(-0.3);
         } else {
-            slideZeroing = false;
-            slideTarget = 0;
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            slide.setDirection(DcMotorSimple.Direction.REVERSE);
-            slideIsBack = true;
+            slide.setPower(0);
         }
     }
 
@@ -130,9 +120,10 @@ public class Arm {
             slideTarget = 0;
         }
         if (slideBack.isPressed() && !previousSlideBack) {
-            slidePosition = 0;
-            slideTarget = 0;
+            slideTarget = slidePosition;
+            slide.setPower(0);
             previousSlideBack = true;
+            return;
         } else if (!slideBack.isPressed()) {
             previousSlideBack = false;
         }
@@ -170,9 +161,10 @@ public class Arm {
             armTarget = 0;
         }
         if (armDown.isPressed() && !previousArmDown) {
-            armPosition = 0;
-            armTarget = 0;
+            armTarget = armPosition;
+            mainBoom.setPower(0);
             previousArmDown = true;
+            return;
         } else if (!armDown.isPressed()) {
             previousArmDown = false;
         }
