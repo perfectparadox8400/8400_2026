@@ -71,6 +71,8 @@ public class PlayGame extends OpMode {
         }
 
         if(start) {
+            wrist1.setPosition(0.15);
+            wrist2.setPosition(0.85);
          if (slideBack.isPressed()){
              slide_reset(false);
 
@@ -166,9 +168,9 @@ public class PlayGame extends OpMode {
 
             /* ------ MAINBOOM LOGIC ------ */
             if (gamepad2.left_stick_y > 0.2){
-                armTarget = armTarget + 12;
+                armTarget = armTarget - 10;
             } else if (gamepad2.left_stick_y < -0.2){
-                armTarget = armTarget - 8;
+                armTarget = armTarget + 10;
             }
 
 
