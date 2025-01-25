@@ -26,26 +26,23 @@ public class Arm {
     //PID For Arm
     public static PIDController armController;
     public static PIDController slideController;
-    public static final double fStart = 0.15;
-    public static final double fEnd = 0.5;
+    //public static final double fStart = 0.15;
+    //public static final double fEnd = 0.5;
     public static double p = 0.005, i = 0.00, d = 0.00;
 
     public static double slideP = 0.08, slideI = 0.00, slideD = 0.00;
-    public static double f = fStart;
+    //public static double f = fStart;
 
     //Arm
     public static final double armTicks = 28 * 125; //ticks per revolution
     public static final int armLimit = 1200;
     public static int armTarget = 0;
-    public static double armTargetPosition = 0;
     public static int armPosition = 0;
 
     public static double armPower = 0;
     public static double holdingTorque = 0;
-    public static double armSpeed = 10;
+    //public static double armSpeed = 10;
     public static double armTolerance = 50;
-    public static boolean armHome = false;
-    public static boolean armZeroing = false;
 
     public static boolean previousArmDown = false;
 
@@ -60,12 +57,7 @@ public class Arm {
     public static double slidePosition;
     public static double slideTolerance = 5;
     public static double slideError = 0;
-    public static boolean slideIsBack = false;
-    public static boolean slideZeroing = false;
     public static boolean previousSlideBack = false;
-
-    //Home
-//    public static boolean isBack;
 
     public static void init_arm(HardwareMap hardwareMap) {
         armController = new PIDController(p, i, d);
@@ -93,7 +85,6 @@ public class Arm {
         wrist2.setPosition(0.85);
         intake.setPower(0);
         intakeOther.setPower(0);
-//        isBack = false;
     }
 
     public static void arm_reset(boolean limit) {
@@ -137,33 +128,20 @@ public class Arm {
             previousSlideBack = false;
         }
 
-//        if (slideBack.isPressed() && slideTarget <= slidePosition) {
-//            slideTarget = armPosition;
-//        }
         slideError = slideTarget - slidePosition;
         if (armPosition > 900) {
             slideLimit = slideMaxLimit;
         } else {
             slideLimit = slideShortLimit;
         }
-        //if (!slideZeroing) {
+
             if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
-                //double error = slideTarget - slidePosition; // Calculate the error
-                //double proportionalPower = Math.min(1.0, Math.max(0.2, Math.abs(error) / 500.0)); // Scale power based on error
                 slideController.setPID(slideP, slideI, slideD);
                 double slidePower = armController.calculate(slidePosition, slideTarget);
                 slide.setPower(slidePower);
-//                if (slidePosition < slideTarget) {
-//                    slide.setPower(proportionalPower); // Move out with scaled power
-//                } else if (slidePosition > slideTarget) {
-//                    slide.setPower(-proportionalPower); // Move in with scaled power
-//                } else {
-//                    slide.setPower(0); // Safety stop if limits are exceeded
-//                }
             } else {
                 slide.setPower(0);
             }
-        //}
     }
     public static void arm() {
         if (armTarget > armLimit) {
@@ -180,32 +158,16 @@ public class Arm {
         } else if (!armDown.isPressed()) {
             previousArmDown = false;
         }
-//        if (armUp.isPressed() && armTarget >= armPosition) {
-//            armTarget = armPosition + 30;
-//        }
-        f = fStart + (slidePosition / slideLimit) * (fEnd - fStart);
-        f = Math.max(fStart, Math.min(fEnd, f));
+
+        //f = fStart + (slidePosition / slideLimit) * (fEnd - fStart);
+        //f = Math.max(fStart, Math.min(fEnd, f));
         armController.setPID(p, i, d);
-        //double pid = controller.calculate(armPosition, armTargetPosition);
         double pid = armController.calculate(armPosition, armTarget);
         double ticksPerDeg = armTicks / 360.0;
-        //double ff = Math.cos(Math.toRadians(armTargetPosition / ticksPerDeg)) * f;
-        double ff = Math.cos(Math.toRadians(armTarget / ticksPerDeg)) * f;
         theta = armPosition / ticksPerDeg - 28;
         holdingTorque = 0.000062 * (slidePosition + 4520.0) * Math.cos(Math.toRadians(theta)); //4250 is the contracted arm length in ticks.
         armPower = pid + holdingTorque;
-        //int negative;
-        //if (armZeroing) {
-         //   negative = armTarget;
-        //} else {
-         //   negative = 0;
-        //}
-        //armTarget = Math.max(negative, Math.min(armLimit, armTarget));
-//        if (Math.abs(armTarget - armTargetPosition) > armSpeed) {
-//            armTargetPosition += Math.signum(armTarget - armTargetPosition) * armSpeed;
-//        } else {
-//            armTargetPosition = armTarget;
-//        }
+
         mainBoom.setPower(armPower);
     }
     public static void arm_telemetry(Telemetry telemetry) {
@@ -219,7 +181,7 @@ public class Arm {
         telemetry.addData("Slide Position", slidePosition);
         telemetry.addData("Slide Target", slideTarget);
         telemetry.addData("Slide Ticks", slideTicks);
-        telemetry.addData("F Value", f);
+        //telemetry.addData("F Value", f);
 
         //Intake Telemetry
         telemetry.addData("Wrist 1", wrist1.getPosition());
