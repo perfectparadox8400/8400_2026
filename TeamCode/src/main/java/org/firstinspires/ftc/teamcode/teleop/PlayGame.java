@@ -8,9 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "! Play Game")
 public class PlayGame extends OpMode {
-    public boolean goX;
-    public boolean goY;
-    public boolean start;
+    public boolean goX = false;
+    public boolean goY = false;
+    public boolean goHome = false;
+    public boolean start = false;
 
     @Override
     public void init() {
@@ -55,11 +56,8 @@ public class PlayGame extends OpMode {
         }
 
         if(start) {
-            wrist1.setPosition(0.15);
-            wrist2.setPosition(0.85);
          if (slideBack.isPressed()){
              slide_reset(false);
-
              if(armDown.isPressed()){
                  arm_reset(false);
                  start = false;
@@ -75,83 +73,95 @@ public class PlayGame extends OpMode {
 
         //Controller2 Buttons
 
-            /* ------ SLIDE LOGIC ------ */
-            if (gamepad2.left_bumper) {
-                //slideTarget = Math.max(slideTarget - 35, 0);
-                slideTarget = slideTarget - 35;
-            } else if (gamepad2.right_bumper) {
-                //slideTarget = Math.min(slideTarget + 35, slideLimit);
-                slideTarget = slideTarget + 35;
-            }
+        /* ------ SLIDE LOGIC ------ */
+        if (gamepad2.left_bumper) {
+            slideTargetPosition -= 40;
+        } else if (gamepad2.right_bumper) {
+            slideTargetPosition += 40;
+        }
 
-            /* ------ RESET ------ */
-            if (gamepad2.back) {
-                start = true;
-            }
+        /* ------ RESET ------ */
+        if (gamepad2.back) {
+            wrist1.setPosition(0.15);
+            wrist2.setPosition(0.85);
+            slideTargetPosition = 0;
+            goHome = true;
+        }
 
-            /* ------WRIST LOGIC------ */
-            if (gamepad2.dpad_up) {
-                wrist1.setPosition(wrist1.getPosition() + .007);
-                wrist2.setPosition(wrist2.getPosition() - .007);
+        /* ------WRIST LOGIC------ */
+        if (gamepad2.dpad_up) {
+            wrist1.setPosition(wrist1.getPosition() + .008);
+            wrist2.setPosition(wrist2.getPosition() - .008);
+        }
+        if (gamepad2.dpad_down) {
+            if(wrist1.getPosition() < 0.15 || wrist2.getPosition() > 0.85) {
+                wrist1.setPosition(0.15);
+                wrist2.setPosition(0.85);
             }
-            if (gamepad2.dpad_down) {
-                wrist1.setPosition(wrist1.getPosition() - .007);
-                wrist2.setPosition(wrist2.getPosition() + .007);
-            }
+            wrist1.setPosition(wrist1.getPosition() - .008);
+            wrist2.setPosition(wrist2.getPosition() + .008);
+        }
 
-            /* ------ MAINBOOM LOGIC ------ */
-            if (gamepad2.left_stick_y > 0.2){
-                armTarget = armTarget - 10;
-            } else if (gamepad2.left_stick_y < -0.2){
-                armTarget = armTarget + 10;
-            }
+        /* ------ MAIN BOOM LOGIC ------ */
+        if (gamepad2.left_stick_y > 0.2){
+            armTargetPosition -= 10;
+        } else if (gamepad2.left_stick_y < -0.2){
+            armTargetPosition += 15;
+        }
 
-            /* ------ INTAKE LOGIC ------ */
-            if (gamepad2.right_stick_y > 0.2){
-                intake.setPower(-1);
-                intakeOther.setPower(1);
-           } else if (gamepad2.right_stick_y < -0.2){
-                intake.setPower(1);
-                intakeOther.setPower(-1);
-            } else {
-                intake.setPower(0);
-                intakeOther.setPower(0);
-            }
+        /* ------ INTAKE LOGIC ------ */
+        if (gamepad2.right_stick_y > 0.2){
+            intake.setPower(-1);
+            intakeOther.setPower(1);
+       } else if (gamepad2.right_stick_y < -0.2){
+            intake.setPower(1);
+            intakeOther.setPower(-1);
+        } else {
+            intake.setPower(0);
+            intakeOther.setPower(0);
+        }
 
-            /* ------ PRESETS ------ */
-            if (gamepad2.x) {
-                goX = true;
-                slideTarget = 0;
-                wrist1.setPosition(0.4);
-                wrist2.setPosition(0.6);
-            }
+        /* ------ PRESETS ------ */
+        if (gamepad2.x) {
+            goX = true;
+            slideTargetPosition = 0;
+            wrist1.setPosition(0.4);
+            wrist2.setPosition(0.6);
+        }
 
-            if (gamepad2.y) {
-                goY = true;
-                armTarget = 1100;
-                wrist1.setPosition(0.7);
-                wrist2.setPosition(0.3);
-            }
-        //}
+        if (gamepad2.y) {
+            goY = true;
+            armTargetPosition = armLimit;
+            wrist1.setPosition(0.5);
+            wrist2.setPosition(0.5);
+        }
 
-        //turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
-        //strafeFactor = 0.0;
-        //if (gamepad2.dpad_left) {
-          //  strafeFactor = -1.0 / DriveSlowPower; // Strafe left
-        //} else if (gamepad2.dpad_right) {
-          //  strafeFactor = 1.0 / DriveSlowPower; // Strafe right
-        //}
+        turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
+        strafeFactor = 0.0;
+        if (gamepad2.dpad_left) {
+            strafeFactor = -1.0 / DriveSlowPower; // Strafe left
+        } else if (gamepad2.dpad_right) {
+            strafeFactor = 1.0 / DriveSlowPower; // Strafe right
+        }
+
+        if (goHome && (slidePosition <= 5)) {
+            slideTargetPosition = 0;
+            armTargetPosition = 0;
+        }
+
+        if (goHome && armDown.isPressed()) {
+            goHome = false;
+        }
 
         //Go X
         if (goX && (slidePosition <= 1500)) {
-            armTarget = 200;
+            armTargetPosition = 200;
             goX = false;
         }
 
         //Go Y
-        if (goY && Math.abs(armPosition - armTarget) <= armTolerance) {
-            slideTarget = slideLimit;
-            armTarget = 1200;
+        if (goY && (armPosition >= 1000)) {
+            slideTargetPosition = slideLimit;
             goY = false;
         }
 
