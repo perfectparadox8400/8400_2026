@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(600);
+        MeepMeep meepMeep = new MeepMeep(700);
 
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
 
@@ -20,9 +20,9 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(55)
+                .lineToY(50)
                 .turnTo(Math.toRadians(0))
-                .lineToX(55)
+                .lineToX(50)
                 .turnTo(Math.toRadians(45))
                 .lineToX(53)
                 .build()); //Put Code above this

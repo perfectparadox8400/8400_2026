@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class BarBlueShortWait extends LinearOpMode {
     @Override
     public void runOpMode()  {
+        wrist1.setPosition(0.15);
+        wrist2.setPosition(0.85);
         Pose2d start = new Pose2d(-16, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         waitForStart();
