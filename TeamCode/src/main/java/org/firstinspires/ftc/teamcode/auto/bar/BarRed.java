@@ -9,14 +9,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Bar Red Short", group = "bar")
-public class BarRedShort extends LinearOpMode {
+@Autonomous(name="Bar Red", group = "bar")
+public class BarRed extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
-        Pose2d start = new Pose2d(16, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
+        init_arm(hardwareMap);
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)
@@ -29,7 +28,6 @@ public class BarRedShort extends LinearOpMode {
                         .turnTo(Math.toRadians(0))
                         .lineToX(-25)
                         .build());
-        init_arm(hardwareMap);
         armTarget = 800;
         wrist1.setPosition(0.9);
         wrist2.setPosition(0.1);

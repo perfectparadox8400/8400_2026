@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.park;
 
-import static org.firstinspires.ftc.teamcode.modules.Arm.wrist1;
-import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
+import static org.firstinspires.ftc.teamcode.modules.Arm.init_arm;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -10,23 +9,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Park Red Short", group = "park")
-public class ParkRedShort extends LinearOpMode {
+@Autonomous(name="Park Blue", group = "park")
+public class ParkBlue extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
-        Pose2d start = new Pose2d(16, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(-16, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
+        init_arm(hardwareMap);
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)
                         .waitSeconds(Wait.None)
-                        .lineToY(-55)
-                        .turnTo(Math.toRadians(0))
-                        .lineToX(48)
-                        .turnTo(Math.toRadians(90))
-                        .lineToY(-63)
+                        .lineToY(55)
+                        .turnTo(Math.toRadians(180))
+                        .lineToX(-48)
+                        .turnTo(Math.toRadians(270))
+                        .lineToY(63)
                         .build());
     }
 }

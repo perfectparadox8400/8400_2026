@@ -9,7 +9,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
+        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(50, 50, Math.PI, Math.PI, 12)
@@ -20,11 +20,13 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(50)
+                .lineToY(-55)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-33)
+                .turnTo(Math.toRadians(90))
+                .lineToY(-10)
                 .turnTo(Math.toRadians(0))
-                .lineToX(50)
-                .turnTo(Math.toRadians(45))
-                .lineToX(53)
+                .lineToX(-25)
                 .build()); //Put Code above this
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

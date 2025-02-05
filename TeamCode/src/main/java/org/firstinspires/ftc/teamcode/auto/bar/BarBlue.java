@@ -1,35 +1,32 @@
 package org.firstinspires.ftc.teamcode.auto.bar;
 
-import static org.firstinspires.ftc.teamcode.modules.Arm.*;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Bar Red Long", group = "bar")
-public class BarRedLong extends LinearOpMode {
+@Autonomous(name="Bar Blue", group = "bar")
+public class BarBlue extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
-        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
+        init_arm(hardwareMap);
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)
                         .waitSeconds(Wait.None)
-                        .lineToY(-55)
-                        .turnTo(Math.toRadians(180))
-                        .lineToX(-33)
-                        .turnTo(Math.toRadians(90))
-                        .lineToY(-10)
+                        .lineToY(55)
                         .turnTo(Math.toRadians(0))
-                        .lineToX(-25)
+                        .lineToX(33)
+                        .turnTo(Math.toRadians(270))
+                        .lineToY(10)
+                        .turnTo(Math.toRadians(180))
+                        .lineToX(25)
                         .build());
-        init_arm(hardwareMap);
         armTarget = 800;
         wrist1.setPosition(0.9);
         wrist2.setPosition(0.1);
