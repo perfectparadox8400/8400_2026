@@ -29,6 +29,12 @@ public class BucketBlue extends LinearOpMode {
                         .turnTo(Math.toRadians(45))
                         .lineToX(53)
                         .stopAndAdd(Bucket.armBucket())
+                        .turnTo(Math.toRadians(-180))
+                        .lineToX(35)
+                        .turnTo(Math.toRadians(270))
+                        .lineToY(10)
+                        .turnTo(Math.toRadians(180))
+                        .lineToX(25)
                         .build());
     }
 }

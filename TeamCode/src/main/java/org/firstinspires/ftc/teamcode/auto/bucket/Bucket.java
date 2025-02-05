@@ -21,7 +21,6 @@ public class Bucket {
         public boolean run(@NonNull TelemetryPacket packet) {
             arm_loop();
             if (up && !isUp) {
-                arm();
                 armTargetPosition = armLimit;
                 if (armPosition >= 1000) {
                     isUp = true;
@@ -29,8 +28,6 @@ public class Bucket {
                     wrist2.setPosition(0.5);
                 }
             } else if (up) {
-                arm();
-                slide();
                 armTargetPosition = armLimit;
                 if (!out) {
                     in = false;
@@ -56,8 +53,6 @@ public class Bucket {
                     wrist2.setPosition(0.85);
                 }
             } else if (down && !isDown) {
-                arm();
-                slide();
                 isUp = false;
                 dispense = false;
                 dispenseStartTime = 0;
@@ -75,11 +70,39 @@ public class Bucket {
                     }
                 }
             } else return !isDown;
+            arm();
+            slide();
             return true;
         }
     }
 
     public static Action armBucket() {
         return new ArmBucket();
+    }
+
+    public static class IntakeOn implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(1);
+            intakeOther.setPower(-1);
+            return false;
+        }
+    }
+
+    public static Action intakeOn() {
+        return new IntakeOn();
+    }
+
+    public static class IntakeOff implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(0);
+            intakeOther.setPower(0);
+            return false;
+        }
+    }
+
+    public static Action intakeOff() {
+        return new IntakeOff();
     }
 }
