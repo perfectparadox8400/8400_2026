@@ -19,7 +19,7 @@ public class Bar {
             }
             arm();
             slide();
-            return false;
+            return true;
         }
     }
 

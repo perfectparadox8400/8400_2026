@@ -33,4 +33,17 @@ public class Start {
     public static Action armStart() {
         return new ArmStart();
     }
+
+    public static Runnable armLoop = new Runnable() {
+        /** @noinspection InfiniteLoopStatement*/
+        @Override
+        public void run() {
+            while (true) {
+                arm_loop();
+                arm();
+                slide();
+            }
+        }
+    };
+    public static Thread armThread = new Thread(armLoop);
 }

@@ -52,7 +52,7 @@ public class Arm {
     public static double slideTargetPosition = 0;
     public static double slidePosition = 0;
 
-    public static double slideTolerance = 5;
+    public static double slideTolerance = 30;
     public static double slideError = 0;
     public static boolean previousSlideBack = false;
 

@@ -19,7 +19,10 @@ public class Bucket {
         private long dispenseStartTime = 0;
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            arm_loop();
+            packet.put("Arm Position", armPosition);
+            packet.put("Arm Target", armTargetPosition);
+            packet.put("Slide Position", slidePosition);
+            packet.put("Slide Target", slideTargetPosition);
             if (up && !isUp) {
                 armTargetPosition = armLimit;
                 if (armPosition >= 1000) {
@@ -36,8 +39,8 @@ public class Bucket {
                         out = true;
                     }
                 } else if (!dispense) {
-                    intake.setPower(-1);
-                    intakeOther.setPower(1);
+                    intake.setPower(1);
+                    intakeOther.setPower(-1);
                     if (dispenseStartTime == 0) {
                         dispenseStartTime = System.currentTimeMillis();
                     }
@@ -58,7 +61,7 @@ public class Bucket {
                 dispenseStartTime = 0;
                 if (out) {
                     slideTargetPosition = 0;
-                    if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
+                    if (slideBack.isPressed()) {
                         out = false;
                         in = true;
                     }
@@ -70,8 +73,6 @@ public class Bucket {
                     }
                 }
             } else return !isDown;
-            arm();
-            slide();
             return true;
         }
     }

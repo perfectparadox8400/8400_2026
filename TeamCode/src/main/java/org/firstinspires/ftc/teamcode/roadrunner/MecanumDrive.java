@@ -32,7 +32,6 @@ import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -60,28 +59,28 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         // drive model parameters
-        public double inPerTick = 0.0019701129671159; //47713
-        public double lateralInPerTick = 0.000871537955715291;
-        public double trackWidthTicks = 5741.902962549881;
+        public double inPerTick = 0.0019606622681439;
+        public double lateralInPerTick = 0.0008599496298921591;
+        public double trackWidthTicks = 5685.160507937776;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.2934563606171614;
-        public double kV = 0.00026567917944503907;
-        public double kA = 0.00004;
+        public double kS = 1.2440040612944019;
+        public double kV = 0.00027161197841005344;
+        public double kA = 0.00001;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 30;
+        public double maxWheelVel = 50;
         public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public double maxProfileAccel = 40;
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 4.3;
-        public double lateralGain = 7.0;
-        public double headingGain = 3; // shared with turn
+        public double axialGain = 4.0;
+        public double lateralGain = 0.01;
+        public double headingGain = 20.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
