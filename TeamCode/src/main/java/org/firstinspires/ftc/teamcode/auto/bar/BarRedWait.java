@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.auto.Start;
+import org.firstinspires.ftc.teamcode.auto.Wait;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Bar Red Wait", group = "bar")
@@ -19,6 +21,7 @@ public class BarRedWait extends LinearOpMode {
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)
+                        .stopAndAdd(Start.armStart())
                         .waitSeconds(Wait.Wait)
                         .lineToY(-55)
                         .turnTo(Math.toRadians(180))
@@ -26,14 +29,8 @@ public class BarRedWait extends LinearOpMode {
                         .turnTo(Math.toRadians(90))
                         .lineToY(-10)
                         .turnTo(Math.toRadians(0))
-                        .lineToX(-25)
+                        .lineToX(-28)
+                        .stopAndAdd(Bar.armBar())
                         .build());
-        armTarget = 800;
-        wrist1.setPosition(0.9);
-        wrist2.setPosition(0.1);
-        while (opModeIsActive()) {
-            arm_loop();
-            arm();
-        }
     }
 }

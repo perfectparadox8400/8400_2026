@@ -9,32 +9,24 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
+        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(50, 50, Math.PI, Math.PI, 12)
-                .setDimensions(15, 18)
+                .setConstraints(40, 40, Math.PI, Math.PI, 12.64)
+                .setDimensions(16, 18)
                 .setColorScheme(PPColor.perfectParadox)
                 .setStartPose(start)
                 .build();
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(55)
+                .lineToY(-55)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-33)
+                .turnTo(Math.toRadians(90))
+                .lineToY(-10)
                 .turnTo(Math.toRadians(0))
-                .lineToX(55)
-                .turnTo(Math.toRadians(55))
-                .lineToX(54)
-                .turnTo(Math.toRadians(0))
-                .lineToX(60)
-                .turnTo(Math.toRadians(270))
-                .lineToY(36)
-                .turnTo(Math.toRadians(-175))
-                .lineToX(38)
-                .turnTo(Math.toRadians(280))
-                .lineToY(10)
-                .turnTo(Math.toRadians(190))
-                .lineToX(30)
+                .lineToX(-28)
                 .build()); //Put Code above this
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
@@ -44,3 +36,30 @@ public class MeepMeepTesting {
                 .start();
     }
 }
+
+/*
+                .lineToY(52)
+                .turnTo(Math.toRadians(0))
+                .lineToX(52.5)
+                .turnTo(Math.toRadians(45))
+                .lineToX(54)
+                .waitSeconds(1)
+                .turnTo(Math.toRadians(270))
+                .strafeToConstantHeading(new Vector2d(58.5,40))
+                .turnTo(Math.toRadians(270))
+                .lineToY(35)
+                .strafeToConstantHeading(new Vector2d(54,52.5))
+                .turnTo(Math.toRadians(45))
+                .waitSeconds(1)
+                .turnTo(Math.toRadians(270))
+                .strafeToConstantHeading(new Vector2d(48.5,40))
+                .turnTo(Math.toRadians(270))
+                .lineToY(35)
+                .strafeToConstantHeading(new Vector2d(54,52.5))
+                .turnTo(Math.toRadians(45))
+                .waitSeconds(1)
+                .turnTo(Math.toRadians(270))
+                .lineToY(10)
+                .turnTo(Math.toRadians(180))
+                .lineToX(25)
+ */
