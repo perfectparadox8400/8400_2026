@@ -7,19 +7,16 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-/** @noinspection FieldMayBeFinal*/
 public class Start {
-    private static boolean runningLoop = false;
     public static class ArmStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            runningLoop = false;
             if (slideBack.isPressed()){
                 slide_reset(false);
                 if(armDown.isPressed()){
                     arm_reset(false);
                     packet.put("Resetting", "Done");
-                    armThread.start();
+                    ArmLoop.startThread();
                     return false;
                 } else {
                     packet.put("Resetting", "Arm");
@@ -38,22 +35,40 @@ public class Start {
         return new ArmStart();
     }
 
-    private static Runnable armLoop = new Runnable() {
-        private boolean running = true;
+    public static class ArmLoop {
+        private static Thread armThread;
+        private static volatile boolean running = false;
 
-        @Override
-        public void run() {
-            runningLoop = true;
-            long startTime = System.currentTimeMillis();
-            while (running) {
-                if (System.currentTimeMillis() - startTime >= 30500) {
-                    //running = false;
+        public static void startThread() {
+            stopThread(); // Ensure any running thread is stopped before starting a new one
+
+            armThread = new Thread(() -> {
+                running = true;
+                long startTime = System.currentTimeMillis();
+
+                while (running) {
+                    if (System.currentTimeMillis() - startTime >= 30500) {
+                        break; // Stop after 30.5 seconds
+                    }
+                    arm_loop();
+                    arm();
+                    slide();
                 }
-                arm_loop();
-                arm();
-                slide();
+                running = false;
+            });
+
+            armThread.start();
+        }
+
+        public static void stopThread() {
+            if (armThread != null && armThread.isAlive()) {
+                running = false;
+                try {
+                    armThread.join(); // Wait for the thread to finish before starting a new one
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-    };
-    private static Thread armThread = new Thread(armLoop);
+    }
 }
