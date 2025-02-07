@@ -21,7 +21,6 @@ public class BucketRedWait extends LinearOpMode {
         init_arm(hardwareMap);
         Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        opModeIsActive();
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)

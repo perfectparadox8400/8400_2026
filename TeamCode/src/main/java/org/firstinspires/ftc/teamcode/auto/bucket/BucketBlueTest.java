@@ -21,7 +21,6 @@ public class BucketBlueTest extends LinearOpMode {
         init_arm(hardwareMap);
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        opModeIsActive();
         waitForStart();
         Actions.runBlocking(
                 drive.actionBuilder(start)

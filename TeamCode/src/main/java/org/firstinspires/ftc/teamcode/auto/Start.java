@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 
 import androidx.annotation.NonNull;
@@ -8,11 +7,13 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-
+/** @noinspection FieldMayBeFinal*/
 public class Start {
+    private static boolean runningLoop = false;
     public static class ArmStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            runningLoop = false;
             if (slideBack.isPressed()){
                 slide_reset(false);
                 if(armDown.isPressed()){
@@ -37,17 +38,22 @@ public class Start {
         return new ArmStart();
     }
 
-    private static final Runnable armLoop = new Runnable() {
-        /** @noinspection InfiniteLoopStatement*/
+    private static Runnable armLoop = new Runnable() {
+        private boolean running = true;
+
         @Override
         public void run() {
-            while (true) {
+            runningLoop = true;
+            long startTime = System.currentTimeMillis();
+            while (running) {
+                if (System.currentTimeMillis() - startTime >= 30500) {
+                    //running = false;
+                }
                 arm_loop();
                 arm();
                 slide();
-                arm_telemetry(telemetry);
             }
         }
     };
-    private static final Thread armThread = new Thread(armLoop);
+    private static Thread armThread = new Thread(armLoop);
 }

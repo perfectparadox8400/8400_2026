@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
+/** @noinspection FieldMayBeFinal*/
 public class Bucket {
     private static boolean hasSample = true;
     private static boolean inPosition = false;
@@ -24,7 +25,7 @@ public class Bucket {
         return new ArmBucket();
     }
 
-    private static final Runnable armBucketLoop = new Runnable() {
+    private static Runnable armBucketLoop = new Runnable() {
         private boolean up = true;
         private boolean isUp = false;
         private boolean down = false;
@@ -64,14 +65,12 @@ public class Bucket {
                                 intake.setPower(0);
                                 intakeOther.setPower(0);
                                 dispense = true;
-                                hasSample = false;
+                                up = false;
+                                down = true;
+                                wrist1.setPosition(0.15);
+                                wrist2.setPosition(0.85);
+                                inPosition = false;
                             }
-                        } else if (inPosition) {
-                            up = false;
-                            down = true;
-                            wrist1.setPosition(0.15);
-                            wrist2.setPosition(0.85);
-                            inPosition = false;
                         }
                     } else if (down && !isDown) {
                         isUp = false;
@@ -93,13 +92,14 @@ public class Bucket {
                     } else if (isDown) {
                         up = true;
                         armBucketDone = true;
+                        hasSample = false;
                     }
                 }
             }
         }
     };
 
-    private static final Thread ArmBucketLoop = new Thread(armBucketLoop);
+    private static Thread ArmBucketLoop = new Thread(armBucketLoop);
 
     public static Action getSample() {
         return new GetSample();
@@ -117,7 +117,7 @@ public class Bucket {
         }
     }
 
-    private static final Runnable getSampleLoop = () -> {
+    private static Runnable getSampleLoop = () -> {
         while (!hasSample) {
             armTargetPosition = 5;
             wrist1.setPosition(0.85);
@@ -131,7 +131,7 @@ public class Bucket {
         }
     };
 
-    private static final Thread GetSampleLoop = new Thread(getSampleLoop);
+    private static Thread GetSampleLoop = new Thread(getSampleLoop);
 
     public static class GrabSample implements Action {
         private long grabStartTime = 0;
