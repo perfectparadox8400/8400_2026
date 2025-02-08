@@ -39,6 +39,8 @@ public class Bucket {
                         in = false;
                         slideTargetPosition = slideLimit;
                         if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
+                            wrist1.setPosition(0.6);
+                            wrist2.setPosition(0.4);
                             out = true;
                         }
                     } else if (!dispense && inPosition) {

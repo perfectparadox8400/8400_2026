@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto.Start;
-import org.firstinspires.ftc.teamcode.auto.bar.Bar;
 import org.firstinspires.ftc.teamcode.auto.Wait;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -38,27 +37,28 @@ public class BucketBlue extends LinearOpMode {
                 .turnTo(Math.toRadians(270))
                 .strafeToConstantHeading(new Vector2d(58.5,40))
                 .turnTo(Math.toRadians(270))
-                .lineToY(35);
+                .lineToY(39);
 
         TrajectoryActionBuilder step4 = step3.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45));
-
-        TrajectoryActionBuilder step5 = step4.endTrajectory().fresh()
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(48.5,40))
-                .turnTo(Math.toRadians(270))
                 .lineToY(35);
 
-        TrajectoryActionBuilder step6 = step5.endTrajectory().fresh()
+        TrajectoryActionBuilder step5 = step4.endTrajectory().fresh()
                 .strafeToConstantHeading(new Vector2d(54,52.5))
                 .turnTo(Math.toRadians(45));
 
-        TrajectoryActionBuilder step7 = step6.endTrajectory().fresh()
-                .turnTo(Math.toRadians(270))
-                .lineToY(10)
-                .turnTo(Math.toRadians(180))
-                .lineToX(25);
+        TrajectoryActionBuilder step6 = step5.endTrajectory().fresh()
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(58.5,40))
+                .turnTo(Math.toRadians(90))
+                .lineToY(12)
+                .strafeToConstantHeading(new Vector2d(62.5,12))
+                .turnTo(Math.toRadians(90))
+                .lineToY(50)
+                .lineToY(12)
+                .strafeToConstantHeading(new Vector2d(48,12))
+                .turnTo(Math.toRadians(75))
+                .lineToY(55)
+                .lineToY(45);
 
         waitForStart();
         Actions.runBlocking(new SequentialAction(
@@ -75,24 +75,15 @@ public class BucketBlue extends LinearOpMode {
                                                 Bucket.bucketDone(),
                                                 step3.build(),
                                                 Bucket.getSample(),
+                                                step4.build(),
                                                 Bucket.grabSample(),
                                                 new ParallelAction(
                                                         Bucket.armBucket(),
                                                         new SequentialAction(
-                                                                step4.build(),
-                                                                Bucket.setInPosition(),
-                                                                Bucket.getSample(),
                                                                 step5.build(),
-                                                                Bucket.grabSample(),
-                                                                new ParallelAction(
-                                                                        Bucket.armBucket(),
-                                                                        new SequentialAction(
-                                                                                step6.build(),
-                                                                                Bucket.setInPosition(),
-                                                                                step7.build(),
-                                                                                Bar.armBar()
-                                                                        )
-                                                                )
+                                                                Bucket.setInPosition(),
+                                                                Bucket.bucketDone(),
+                                                                step6.build()
                                                         )
                                                 )
                                         )
