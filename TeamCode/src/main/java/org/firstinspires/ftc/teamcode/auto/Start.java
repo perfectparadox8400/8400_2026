@@ -16,7 +16,6 @@ public class Start {
                 if(armDown.isPressed()){
                     arm_reset(false);
                     packet.put("Resetting", "Done");
-                    ArmLoop.startThread();
                     return false;
                 } else {
                     packet.put("Resetting", "Arm");
@@ -35,40 +34,21 @@ public class Start {
         return new ArmStart();
     }
 
-    public static class ArmLoop {
-        private static Thread armThread;
-        private static volatile boolean running = false;
-
-        public static void startThread() {
-            stopThread(); // Ensure any running thread is stopped before starting a new one
-
-            armThread = new Thread(() -> {
-                running = true;
-                long startTime = System.currentTimeMillis();
-
-                while (running) {
-                    if (System.currentTimeMillis() - startTime >= 30500) {
-                        break; // Stop after 30.5 seconds
-                    }
-                    arm_loop();
-                    arm();
-                    slide();
-                }
-                running = false;
-            });
-
-            armThread.start();
+    public static class ArmLoop implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            packet.put("Arm Position", armPosition);
+            packet.put("Arm Target", armTargetPosition);
+            packet.put("Slide Position", slidePosition);
+            packet.put("Slide Target", slideTargetPosition);
+            arm_loop();
+            arm();
+            slide();
+            return true;
         }
+    }
 
-        public static void stopThread() {
-            if (armThread != null && armThread.isAlive()) {
-                running = false;
-                try {
-                    armThread.join(); // Wait for the thread to finish before starting a new one
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
+    public static Action armLoop() {
+        return new ArmLoop();
     }
 }
