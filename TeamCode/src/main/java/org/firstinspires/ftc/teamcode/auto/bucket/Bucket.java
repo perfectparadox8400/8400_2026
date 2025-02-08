@@ -145,4 +145,15 @@ public class Bucket {
     public static Action setInPosition() {
         return new SetInPosition();
     }
+
+    public static Action bucketDone() {
+        return new BucketDone();
+    }
+
+    public static class BucketDone implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            return inPosition;
+        }
+    }
 }

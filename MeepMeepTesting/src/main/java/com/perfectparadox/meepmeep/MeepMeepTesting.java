@@ -1,6 +1,7 @@
 package com.perfectparadox.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -9,7 +10,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        Pose2d start = new Pose2d(15, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(40, 40, Math.PI, Math.PI, 12.64)
@@ -20,13 +21,33 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(-38)
+                .lineToY(-52)
+                .turnTo(Math.toRadians(180))
+
+                .lineToX(-52.5)
+                .turnTo(Math.toRadians(225))
+                .lineToX(-54)
+
                 .turnTo(Math.toRadians(90))
-//                .lineToX(-33)
-//                .turnTo(Math.toRadians(90))
-//                .lineToY(-10)
-//                .turnTo(Math.toRadians(0))
-//                .lineToX(-28)
+                .strafeToConstantHeading(new Vector2d(-58.5,-40))
+                .turnTo(Math.toRadians(90))
+                .lineToY(-35)
+
+                .strafeToConstantHeading(new Vector2d(-54,-52.5))
+                .turnTo(Math.toRadians(225))
+
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(-48.5,-40))
+                .turnTo(Math.toRadians(90))
+                .lineToY(-35)
+
+                .strafeToConstantHeading(new Vector2d(-54,-52.5))
+                .turnTo(Math.toRadians(225))
+
+                .turnTo(Math.toRadians(90))
+                .lineToY(-10)
+                .turnTo(Math.toRadians(0))
+                .lineToX(-25)
                 .build()); //Put Code above this
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

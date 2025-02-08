@@ -72,8 +72,9 @@ public class BucketBlue extends LinearOpMode {
                                         new SequentialAction(
                                                 step2.build(),
                                                 Bucket.setInPosition(),
-                                                Bucket.getSample(),
+                                                Bucket.bucketDone(),
                                                 step3.build(),
+                                                Bucket.getSample(),
                                                 Bucket.grabSample(),
                                                 new ParallelAction(
                                                         Bucket.armBucket(),
