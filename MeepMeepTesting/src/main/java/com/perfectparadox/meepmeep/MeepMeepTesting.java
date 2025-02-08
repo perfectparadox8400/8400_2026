@@ -10,7 +10,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
+        Pose2d start = new Pose2d(-16, 63, Math.toRadians(270));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(40, 40, Math.PI, Math.PI, 12.64)
@@ -21,34 +21,27 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(52)
-                .turnTo(Math.toRadians(0))
-
-                .lineToX(52.5)
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,40))
-                .turnTo(Math.toRadians(270))
-
-                .lineToY(35)
-
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45))
-
-                .turnTo(Math.toRadians(90))
-                .strafeToConstantHeading(new Vector2d(58.5,40))
-                .turnTo(Math.toRadians(90))
-                .lineToY(12)
-                .strafeToConstantHeading(new Vector2d(62.5,12))
-                .turnTo(Math.toRadians(90))
-                .lineToY(50)
-                .lineToY(12)
-                .strafeToConstantHeading(new Vector2d(48,12))
-                .turnTo(Math.toRadians(75))
                 .lineToY(55)
-                .lineToY(45)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-36)
+                .turnTo(Math.toRadians(270))
+                .lineToY(10)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-42)
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(10)
+                .strafeToConstantHeading(new Vector2d(-55,10))
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(10)
+                .strafeToConstantHeading(new Vector2d(-63,10))
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(48)
+                .strafeToConstantHeading(new Vector2d(-48,48))
+                .turnTo(Math.toRadians(270))
+                .lineToY(61)
                 .build()); //Put Code above this
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

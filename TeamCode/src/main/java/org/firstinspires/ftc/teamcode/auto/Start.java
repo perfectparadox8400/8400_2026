@@ -11,6 +11,8 @@ public class Start {
     public static class ArmStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            wrist1.setPosition(0.15);
+            wrist2.setPosition(0.85);
             if (slideBack.isPressed()){
                 slide_reset(false);
                 if(armDown.isPressed()){

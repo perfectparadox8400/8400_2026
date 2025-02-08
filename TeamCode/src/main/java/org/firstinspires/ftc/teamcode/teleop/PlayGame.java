@@ -24,6 +24,8 @@ public class PlayGame extends OpMode {
     @Override
     public void start() {
         start = true;
+        wrist1.setPosition(0.15);
+        wrist2.setPosition(0.85);
     }
 
     @Override

@@ -76,8 +76,6 @@ public class Arm {
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slide.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
         intake.setPower(0);
         intakeOther.setPower(0);
 
