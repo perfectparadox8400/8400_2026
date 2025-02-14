@@ -13,7 +13,7 @@ public class Drive {
     public static DcMotor left_back = null;
     public static DcMotor right_back = null;
 
-    public static double DrivePower = 2.5;
+    public static double DrivePower = 2;
     public static double DriveSlowPower = 3;
     public static double turnFactor = 0;
     public static double strafeFactor = 0.0;

@@ -77,9 +77,9 @@ public class PlayGame extends OpMode {
 
         /* ------ SLIDE LOGIC ------ */
         if (gamepad2.left_bumper) {
-            slideTargetPosition -= 40;
+            slideTargetPosition -= 60;
         } else if (gamepad2.right_bumper) {
-            slideTargetPosition += 40;
+            slideTargetPosition += 60;
         }
 
         /* ------ RESET ------ */
@@ -92,16 +92,16 @@ public class PlayGame extends OpMode {
 
         /* ------WRIST LOGIC------ */
         if (gamepad2.dpad_up) {
-            wrist1.setPosition(wrist1.getPosition() + .008);
-            wrist2.setPosition(wrist2.getPosition() - .008);
+            wrist1.setPosition(wrist1.getPosition() + .015);
+            wrist2.setPosition(wrist2.getPosition() - .015);
         }
         if (gamepad2.dpad_down) {
             if(wrist1.getPosition() < 0.15 || wrist2.getPosition() > 0.85) {
                 wrist1.setPosition(0.15);
                 wrist2.setPosition(0.85);
             }
-            wrist1.setPosition(wrist1.getPosition() - .008);
-            wrist2.setPosition(wrist2.getPosition() + .008);
+            wrist1.setPosition(wrist1.getPosition() - .015);
+            wrist2.setPosition(wrist2.getPosition() + .015);
         }
 
         /* ------ MAIN BOOM LOGIC ------ */
@@ -115,12 +115,28 @@ public class PlayGame extends OpMode {
         if (gamepad2.right_stick_y > 0.2){
             intake.setPower(-1);
             intakeOther.setPower(1);
-       } else if (gamepad2.right_stick_y < -0.2){
+        } else if (gamepad2.right_stick_y < -0.2){
             intake.setPower(1);
             intakeOther.setPower(-1);
+        } else if (gamepad2.right_stick_x > 0.2){
+            intake.setPower(-1);
+            intakeOther.setPower(-1);
+        } else if (gamepad2.right_stick_x < -0.2){
+            intake.setPower(1);
+            intakeOther.setPower(1);
         } else {
             intake.setPower(0);
             intakeOther.setPower(0);
+        }
+
+        if (gamepad2.b) {
+            wrist1.setPosition(0.15);
+            wrist2.setPosition(0.85);
+        }
+
+        if (gamepad2.a) {
+            wrist1.setPosition(0.8);
+            wrist2.setPosition(0.2);
         }
 
         /* ------ PRESETS ------ */
@@ -146,7 +162,7 @@ public class PlayGame extends OpMode {
             strafeFactor = 1.0 / DriveSlowPower; // Strafe right
         }
 
-        if (goHome && (slidePosition <= 5)) {
+        if (goHome && (slidePosition <= 2000)) {
             slideTargetPosition = 0;
             armTargetPosition = 0;
         }
@@ -156,14 +172,16 @@ public class PlayGame extends OpMode {
         }
 
         //Go X
-        if (goX && (slidePosition <= 1500)) {
+        if (goX && (slidePosition <= 2000)) {
             armTargetPosition = 200;
             goX = false;
         }
 
         //Go Y
-        if (goY && (armPosition >= 1000)) {
+        if (goY && (armPosition >= 950)) {
             slideTargetPosition = slideLimit;
+            wrist1.setPosition(0.6);
+            wrist2.setPosition(0.4);
             goY = false;
         }
 

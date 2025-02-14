@@ -13,6 +13,12 @@ public class Bucket {
     private static boolean inPosition = false;
     private static boolean armBucketDone = false;
 
+    public static void resetBucket() {
+        hasSample = true;
+        inPosition = false;
+        armBucketDone = false;
+    }
+
     public static class ArmBucket implements Action {
         private boolean up = true;
         private boolean isUp = false;
@@ -25,6 +31,13 @@ public class Bucket {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            packet.put("up", up);
+            packet.put("isUp", isUp);
+            packet.put("down", down);
+            packet.put("isDown", isDown);
+            packet.put("in", in);
+            packet.put("out", out);
+            packet.put("dispense", dispense);
             if (hasSample) {
                 if (up && !isUp) {
                     isDown = false;

@@ -11,56 +11,57 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.auto.Arm;
 import org.firstinspires.ftc.teamcode.auto.Start;
-import org.firstinspires.ftc.teamcode.auto.bar.Bar;
 import org.firstinspires.ftc.teamcode.auto.Wait;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Bucket Red", group = "bucket")
-public class BucketRed extends LinearOpMode {
+@Autonomous(name="Bucket 2", group = "bucket")
+public class Bucket2 extends LinearOpMode {
     @Override
     public void runOpMode()  {
         init_arm(hardwareMap);
-        Pose2d start = new Pose2d(-31, -63, Math.toRadians(90));
+        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(Wait.None)
-                .lineToY(-52)
-                .turnTo(Math.toRadians(180));
+                .lineToY(52);
 
         TrajectoryActionBuilder step2 = step1.endTrajectory().fresh()
+                .turnTo(Math.toRadians(0))
                 .lineToX(52.5)
                 .turnTo(Math.toRadians(45))
                 .lineToX(54);
 
         TrajectoryActionBuilder step3 = step2.endTrajectory().fresh()
                 .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,40))
+                .strafeToConstantHeading(new Vector2d(58.5,42))
                 .turnTo(Math.toRadians(270))
-                .lineToY(35);
+                .lineToY(41);
 
         TrajectoryActionBuilder step4 = step3.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45));
+                .lineToY(36);
 
         TrajectoryActionBuilder step5 = step4.endTrajectory().fresh()
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(48.5,40))
-                .turnTo(Math.toRadians(270))
-                .lineToY(35);
+                .strafeToConstantHeading(new Vector2d(52.5,52))
+                .turnTo(Math.toRadians(45))
+                .lineToX(54);
 
         TrajectoryActionBuilder step6 = step5.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45));
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(60.5,40))
+                .turnTo(Math.toRadians(90))
+                .lineToY(12)
+                .strafeToConstantHeading(new Vector2d(65,12))
+                .turnTo(Math.toRadians(90))
+                .lineToY(50)
+                .lineToY(12)
+                .strafeToConstantHeading(new Vector2d(48,12))
+                .turnTo(Math.toRadians(75))
+                .lineToY(54)
+                .lineToY(45);
 
-        TrajectoryActionBuilder step7 = step6.endTrajectory().fresh()
-                .turnTo(Math.toRadians(270))
-                .lineToY(10)
-                .turnTo(Math.toRadians(180))
-                .lineToX(25);
-
+        Bucket.resetBucket();
         waitForStart();
         Actions.runBlocking(new SequentialAction(
                 Start.armStart(),
@@ -73,26 +74,18 @@ public class BucketRed extends LinearOpMode {
                                         new SequentialAction(
                                                 step2.build(),
                                                 Bucket.setInPosition(),
-                                                Bucket.getSample(),
+                                                Bucket.bucketDone(),
                                                 step3.build(),
+                                                Bucket.getSample(),
+                                                step4.build(),
                                                 Bucket.grabSample(),
                                                 new ParallelAction(
                                                         Bucket.armBucket(),
                                                         new SequentialAction(
-                                                                step4.build(),
-                                                                Bucket.setInPosition(),
-                                                                Bucket.getSample(),
                                                                 step5.build(),
-                                                                Bucket.grabSample(),
-                                                                new ParallelAction(
-                                                                        Bucket.armBucket(),
-                                                                        new SequentialAction(
-                                                                                step6.build(),
-                                                                                Bucket.setInPosition(),
-                                                                                step7.build(),
-                                                                                Bar.armBar()
-                                                                        )
-                                                                )
+                                                                Bucket.setInPosition(),
+                                                                Bucket.bucketDone(),
+                                                                step6.build()
                                                         )
                                                 )
                                         )
