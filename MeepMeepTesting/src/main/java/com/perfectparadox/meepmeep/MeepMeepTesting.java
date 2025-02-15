@@ -10,7 +10,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
+        Pose2d start = new Pose2d(-8, 63, Math.toRadians(270));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(40, 40, Math.PI, Math.PI, 12.64)
@@ -21,39 +21,15 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(52)
-
-                .turnTo(Math.toRadians(0))
-                .lineToX(52.5)
-                .turnTo(Math.toRadians(45))
-                .lineToX(54).turnTo(Math.toRadians(0))
-                .lineToX(52.5)
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
+                .lineToY(38)
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(-35,58))
                 .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,45))
+                .strafeToConstantHeading(new Vector2d(-4,38))
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(-35,58))
                 .turnTo(Math.toRadians(270))
-                .lineToY(44)
-
-                .lineToY(36)
-
-                .strafeToConstantHeading(new Vector2d(52.5,52))
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
-                .turnTo(Math.toRadians(90))
-                .strafeToConstantHeading(new Vector2d(61.5,40))
-                .turnTo(Math.toRadians(90))
-                .lineToY(12)
-                .strafeToConstantHeading(new Vector2d(66,12))
-                .turnTo(Math.toRadians(90))
-                .strafeToConstantHeading(new Vector2d(60,50))
-                .strafeToConstantHeading(new Vector2d(55,12))
-                .strafeToConstantHeading(new Vector2d(48,12))
-                .turnTo(Math.toRadians(80))
-                .lineToY(54)
-                .lineToY(45)
+                .strafeToConstantHeading(new Vector2d(-2,38))
 
                 .build()); //Put Code above this
 
