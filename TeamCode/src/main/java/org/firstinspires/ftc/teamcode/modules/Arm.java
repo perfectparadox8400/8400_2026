@@ -165,8 +165,8 @@ public class Arm {
                 armTarget = armTargetPosition;
             }
         } else if (armTarget > armTargetPosition) {
-            if ((armTarget - armTargetPosition) > 10) {
-                armTarget -= 10;
+            if ((armTarget - armTargetPosition) > 13) {
+                armTarget -= 13;
             } else {
                 armTarget = armTargetPosition;
             }

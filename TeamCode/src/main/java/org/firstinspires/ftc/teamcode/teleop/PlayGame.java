@@ -77,9 +77,9 @@ public class PlayGame extends OpMode {
 
         /* ------ SLIDE LOGIC ------ */
         if (gamepad2.left_bumper) {
-            slideTargetPosition -= 60;
+            slideTargetPosition -= 55;
         } else if (gamepad2.right_bumper) {
-            slideTargetPosition += 60;
+            slideTargetPosition += 55;
         }
 
         /* ------ RESET ------ */
