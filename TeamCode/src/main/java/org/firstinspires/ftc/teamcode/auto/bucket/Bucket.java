@@ -19,88 +19,76 @@ public class Bucket {
         armBucketDone = false;
     }
 
+    public enum ArmState {
+        MOVE_UP, EXTEND, DISPENSE, RETRACT, MOVE_DOWN, DONE
+    }
+
     public static class ArmBucket implements Action {
-        private boolean up = true;
-        private boolean isUp = false;
-        private boolean down = false;
-        private boolean isDown = true;
-        private boolean in = true;
-        private boolean out = false;
-        private boolean dispense = false;
+        private ArmState state = ArmState.MOVE_UP;
         private long dispenseStartTime = 0;
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            packet.put("up", up);
-            packet.put("isUp", isUp);
-            packet.put("down", down);
-            packet.put("isDown", isDown);
-            packet.put("in", in);
-            packet.put("out", out);
-            packet.put("dispense", dispense);
-            if (hasSample) {
-                if (up && !isUp) {
-                    isDown = false;
+            if (!hasSample) return false;
+
+            switch (state) {
+                case MOVE_UP:
                     armTargetPosition = armLimit;
                     if (armPosition >= 1000) {
-                        isUp = true;
                         wrist1.setPosition(0.5);
                         wrist2.setPosition(0.5);
+                        state = ArmState.EXTEND;
                     }
-                } else if (up) {
-                    if (!out) {
-                        in = false;
-                        slideTargetPosition = slideLimit;
-                        if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
-                            wrist1.setPosition(0.6);
-                            wrist2.setPosition(0.4);
-                            out = true;
-                        }
-                    } else if (!dispense && inPosition) {
+                    break;
+
+                case EXTEND:
+                    slideTargetPosition = slideLimit;
+                    if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
+                        wrist1.setPosition(0.6);
+                        wrist2.setPosition(0.4);
+                        state = ArmState.DISPENSE;
+                    }
+                    break;
+
+                case DISPENSE:
+                    if (dispenseStartTime == 0) {
                         intake.setPower(1);
                         intakeOther.setPower(-1);
-                        if (dispenseStartTime == 0) {
-                            dispenseStartTime = System.currentTimeMillis();
-                        }
-                        if (System.currentTimeMillis() - dispenseStartTime >= 1000) {
-                            intake.setPower(0);
-                            intakeOther.setPower(0);
-                            dispense = true;
-                            up = false;
-                            down = true;
-                            wrist1.setPosition(0.15);
-                            wrist2.setPosition(0.85);
-                            inPosition = false;
-                        }
+                        dispenseStartTime = System.currentTimeMillis();
                     }
-                } else if (down && !isDown) {
-                    isUp = false;
-                    dispense = false;
-                    dispenseStartTime = 0;
-                    if (out) {
-                        slideTargetPosition = 0;
-                        if (slideBack.isPressed()) {
-                            out = false;
-                            in = true;
-                        }
-                    } else if (in) {
-                        armTargetPosition = 0;
-                        if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
-                            down = false;
-                            isDown = true;
-                        }
+                    if (System.currentTimeMillis() - dispenseStartTime >= 1000) {
+                        intake.setPower(0);
+                        intakeOther.setPower(0);
+                        wrist1.setPosition(0.15);
+                        wrist2.setPosition(0.85);
+                        inPosition = false;
+                        state = ArmState.RETRACT;
                     }
-                } else if (isDown) {
-                    up = true;
+                    break;
+
+                case RETRACT:
+                    slideTargetPosition = 0;
+                    if (slideBack.isPressed()) {
+                        state = ArmState.MOVE_DOWN;
+                    }
+                    break;
+
+                case MOVE_DOWN:
+                    armTargetPosition = 0;
+                    if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
+                        state = ArmState.DONE;
+                    }
+                    break;
+
+                case DONE:
                     armBucketDone = true;
                     hasSample = false;
                     return false;
-                }
             }
             return true;
         }
     }
-
+    
     public static Action armBucket() {
         return new ArmBucket();
     }
