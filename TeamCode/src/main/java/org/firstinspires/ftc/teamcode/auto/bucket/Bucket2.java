@@ -35,9 +35,9 @@ public class Bucket2 extends LinearOpMode {
 
         TrajectoryActionBuilder step3 = step2.endTrajectory().fresh()
                 .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,42))
+                .strafeToConstantHeading(new Vector2d(58.5,45))
                 .turnTo(Math.toRadians(270))
-                .lineToY(41);
+                .lineToY(44);
 
         TrajectoryActionBuilder step4 = step3.endTrajectory().fresh()
                 .lineToY(36);
@@ -49,15 +49,15 @@ public class Bucket2 extends LinearOpMode {
 
         TrajectoryActionBuilder step6 = step5.endTrajectory().fresh()
                 .turnTo(Math.toRadians(90))
-                .strafeToConstantHeading(new Vector2d(60.5,40))
+                .strafeToConstantHeading(new Vector2d(61.5,40))
                 .turnTo(Math.toRadians(90))
                 .lineToY(12)
-                .strafeToConstantHeading(new Vector2d(65,12))
+                .strafeToConstantHeading(new Vector2d(66,12))
                 .turnTo(Math.toRadians(90))
-                .lineToY(50)
-                .lineToY(12)
+                .strafeToConstantHeading(new Vector2d(60,50))
+                .strafeToConstantHeading(new Vector2d(55,12))
                 .strafeToConstantHeading(new Vector2d(48,12))
-                .turnTo(Math.toRadians(75))
+                .turnTo(Math.toRadians(80))
                 .lineToY(54)
                 .lineToY(45);
 

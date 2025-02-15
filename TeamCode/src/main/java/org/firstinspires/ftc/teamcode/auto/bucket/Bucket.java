@@ -101,11 +101,11 @@ public class Bucket {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (armBucketDone && !hasSample) {
-                armTargetPosition = 5;
-                wrist1.setPosition(0.60);
-                wrist2.setPosition(0.40);
+                armTargetPosition = 0;
+                wrist1.setPosition(0.5694);
+                wrist2.setPosition(0.4294);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
-                    slideTargetPosition = 100;
+                    slideTargetPosition = 0;
                     intake.setPower(-1);
                     intakeOther.setPower(1);
                     hasSample = true;

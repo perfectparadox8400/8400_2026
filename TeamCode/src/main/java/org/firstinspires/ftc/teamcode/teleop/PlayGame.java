@@ -92,16 +92,16 @@ public class PlayGame extends OpMode {
 
         /* ------WRIST LOGIC------ */
         if (gamepad2.dpad_up) {
-            wrist1.setPosition(wrist1.getPosition() + .015);
-            wrist2.setPosition(wrist2.getPosition() - .015);
+            wrist1.setPosition(wrist1.getPosition() + .012);
+            wrist2.setPosition(wrist2.getPosition() - .012);
         }
         if (gamepad2.dpad_down) {
             if(wrist1.getPosition() < 0.15 || wrist2.getPosition() > 0.85) {
                 wrist1.setPosition(0.15);
                 wrist2.setPosition(0.85);
             }
-            wrist1.setPosition(wrist1.getPosition() - .015);
-            wrist2.setPosition(wrist2.getPosition() + .015);
+            wrist1.setPosition(wrist1.getPosition() - .012);
+            wrist2.setPosition(wrist2.getPosition() + .012);
         }
 
         /* ------ MAIN BOOM LOGIC ------ */
@@ -157,9 +157,9 @@ public class PlayGame extends OpMode {
         turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
         strafeFactor = 0.0;
         if (gamepad2.dpad_left) {
-            strafeFactor = -1.0 / DriveSlowPower; // Strafe left
+            strafeFactor = -1.0 / DrivePower; // Strafe left
         } else if (gamepad2.dpad_right) {
-            strafeFactor = 1.0 / DriveSlowPower; // Strafe right
+            strafeFactor = 1.0 / DrivePower; // Strafe right
         }
 
         if (goHome && (slidePosition <= 2000)) {
