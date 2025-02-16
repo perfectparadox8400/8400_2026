@@ -10,7 +10,7 @@ public class PPColor {
     public static Color BOT_BODY_COLOR = new Color(128, 0, 128);        // Purple
     public static Color BOT_WHEEL_COLOR = new Color(64, 0, 64);         // Dark Purple
     public static Color BOT_DIRECTION_COLOR = new Color(0, 0, 0);
-    public static Color AXIS_COLOR = new Color(255, 0, 0);             // Red
+    public static Color AXIS_COLOR = new Color(255, 0, 0); // Red
     public static ColorScheme perfectParadox = new ColorScheme() {
         @NotNull
         @Override
@@ -96,7 +96,7 @@ public class PPColor {
 
         @Override
         public boolean isDark() {
-            return true; // Dark theme
+            return false; // Dark theme
         }
     };
 }

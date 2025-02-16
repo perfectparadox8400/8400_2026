@@ -6,15 +6,23 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-public class Start {
+public class Auto {
+    public static final double Wait = 5;
+    public static final double None = 0;
+
+    public static void startWrist() {
+        wrist1.setPosition(0.15);
+        wrist2.setPosition(0.85);
+    }
+
     public static class ArmStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            wrist1.setPosition(0.15);
-            wrist2.setPosition(0.85);
+            startWrist();
             if (slideBack.isPressed()){
                 slide_reset(false);
                 if(armDown.isPressed()){
@@ -54,5 +62,22 @@ public class Start {
 
     public static Action armLoop() {
         return new ArmLoop();
+    }
+
+    public static class SetPose implements Action {
+        private final Pose2d robotPose;
+
+        public SetPose(MecanumDrive drive) { this.robotPose = drive.localizer.getPose();}
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            PoseStorage.currentPose = robotPose;
+            return true;
+        }
+    }
+
+
+    public static Action setPose(MecanumDrive drive) {
+        return new SetPose(drive);
     }
 }

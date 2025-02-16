@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.specimen;
+package org.firstinspires.ftc.teamcode.modules;
 
 import static org.firstinspires.ftc.teamcode.modules.Arm.armLimit;
 import static org.firstinspires.ftc.teamcode.modules.Arm.armPosition;
@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-/** @noinspection FieldMayBeFinal*/
+/** @noinspection unused*/
 public class Specimen {
     private static boolean hasSample = true;
     private static boolean inPosition = false;

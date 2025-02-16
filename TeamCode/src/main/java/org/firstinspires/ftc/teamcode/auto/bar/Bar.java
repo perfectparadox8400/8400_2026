@@ -1,26 +1,49 @@
 package org.firstinspires.ftc.teamcode.auto.bar;
 
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+import static org.firstinspires.ftc.teamcode.modules.Bar.armBar;
 
-import androidx.annotation.NonNull;
+import org.firstinspires.ftc.teamcode.auto.Auto;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
+@Autonomous(name="Bar", group = "bar")
+public class Bar extends LinearOpMode {
+    @Override
+    public void runOpMode()  {
+        Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, start);
+        init_arm(hardwareMap);
 
-public class Bar {
-    public static class ArmBar implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            armTargetPosition = 800;
-            if (armPosition >= 600) {
-                wrist1.setPosition(0.9);
-                wrist2.setPosition(0.1);
-            }
-            return true;
-        }
-    }
+        TrajectoryActionBuilder step1 = drive.actionBuilder(start)
+                .waitSeconds(None)
+                .lineToY(55)
+                .turnTo(Math.toRadians(0))
+                .lineToX(33)
+                .turnTo(Math.toRadians(270))
+                .lineToY(10)
+                .turnTo(Math.toRadians(180))
+                .lineToX(28)
+                .stopAndAdd(armBar());
 
-    public static Action armBar() {
-        return new ArmBar();
+        waitForStart();
+        Actions.runBlocking(new SequentialAction(
+                Auto.armStart(),
+                new ParallelAction(
+                        Auto.armLoop(),
+                        Auto.setPose(drive),
+                        new SequentialAction(
+                                step1.build()
+                        )
+                )
+        ));
     }
 }

@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +14,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * @noinspection ALL
+ */
 public class Arm {
     public static CRServo intake = null;
     public static CRServo intakeOther = null;
@@ -128,7 +135,7 @@ public class Arm {
             slideTarget = slideLimit;
             slideTargetPosition = slideTarget;
         }
-        if (slideTarget < 0){
+        if (slideTarget < 0) {
             slideTarget = 0;
             slideTargetPosition = slideTarget;
         }
@@ -148,13 +155,13 @@ public class Arm {
             slideLimit = slideShortLimit;
         }
 
-            if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
-                slideController.setPID(slideP, slideI, slideD);
-                double slidePower = slideController.calculate(slidePosition, slideTarget);
-                slide.setPower(slidePower);
-            } else {
-                slide.setPower(0);
-            }
+        if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
+            slideController.setPID(slideP, slideI, slideD);
+            double slidePower = slideController.calculate(slidePosition, slideTarget);
+            slide.setPower(slidePower);
+        } else {
+            slide.setPower(0);
+        }
     }
 
     public static void arm() {
@@ -175,7 +182,7 @@ public class Arm {
             armTarget = armLimit;
             armTargetPosition = armTarget;
         }
-        if (armTarget < 0){
+        if (armTarget < 0) {
             armTarget = 0;
             armTargetPosition = armTarget;
         }
@@ -196,6 +203,7 @@ public class Arm {
         armPower = pid + holdingTorque;
         mainBoom.setPower(armPower);
     }
+
     public static void arm_telemetry(Telemetry telemetry) {
         //Arm Telemetry
         telemetry.addData("Arm Position", armPosition);
@@ -219,5 +227,80 @@ public class Arm {
         //Switch's
         telemetry.addData("Arm Down", armDown.isPressed());
         telemetry.addData("Slide Back", slideBack.isPressed());
+    }
+
+    public static class MoveArm implements Action {
+        private final int targetPosition;
+
+        public MoveArm(int targetPosition) {
+            this.targetPosition = targetPosition;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            armTargetPosition = targetPosition;
+            return false;
+        }
+    }
+
+    public static Action moveArm(int targetPosition) {
+        return new MoveArm(targetPosition);
+    }
+
+    public static class MoveSlide implements Action {
+        private final int targetPosition;
+
+        public MoveSlide(int targetPosition) {
+            this.targetPosition = targetPosition;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            slideTargetPosition = targetPosition;
+            return false;
+        }
+    }
+
+    public static Action moveSlide(int targetPosition) {
+        return new MoveSlide(targetPosition);
+    }
+
+    public static class IntakeIn implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(-1);
+            intakeOther.setPower(1);
+            return false;
+        }
+    }
+
+    public static Action intakeIn() {
+        return new IntakeIn();
+    }
+
+    public static class IntakeOut implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(1);
+            intakeOther.setPower(-1);
+            return false;
+        }
+    }
+
+    public static Action intakeOut() {
+        return new IntakeOut();
+    }
+
+    public static class IntakeOff implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(0);
+            intakeOther.setPower(0);
+            return false;
+        }
+    }
+
+    public static Action intakeOff() {
+        return new IntakeOff();
     }
 }

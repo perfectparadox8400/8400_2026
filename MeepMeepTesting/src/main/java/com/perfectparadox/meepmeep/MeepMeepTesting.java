@@ -6,14 +6,20 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(700);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+        MeepMeep meepMeep = new MeepMeep((int) screenSize.getHeight() - 200);
+
+        //Start Pose
         Pose2d start = new Pose2d(-8, 63, Math.toRadians(270));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(40, 40, Math.PI, Math.PI, 12.64)
+                .setConstraints(100, 80, Math.PI, Math.PI, 12.64)
                 .setDimensions(16, 18)
                 .setColorScheme(PPColor.perfectParadox)
                 .setStartPose(start)
@@ -40,30 +46,3 @@ public class MeepMeepTesting {
                 .start();
     }
 }
-
-/*
-                .lineToY(52)
-                .turnTo(Math.toRadians(0))
-                .lineToX(52.5)
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-                .waitSeconds(1)
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,40))
-                .turnTo(Math.toRadians(270))
-                .lineToY(35)
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45))
-                .waitSeconds(1)
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(48.5,40))
-                .turnTo(Math.toRadians(270))
-                .lineToY(35)
-                .strafeToConstantHeading(new Vector2d(54,52.5))
-                .turnTo(Math.toRadians(45))
-                .waitSeconds(1)
-                .turnTo(Math.toRadians(270))
-                .lineToY(10)
-                .turnTo(Math.toRadians(180))
-                .lineToX(25)
- */

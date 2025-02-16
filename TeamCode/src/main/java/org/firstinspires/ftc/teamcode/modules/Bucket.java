@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.bucket;
+package org.firstinspires.ftc.teamcode.modules;
 
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 
@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-/** @noinspection FieldMayBeFinal*/
 public class Bucket {
     private static boolean hasSample = true;
     private static boolean inPosition = false;
@@ -17,6 +16,10 @@ public class Bucket {
         hasSample = true;
         inPosition = false;
         armBucketDone = false;
+        armTargetPosition = 0;
+        armTarget = 0;
+        slideTargetPosition = 0;
+        slideTarget = 0;
     }
 
     public enum ArmState {
@@ -29,61 +32,61 @@ public class Bucket {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (!hasSample) return false;
+            if (hasSample) {
+                switch (state) {
+                    case MOVE_UP:
+                        armTargetPosition = armLimit;
+                        if (armPosition >= 1000) {
+                            wrist1.setPosition(0.5);
+                            wrist2.setPosition(0.5);
+                            state = ArmState.EXTEND;
+                        }
+                        break;
 
-            switch (state) {
-                case MOVE_UP:
-                    armTargetPosition = armLimit;
-                    if (armPosition >= 1000) {
-                        wrist1.setPosition(0.5);
-                        wrist2.setPosition(0.5);
-                        state = ArmState.EXTEND;
-                    }
-                    break;
+                    case EXTEND:
+                        slideTargetPosition = slideLimit;
+                        if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
+                            wrist1.setPosition(0.6);
+                            wrist2.setPosition(0.4);
+                            state = ArmState.DISPENSE;
+                        }
+                        break;
 
-                case EXTEND:
-                    slideTargetPosition = slideLimit;
-                    if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
-                        wrist1.setPosition(0.6);
-                        wrist2.setPosition(0.4);
-                        state = ArmState.DISPENSE;
-                    }
-                    break;
+                    case DISPENSE:
+                        if (dispenseStartTime == 0) {
+                            intake.setPower(1);
+                            intakeOther.setPower(-1);
+                            dispenseStartTime = System.currentTimeMillis();
+                        }
+                        if (System.currentTimeMillis() - dispenseStartTime >= 1000) {
+                            intake.setPower(0);
+                            intakeOther.setPower(0);
+                            wrist1.setPosition(0.15);
+                            wrist2.setPosition(0.85);
+                            inPosition = false;
+                            state = ArmState.RETRACT;
+                        }
+                        break;
 
-                case DISPENSE:
-                    if (dispenseStartTime == 0) {
-                        intake.setPower(1);
-                        intakeOther.setPower(-1);
-                        dispenseStartTime = System.currentTimeMillis();
-                    }
-                    if (System.currentTimeMillis() - dispenseStartTime >= 1000) {
-                        intake.setPower(0);
-                        intakeOther.setPower(0);
-                        wrist1.setPosition(0.15);
-                        wrist2.setPosition(0.85);
-                        inPosition = false;
-                        state = ArmState.RETRACT;
-                    }
-                    break;
+                    case RETRACT:
+                        slideTargetPosition = 0;
+                        if (slideBack.isPressed()) {
+                            state = ArmState.MOVE_DOWN;
+                        }
+                        break;
 
-                case RETRACT:
-                    slideTargetPosition = 0;
-                    if (slideBack.isPressed()) {
-                        state = ArmState.MOVE_DOWN;
-                    }
-                    break;
+                    case MOVE_DOWN:
+                        armTargetPosition = 0;
+                        if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
+                            state = ArmState.DONE;
+                        }
+                        break;
 
-                case MOVE_DOWN:
-                    armTargetPosition = 0;
-                    if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
-                        state = ArmState.DONE;
-                    }
-                    break;
-
-                case DONE:
-                    armBucketDone = true;
-                    hasSample = false;
-                    return false;
+                    case DONE:
+                        armBucketDone = true;
+                        hasSample = false;
+                        return false;
+                }
             }
             return true;
         }
@@ -91,10 +94,6 @@ public class Bucket {
     
     public static Action armBucket() {
         return new ArmBucket();
-    }
-
-    public static Action getSample() {
-        return new GetSample();
     }
 
     public static class GetSample implements Action {
@@ -114,6 +113,10 @@ public class Bucket {
             }
             return true;
         }
+    }
+
+    public static Action getSample() {
+        return new GetSample();
     }
 
     public static class GrabSample implements Action {
@@ -149,14 +152,14 @@ public class Bucket {
         return new SetInPosition();
     }
 
-    public static Action bucketDone() {
-        return new BucketDone();
-    }
-
     public static class BucketDone implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             return inPosition;
         }
+    }
+
+    public static Action bucketDone() {
+        return new BucketDone();
     }
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.specimen;
 
+import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.modules.Arm.init_arm;
 
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -11,12 +12,11 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.auto.Start;
-import org.firstinspires.ftc.teamcode.auto.Wait;
-import org.firstinspires.ftc.teamcode.auto.bucket.Bucket;
+import org.firstinspires.ftc.teamcode.auto.Auto;
+import org.firstinspires.ftc.teamcode.modules.Bucket;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Bucket 3", group = "bucket")
+@Autonomous(name="Specimen 3", group = "specimen")
 public class Specimen3 extends LinearOpMode {
     @Override
     public void runOpMode()  {
@@ -35,7 +35,7 @@ public class Specimen3 extends LinearOpMode {
 //                .strafeToConstantHeading(new Vector2d(-2,38))
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
-                .waitSeconds(Wait.None)
+                .waitSeconds(None)
                 .lineToY(52);
 
         TrajectoryActionBuilder step2 = step1.endTrajectory().fresh()
@@ -82,9 +82,9 @@ public class Specimen3 extends LinearOpMode {
         Bucket.resetBucket();
         waitForStart();
         Actions.runBlocking(new SequentialAction(
-                Start.armStart(),
+                Auto.armStart(),
                 new ParallelAction(
-                        Start.armLoop(),
+                        Auto.armLoop(),
                         new SequentialAction(
                                 step1.build(),
                                 new ParallelAction(

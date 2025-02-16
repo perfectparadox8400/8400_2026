@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.bucket;
 
+import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -12,20 +13,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto.PoseStorage;
-import org.firstinspires.ftc.teamcode.auto.Start;
-import org.firstinspires.ftc.teamcode.auto.Wait;
+import org.firstinspires.ftc.teamcode.auto.Auto;
+import org.firstinspires.ftc.teamcode.modules.Bucket;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Bucket 3", group = "bucket")
 public class Bucket3 extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        init_arm(hardwareMap);
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
+        init_arm(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
-                .waitSeconds(Wait.None)
+                .waitSeconds(None)
                 .lineToY(52);
 
         TrajectoryActionBuilder step2 = step1.endTrajectory().fresh()
@@ -63,14 +64,17 @@ public class Bucket3 extends LinearOpMode {
                 .lineToX(54);
 
         TrajectoryActionBuilder step9 = step8.endTrajectory().fresh()
-                .turnTo(Math.toRadians(285));
+                .lineToX(50)
+                .turnTo(Math.toRadians(290));
 
         Bucket.resetBucket();
+
         waitForStart();
         Actions.runBlocking(new SequentialAction(
-                Start.armStart(),
+                Auto.armStart(),
                 new ParallelAction(
-                        Start.armLoop(),
+                        Auto.armLoop(),
+                        Auto.setPose(drive),
                         new SequentialAction(
                                 step1.build(),
                                 new ParallelAction(
