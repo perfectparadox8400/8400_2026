@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -65,13 +64,15 @@ public class Auto {
     }
 
     public static class SetPose implements Action {
-        private final Pose2d robotPose;
+        private final MecanumDrive drive;
 
-        public SetPose(MecanumDrive drive) { this.robotPose = drive.localizer.getPose();}
+        public SetPose(MecanumDrive drive) {
+            this.drive = drive;
+        }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            PoseStorage.currentPose = robotPose;
+            PoseStorage.currentPose = drive.localizer.getPose();
             return true;
         }
     }

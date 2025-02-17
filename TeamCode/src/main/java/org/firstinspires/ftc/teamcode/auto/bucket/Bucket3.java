@@ -12,7 +12,6 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.auto.PoseStorage;
 import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.modules.Bucket;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -113,6 +112,5 @@ public class Bucket3 extends LinearOpMode {
                         )
                 )
         ));
-        PoseStorage.currentPose = drive.localizer.getPose();
     }
 }

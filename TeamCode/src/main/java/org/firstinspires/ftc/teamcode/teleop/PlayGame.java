@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 import static org.firstinspires.ftc.teamcode.modules.Drive.*;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,6 +21,8 @@ public class PlayGame extends OpMode {
         init_arm(hardwareMap);
         //Init Wheels
         init_drive(hardwareMap);
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
