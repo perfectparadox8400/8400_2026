@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -18,6 +17,8 @@ public class Drive {
     public static double turnFactor = 0;
     public static double strafeFactor = 0.0;
 
+    public static boolean driving = false;
+
     public static void init_drive(HardwareMap hardwareMap) {
         right_front = hardwareMap.get(DcMotor.class, "right_front");
         left_front = hardwareMap.get(DcMotor.class, "left_front");
@@ -26,6 +27,7 @@ public class Drive {
     }
 
     public static void drive(Gamepad gamepad) {
+        driving = gamepad.left_stick_y > 0.1 && gamepad.left_stick_x > 0.1 && gamepad.right_stick_x > 0.1 && gamepad.right_stick_y > 0.1 && gamepad.left_stick_y < -0.1 && gamepad.left_stick_x < -0.1 && gamepad.right_stick_x < -0.1 && gamepad.right_stick_y < -0.1;
         left_front.setPower(-gamepad.left_stick_y/DrivePower + gamepad.left_stick_x/DrivePower + gamepad.right_stick_x/DrivePower + turnFactor + strafeFactor);
         right_front.setPower(-gamepad.left_stick_y/DrivePower - gamepad.left_stick_x/DrivePower - gamepad.right_stick_x/DrivePower - turnFactor - strafeFactor);
         left_back.setPower(-gamepad.left_stick_y/DrivePower - gamepad.left_stick_x/DrivePower + gamepad.right_stick_x/DrivePower + turnFactor - strafeFactor);
