@@ -32,7 +32,7 @@ public class Arm {
     //PID For Arm
     public static PIDController armController;
     public static PIDController slideController;
-    public static double armP = 0.005, armI = 0.00, armD = 0.00;
+    public static double armP = 0.005, armI = 0.0001, armD = 0.00;
 
     public static double slideP = 0.005, slideI = 0.00, slideD = 0.00;
 
