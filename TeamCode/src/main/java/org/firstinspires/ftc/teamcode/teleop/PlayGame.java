@@ -30,6 +30,8 @@ public class PlayGame extends OpMode {
         start = true;
         wrist1.setPosition(0.15);
         wrist2.setPosition(0.85);
+        hang1.setPosition(1);
+        hang2.setPosition(0);
     }
 
     @Override
@@ -49,6 +51,20 @@ public class PlayGame extends OpMode {
             DrivePower = DriveSlowPower;
         }
 
+        if (gamepad1.dpad_down) {
+            hang1.setPosition(hang1.getPosition() + .012);
+            hang2.setPosition(hang2.getPosition() - .012);
+        } else if (gamepad1.dpad_up) {
+            hang1.setPosition(hang1.getPosition() - .012);
+            hang2.setPosition(hang2.getPosition() + .012);
+        } else if (gamepad1.dpad_left) {
+            hang1.setPosition(1);
+            hang2.setPosition(0);
+        } else if (gamepad1.dpad_right) {
+            hang1.setPosition(0.5);
+            hang2.setPosition(0.5);
+        }
+
         //Drive Power
         drive(gamepad1);
 
@@ -59,6 +75,9 @@ public class PlayGame extends OpMode {
 
         if (gamepad2.guide) {
             start = false;
+            goX = false;
+            goY = false;
+            goHome = false;
         }
 
         if(start) {
@@ -133,12 +152,12 @@ public class PlayGame extends OpMode {
             intakeOther.setPower(0);
         }
 
-        if (gamepad2.b) {
+        if ((change && gamepad2.b)) {
             wrist1.setPosition(0.15);
             wrist2.setPosition(0.85);
         }
 
-        if (gamepad2.a) {
+        if ((change && gamepad2.a)) {
             wrist1.setPosition(0.8);
             wrist2.setPosition(0.2);
         }
@@ -146,7 +165,12 @@ public class PlayGame extends OpMode {
         /* ------ PRESETS ------ */
         if (gamepad2.x) {
             goX = true;
-            slideTargetPosition = 0;
+            if (armPosition < 200) {
+                slideTargetPosition = 0;
+                armTargetPosition = 200;
+            } else {
+                slideTargetPosition = 0;
+            }
             wrist1.setPosition(0.4);
             wrist2.setPosition(0.6);
         }

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.auto.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@TeleOp(name = "! Play Auto")
+@TeleOp(name = "! Play Zauto")
 public class PlayAuto extends OpMode {
     public boolean goX = false;
     public boolean goY = false;

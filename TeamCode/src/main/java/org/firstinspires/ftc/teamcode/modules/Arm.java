@@ -22,10 +22,13 @@ public class Arm {
     public static CRServo intakeOther = null;
     public static Servo wrist1 = null;
     public static Servo wrist2 = null;
+    public static Servo hang1 = null;
+    public static Servo hang2 = null;
 
     public static DcMotor mainBoom = null;
     public static DcMotor slide = null;
 
+    // Switchs
     public static TouchSensor armDown = null;
     public static TouchSensor slideBack = null;
 
@@ -71,6 +74,8 @@ public class Arm {
         slide = hardwareMap.get(DcMotor.class, "slide");
         wrist1 = hardwareMap.get(Servo.class, "wrist1");
         wrist2 = hardwareMap.get(Servo.class, "wrist2");
+        hang1 = hardwareMap.get(Servo.class, "hang1");
+        hang2 = hardwareMap.get(Servo.class, "hang2");
         intake = hardwareMap.get(CRServo.class, "intake");
         intakeOther = hardwareMap.get(CRServo.class, "intake2");
         armDown = hardwareMap.get(TouchSensor.class, "bottom_limit");
@@ -143,7 +148,6 @@ public class Arm {
             slideTarget = slidePosition;
             slide.setPower(0);
             previousSlideBack = true;
-            return;
         } else if (!slideBack.isPressed()) {
             previousSlideBack = false;
         }
@@ -182,15 +186,17 @@ public class Arm {
             armTarget = armLimit;
             armTargetPosition = armTarget;
         }
-        if (armTarget < 0) {
-            armTarget = 0;
+        if (armDown.isPressed() && armTargetPosition < 0) {
+            armTargetPosition = 0;
+        }
+        if (armTarget < -350) {
+            armTarget = -350;
             armTargetPosition = armTarget;
         }
         if (armDown.isPressed() && !previousArmDown) {
-            armTarget = armPosition;
+            armTarget = 0;
             mainBoom.setPower(0);
             previousArmDown = true;
-            return;
         } else if (!armDown.isPressed()) {
             previousArmDown = false;
         }
@@ -223,6 +229,10 @@ public class Arm {
         //Intake Telemetry
         telemetry.addData("Wrist 1", wrist1.getPosition());
         telemetry.addData("Wrist 2", wrist2.getPosition());
+
+        //Hang Telemetry
+        telemetry.addData("Hang 1", hang1.getPosition());
+        telemetry.addData("Hang 2", hang2.getPosition());
 
         //Switch's
         telemetry.addData("Arm Down", armDown.isPressed());
