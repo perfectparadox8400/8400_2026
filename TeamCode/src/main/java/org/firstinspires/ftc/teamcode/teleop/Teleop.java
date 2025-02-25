@@ -55,27 +55,44 @@ public class Teleop {
         }
 
         if (gamepad1.dpad_down) {
-            hang1.setPosition(hang1.getPosition() + .012);
-            hang2.setPosition(hang2.getPosition() - .012);
+            hang1.setPosition(hang1.getPosition() + .013);
+            hang2.setPosition(hang2.getPosition() - .013);
         } else if (gamepad1.dpad_up) {
-            hang1.setPosition(hang1.getPosition() - .012);
-            hang2.setPosition(hang2.getPosition() + .012);
+            hang1.setPosition(hang1.getPosition() - .013);
+            hang2.setPosition(hang2.getPosition() + .013);
         } else if (gamepad1.dpad_left) {
             hang1.setPosition(1);
             hang2.setPosition(0);
         } else if (gamepad1.dpad_right) {
-            hang1.setPosition(0.65);
-            hang2.setPosition(0.35);
+            hang1.setPosition(0.45);
+            hang2.setPosition(0.55);
         }
 
-        //Drive Power
-        drive(gamepad1);
+        if (gamepad1.x) {
+            armTargetPosition = -350;
+            slideTargetPosition = 0;
+            wrist1.setPosition(0);
+            wrist2.setPosition(1);
+            hang1.setPosition(1);
+            hang2.setPosition(0);
+        }
+
+        if (gamepad1.y) {
+            slideTargetPosition = 0;
+            armTargetPosition = -200;
+            wrist1.setPosition(1);
+            wrist2.setPosition(0);
+            hang1.setPosition(1);
+            hang2.setPosition(0);
+        }
 
         if (gamepad2.guide) {
             start = false;
             goX = false;
             goY = false;
             goHome = false;
+            armTargetPosition = armPosition;
+            slideTargetPosition = slidePosition;
         }
 
         if(start) {
@@ -95,6 +112,14 @@ public class Teleop {
         }
 
         //Controller2 Buttons
+
+        turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
+        strafeFactor = 0.0;
+        if (gamepad2.dpad_left) {
+            strafeFactor = -1.0 / DrivePower; // Strafe left
+        } else if (gamepad2.dpad_right) {
+            strafeFactor = 1.0 / DrivePower; // Strafe right
+        }
 
         /* ------ SLIDE LOGIC ------ */
         if (gamepad2.left_bumper) {
@@ -174,14 +199,6 @@ public class Teleop {
             armTargetPosition = armLimit;
             wrist1.setPosition(0.5);
             wrist2.setPosition(0.5);
-        }
-
-        turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
-        strafeFactor = 0.0;
-        if (gamepad2.dpad_left) {
-            strafeFactor = -1.0 / DrivePower; // Strafe left
-        } else if (gamepad2.dpad_right) {
-            strafeFactor = 1.0 / DrivePower; // Strafe right
         }
 
         if (goHome && (slidePosition <= 2000)) {

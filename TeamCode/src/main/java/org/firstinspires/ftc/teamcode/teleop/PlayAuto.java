@@ -27,6 +27,8 @@ public class PlayAuto extends OpMode {
     @Override
     public void loop() {
         Teleop.play_loop(gamepad1, gamepad2);
+        //Drive Power
+        drive(gamepad1);
 
         auto_drive(drive, dashboard);
         telemetry_auto(drive);
