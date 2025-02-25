@@ -153,7 +153,7 @@ public class Arm {
         }
 
         slideError = slideTarget - slidePosition;
-        if (armPosition > 900) {
+        if (armPosition > 700) {
             slideLimit = slideMaxLimit;
         } else {
             slideLimit = slideShortLimit;

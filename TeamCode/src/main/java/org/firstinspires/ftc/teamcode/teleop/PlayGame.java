@@ -61,8 +61,8 @@ public class PlayGame extends OpMode {
             hang1.setPosition(1);
             hang2.setPosition(0);
         } else if (gamepad1.dpad_right) {
-            hang1.setPosition(0.5);
-            hang2.setPosition(0.5);
+            hang1.setPosition(0.65);
+            hang2.setPosition(0.35);
         }
 
         //Drive Power
@@ -119,10 +119,6 @@ public class PlayGame extends OpMode {
             wrist2.setPosition(wrist2.getPosition() - .012);
         }
         if (gamepad2.dpad_down) {
-            if(wrist1.getPosition() < 0.15 || wrist2.getPosition() > 0.85) {
-                wrist1.setPosition(0.15);
-                wrist2.setPosition(0.85);
-            }
             wrist1.setPosition(wrist1.getPosition() - .012);
             wrist2.setPosition(wrist2.getPosition() + .012);
         }

@@ -101,8 +101,8 @@ public class Bucket {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (armBucketDone && !hasSample) {
                 armTargetPosition = 0;
-                wrist1.setPosition(0.6044);
-                wrist2.setPosition(0.3922);
+                wrist1.setPosition(0.5433);
+                wrist2.setPosition(0.4517);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
                     slideTargetPosition = 0;
                     intake.setPower(-1);
