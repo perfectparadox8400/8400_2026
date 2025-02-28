@@ -35,7 +35,7 @@ public class Bucket {
             if (hasSample) {
                 switch (state) {
                     case MOVE_UP:
-                        armTargetPosition = armLimit;
+                        armTargetPosition = 1110;
                         if (armPosition >= 1000) {
                             wrist1.setPosition(0.5);
                             wrist2.setPosition(0.5);
@@ -101,8 +101,8 @@ public class Bucket {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (armBucketDone && !hasSample) {
                 armTargetPosition = 0;
-                wrist1.setPosition(0.5433);
-                wrist2.setPosition(0.4517);
+                wrist1.setPosition(0.5694);
+                wrist2.setPosition(0.4294);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
                     slideTargetPosition = 0;
                     intake.setPower(-1);

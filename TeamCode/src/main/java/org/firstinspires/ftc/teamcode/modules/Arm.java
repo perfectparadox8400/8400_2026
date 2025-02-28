@@ -41,7 +41,7 @@ public class Arm {
 
     //Arm
     public static final double armTicks = 28 * 125; //ticks per revolution
-    public static final int armLimit = 1100;
+    public static final int armLimit = 1150;
     public static int armTarget = 0;
     public static int armPosition = 0;
     public static int armTargetPosition = 0;
@@ -65,6 +65,7 @@ public class Arm {
     public static double slideTolerance = 30;
     public static double slideError = 0;
     public static boolean previousSlideBack = false;
+    public static boolean hang = false;
 
     public static void init_arm(HardwareMap hardwareMap) {
         armController = new PIDController(armP, armI, armD);
@@ -153,10 +154,11 @@ public class Arm {
         }
 
         slideError = slideTarget - slidePosition;
-        if (armPosition > 700) {
-            slideLimit = slideMaxLimit;
-        } else {
+
+        if ((armPosition < 800) && !hang) {
             slideLimit = slideShortLimit;
+        } else {
+            slideLimit = slideMaxLimit;
         }
 
         if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
@@ -189,8 +191,8 @@ public class Arm {
         if (armDown.isPressed() && armTargetPosition < 0) {
             armTargetPosition = 0;
         }
-        if (armTarget < -350) {
-            armTarget = -350;
+        if (armTarget < -450) {
+            armTarget = -450;
             armTargetPosition = armTarget;
         }
         if (armDown.isPressed() && !previousArmDown) {
