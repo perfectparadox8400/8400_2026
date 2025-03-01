@@ -41,7 +41,8 @@ public class Arm {
 
     //Arm
     public static final double armTicks = 28 * 125; //ticks per revolution
-    public static final int armLimit = 1150;
+    public static int armLimit = 1150;
+    public static int armDownLimit = -450;
     public static int armTarget = 0;
     public static int armPosition = 0;
     public static int armTargetPosition = 0;
@@ -96,6 +97,8 @@ public class Arm {
         armTargetPosition = 0;
         slideTarget = 0;
         slideTargetPosition = 0;
+        armLimit = 1150;
+        armDownLimit = -450;
     }
 
     public static void arm_reset(boolean limit) {
@@ -191,8 +194,8 @@ public class Arm {
         if (armDown.isPressed() && armTargetPosition < 0) {
             armTargetPosition = 0;
         }
-        if (armTarget < -450) {
-            armTarget = -450;
+        if (armTarget < armDownLimit) {
+            armTarget = armDownLimit;
             armTargetPosition = armTarget;
         }
         if (armDown.isPressed() && !previousArmDown) {

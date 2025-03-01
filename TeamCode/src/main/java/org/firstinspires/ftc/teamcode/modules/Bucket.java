@@ -35,7 +35,7 @@ public class Bucket {
             if (hasSample) {
                 switch (state) {
                     case MOVE_UP:
-                        armTargetPosition = 1110;
+                        armTargetPosition = 1105;
                         if (armPosition >= 1000) {
                             wrist1.setPosition(0.5);
                             wrist2.setPosition(0.5);
@@ -58,7 +58,7 @@ public class Bucket {
                             intakeOther.setPower(-1);
                             dispenseStartTime = System.currentTimeMillis();
                         }
-                        if (System.currentTimeMillis() - dispenseStartTime >= 1000) {
+                        if (System.currentTimeMillis() - dispenseStartTime >= 600) {
                             intake.setPower(0);
                             intakeOther.setPower(0);
                             wrist1.setPosition(0.15);

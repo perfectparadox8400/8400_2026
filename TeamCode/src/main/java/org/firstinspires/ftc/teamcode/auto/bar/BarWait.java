@@ -27,11 +27,11 @@ public class BarWait extends LinearOpMode {
                 .waitSeconds(Wait)
                 .lineToY(55)
                 .turnTo(Math.toRadians(0))
-                .lineToX(33)
+                .lineToX(35)
                 .turnTo(Math.toRadians(270))
-                .lineToY(10)
+                .lineToY(5)
                 .turnTo(Math.toRadians(180))
-                .lineToX(28)
+                .lineToX(27)
                 .stopAndAdd(armBar());
 
         waitForStart();
