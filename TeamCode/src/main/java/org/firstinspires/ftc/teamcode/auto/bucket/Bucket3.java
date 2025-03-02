@@ -50,7 +50,7 @@ public class Bucket3 extends LinearOpMode {
 
         TrajectoryActionBuilder step6 = step5.endTrajectory().fresh()
                 .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(48.5,45))
+                .strafeToConstantHeading(new Vector2d(48,45))
                 .turnTo(Math.toRadians(270))
                 .lineToY(44);
 

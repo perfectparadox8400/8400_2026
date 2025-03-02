@@ -13,6 +13,7 @@ public class PlayGame extends OpMode {
     public boolean goX = false;
     public boolean goY = false;
     public boolean goLowX = false;
+    public boolean goB = false;
     public boolean goHome = false;
     public boolean start = false;
     public final FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -32,14 +33,15 @@ public class PlayGame extends OpMode {
     public void start() {
         goX = false;
         goY = false;
+        goB = false;
         goLowX = false;
         goHome = false;
         start = true;
         hang = false;
         wrist1.setPosition(0.15);
         wrist2.setPosition(0.85);
-        hang1.setPosition(1);
-        hang2.setPosition(0);
+        hang1.setPosition(0);
+        hang2.setPosition(1);
         armLimitReset = false;
         armDownReset = false;
     }
@@ -62,17 +64,17 @@ public class PlayGame extends OpMode {
         }
 
         if (gamepad1.dpad_down) {
-            hang1.setPosition(hang1.getPosition() + .013);
-            hang2.setPosition(hang2.getPosition() - .013);
-        } else if (gamepad1.dpad_up) {
             hang1.setPosition(hang1.getPosition() - .013);
             hang2.setPosition(hang2.getPosition() + .013);
+        } else if (gamepad1.dpad_up) {
+            hang1.setPosition(hang1.getPosition() + .013);
+            hang2.setPosition(hang2.getPosition() - .013);
         } else if (gamepad1.dpad_left) {
-            hang1.setPosition(1);
-            hang2.setPosition(0);
-        } else if (gamepad1.dpad_right) {
             hang1.setPosition(0);
             hang2.setPosition(1);
+        } else if (gamepad1.dpad_right) {
+            hang1.setPosition(0.5);
+            hang2.setPosition(0.5);
         }
 
         if (gamepad1.x) {
@@ -80,8 +82,8 @@ public class PlayGame extends OpMode {
             slideTargetPosition = 0;
             wrist1.setPosition(0);
             wrist2.setPosition(1);
-            hang1.setPosition(1);
-            hang2.setPosition(0);
+            hang1.setPosition(0);
+            hang2.setPosition(1);
             hang = true;
         }
 
@@ -95,6 +97,7 @@ public class PlayGame extends OpMode {
             goLowX = false;
             goY = false;
             goHome = false;
+            goB = false;
             armTargetPosition = armPosition;
             slideTargetPosition = slidePosition;
         }
@@ -109,6 +112,7 @@ public class PlayGame extends OpMode {
         telemetry.addData("goLowX", goLowX);
         telemetry.addData("goX", goX);
         telemetry.addData("goY", goY);
+        telemetry.addData("goB", goB);
         telemetry.addData("goHome", goHome);
 
 
@@ -208,8 +212,8 @@ public class PlayGame extends OpMode {
         }
 
         if ((change && gamepad2.b)) {
-            wrist1.setPosition(0.15);
-            wrist2.setPosition(0.85);
+            armTargetPosition = 900;
+            goB = true;
         }
 
         if ((change && gamepad2.a)) {
@@ -229,6 +233,7 @@ public class PlayGame extends OpMode {
                 slideTargetPosition = 0;
             }
             goY = false;
+            goB = false;
             goHome = false;
             wrist1.setPosition(0.4);
             wrist2.setPosition(0.6);
@@ -239,6 +244,7 @@ public class PlayGame extends OpMode {
             goX = false;
             goLowX = false;
             goHome = false;
+            goB = false;
             armTargetPosition = 1110;
             wrist1.setPosition(0.5);
             wrist2.setPosition(0.5);
@@ -270,6 +276,14 @@ public class PlayGame extends OpMode {
             wrist1.setPosition(0.6);
             wrist2.setPosition(0.4);
             goY = false;
+        }
+
+        //Go B
+        if (goB && (armPosition >= 800)) {
+            slideTargetPosition = 1500;
+            wrist1.setPosition(0.7);
+            wrist2.setPosition(0.3);
+            goB = false;
         }
 
         //Slide Power
