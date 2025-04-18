@@ -25,6 +25,11 @@ public class Arm {
     public static Servo hang1 = null;
     public static Servo hang2 = null;
 
+    public static double hookOpen1 = 0;
+    public static double hookOpen2 = 1;
+    public static double hookClosed1 = 0.65;
+    public static double hookClosed2 = 0.35;
+
     public static DcMotor mainBoom = null;
     public static DcMotor slide = null;
 

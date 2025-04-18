@@ -63,18 +63,18 @@ public class PlayGame extends OpMode {
             DrivePower = DriveSlowPower;
         }
 
-        if (gamepad1.dpad_down) {
+        if (gamepad1.dpad_down && (hang1.getPosition() >= hookOpen1 && hang2.getPosition() <= hookOpen2)) {
             hang1.setPosition(hang1.getPosition() - .013);
             hang2.setPosition(hang2.getPosition() + .013);
-        } else if (gamepad1.dpad_up) {
+        } else if (gamepad1.dpad_up && (hang1.getPosition() <= hookClosed1 && hang2.getPosition() >= hookClosed2)) {
             hang1.setPosition(hang1.getPosition() + .013);
             hang2.setPosition(hang2.getPosition() - .013);
         } else if (gamepad1.dpad_left) {
-            hang1.setPosition(0);
-            hang2.setPosition(1);
+            hang1.setPosition(hookOpen1);
+            hang2.setPosition(hookOpen2);
         } else if (gamepad1.dpad_right) {
-            hang1.setPosition(0.5);
-            hang2.setPosition(0.5);
+            hang1.setPosition(hookClosed1);
+            hang2.setPosition(hookClosed2);
         }
 
         if (gamepad1.x) {
