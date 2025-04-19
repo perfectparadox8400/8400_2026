@@ -102,7 +102,7 @@ public class PlayGame extends OpMode {
             slideTargetPosition = slidePosition;
         }
 
-        drive(gamepad1);
+        drive(gamepad1, DrivePower);
 
         //Telemetry
         drive_telemetry(telemetry);
