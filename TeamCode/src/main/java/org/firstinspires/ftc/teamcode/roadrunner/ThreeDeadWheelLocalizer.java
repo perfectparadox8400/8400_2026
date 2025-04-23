@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.ThreeDeadWheelInputsMessage;
 
 @Config
@@ -38,12 +39,18 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
     private Pose2d pose;
 
     public ThreeDeadWheelLocalizer(HardwareMap hardwareMap, double inPerTick, Pose2d pose) {
-        par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "par0")));
-        par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
-        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "perp")));
-
-        par0.setDirection(DcMotorSimple.Direction.REVERSE);
-        perp.setDirection(DcMotorSimple.Direction.REVERSE);
+        Robot.init(hardwareMap.appContext);
+        if (Robot.robotName().equals("ophelia")) {
+            par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
+            par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_front")));
+            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_front")));
+        } else {
+            par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "par0")));
+            par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
+            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "perp")));
+            par0.setDirection(DcMotorSimple.Direction.REVERSE);
+            perp.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
 
         this.inPerTick = inPerTick;
 

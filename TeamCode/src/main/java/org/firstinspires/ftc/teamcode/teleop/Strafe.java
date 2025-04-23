@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import static org.firstinspires.ftc.teamcode.modules.Arm.*;
 import static org.firstinspires.ftc.teamcode.modules.Drive.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -8,17 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "! Strafe")
 public class Strafe extends OpMode {
+
+    boolean xButton = false;
+
     @Override
     public void init() {
         init_drive(hardwareMap);
-        init_arm(hardwareMap);
-    }
-    @Override
-    public void start() {
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
-        hang1.setPosition(0);
-        hang2.setPosition(1);
     }
     @Override
     public void loop() {
@@ -38,7 +32,15 @@ public class Strafe extends OpMode {
 
         drive(gamepad1, DrivePower);
 
-        brake(gamepad1.x);
+        if (gamepad1.x) {
+            brake(true);
+            xButton = true;
+        } else {
+            if (xButton) {
+                xButton = false;
+                brake(false);
+            }
+        }
 
         drive_telemetry(telemetry);
 

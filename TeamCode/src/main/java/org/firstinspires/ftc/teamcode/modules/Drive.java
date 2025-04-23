@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.Drawing;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -26,10 +27,15 @@ public class Drive {
     public static boolean driving = false;
 
     public static void init_drive(HardwareMap hardwareMap) {
+        Robot.init(hardwareMap.appContext);
         right_front = hardwareMap.get(DcMotor.class, "right_front");
         left_front = hardwareMap.get(DcMotor.class, "left_front");
         left_back = hardwareMap.get(DcMotor.class, "left_back");
         right_back = hardwareMap.get(DcMotor.class, "right_back");
+        if (Robot.robotName().equals("ophelia")) {
+            right_back.setDirection(DcMotor.Direction.REVERSE);
+            left_back.setDirection(DcMotor.Direction.REVERSE);
+        }
     }
 
     public static void drive(Gamepad gamepad, double Power) {
