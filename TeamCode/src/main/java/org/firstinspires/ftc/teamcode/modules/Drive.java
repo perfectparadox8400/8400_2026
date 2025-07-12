@@ -35,6 +35,9 @@ public class Drive {
         if (Robot.robotName().equals("ophelia")) {
             right_back.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
+        } else if (Robot.robotName().equals("mentorbot")) {
+            left_back.setDirection(DcMotor.Direction.REVERSE);
+            left_front.setDirection(DcMotor.Direction.REVERSE);
         }
     }
 

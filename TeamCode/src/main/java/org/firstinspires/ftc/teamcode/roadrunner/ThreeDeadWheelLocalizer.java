@@ -40,7 +40,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
     public ThreeDeadWheelLocalizer(HardwareMap hardwareMap, double inPerTick, Pose2d pose) {
         Robot.init(hardwareMap.appContext);
-        if (Robot.robotName().equals("ophelia")) {
+        if (Robot.robotName().equals("ophelia") || Robot.robotName().equals("mentorbot")) {
             par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
             par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_front")));
             perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_front")));
