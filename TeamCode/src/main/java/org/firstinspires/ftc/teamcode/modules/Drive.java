@@ -38,6 +38,10 @@ public class Drive {
         } else if (Robot.robotName().equals("mentorbot")) {
             left_back.setDirection(DcMotor.Direction.REVERSE);
             left_front.setDirection(DcMotor.Direction.REVERSE);
+        } else {
+            right_back.setDirection(DcMotor.Direction.REVERSE);
+            left_back.setDirection(DcMotor.Direction.REVERSE);
+            right_front.setDirection(DcMotor.Direction.REVERSE);
         }
     }
 
