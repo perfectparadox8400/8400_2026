@@ -40,8 +40,8 @@ public class PlayGame extends OpMode {
         hang = false;
         wrist1.setPosition(0.15);
         wrist2.setPosition(0.85);
-        hang1.setPosition(0);
-        hang2.setPosition(1);
+        hang1.setPosition(1);
+        hang2.setPosition(0);
         armLimitReset = false;
         armDownReset = false;
     }
@@ -63,12 +63,12 @@ public class PlayGame extends OpMode {
             DrivePower = DriveSlowPower;
         }
 
-        if (gamepad1.dpad_down && (hang1.getPosition() >= hookOpen1 && hang2.getPosition() <= hookOpen2)) {
-            hang1.setPosition(hang1.getPosition() - .013);
-            hang2.setPosition(hang2.getPosition() + .013);
-        } else if (gamepad1.dpad_up && (hang1.getPosition() <= hookClosed1 && hang2.getPosition() >= hookClosed2)) {
+        if (gamepad1.dpad_down && (hang1.getPosition() <= hookOpen1 && hang2.getPosition() >= hookOpen2)) {
             hang1.setPosition(hang1.getPosition() + .013);
             hang2.setPosition(hang2.getPosition() - .013);
+        } else if (gamepad1.dpad_up && (hang1.getPosition() >= hookClosed1 && hang2.getPosition() <= hookClosed2)) {
+            hang1.setPosition(hang1.getPosition() - .013);
+            hang2.setPosition(hang2.getPosition() + .013);
         } else if (gamepad1.dpad_left) {
             hang1.setPosition(hookOpen1);
             hang2.setPosition(hookOpen2);
@@ -146,9 +146,9 @@ public class PlayGame extends OpMode {
 
         /* ------ SLIDE LOGIC ------ */
         if (gamepad2.left_bumper) {
-            slideTargetPosition -= 55;
+            slideTargetPosition -= 65;
         } else if (gamepad2.right_bumper) {
-            slideTargetPosition += 55;
+            slideTargetPosition += 65;
         }
 
         /* ------ RESET ------ */
@@ -273,16 +273,16 @@ public class PlayGame extends OpMode {
         //Go Y
         if (goY && (armPosition >= 950)) {
             slideTargetPosition = slideLimit;
-            wrist1.setPosition(0.6);
-            wrist2.setPosition(0.4);
+            wrist1.setPosition(0.8);
+            wrist2.setPosition(0.2);
             goY = false;
         }
 
         //Go B
         if (goB && (armPosition >= 800)) {
             slideTargetPosition = 1500;
-            wrist1.setPosition(0.7);
-            wrist2.setPosition(0.3);
+            wrist1.setPosition(0.85);
+            wrist2.setPosition(0.15);
             goB = false;
         }
 

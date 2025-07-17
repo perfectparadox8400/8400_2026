@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -25,10 +24,10 @@ public class Arm {
     public static Servo hang1 = null;
     public static Servo hang2 = null;
 
-    public static double hookOpen1 = 0;
-    public static double hookOpen2 = 1;
-    public static double hookClosed1 = 0.65;
-    public static double hookClosed2 = 0.35;
+    public static double hookOpen1 = 1;
+    public static double hookOpen2 = 0;
+    public static double hookClosed1 = 0.35;
+    public static double hookClosed2 = 0.65;
 
     public static DcMotor mainBoom = null;
     public static DcMotor slide = null;
@@ -93,7 +92,6 @@ public class Arm {
 
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         intake.setPower(0);
         intakeOther.setPower(0);
@@ -127,7 +125,7 @@ public class Arm {
     }
 
     public static void arm_loop() {
-        slidePosition = slide.getCurrentPosition();
+        slidePosition = slide.getCurrentPosition() * -1;
         armPosition = mainBoom.getCurrentPosition();
     }
 
