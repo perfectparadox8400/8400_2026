@@ -25,19 +25,27 @@ android {
         jniLibs.useLegacyPackaging true
     }
 
+    defaultConfig {
+        buildConfigField "String",  "ROBOT", "\"nancy\""
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     flavorDimensions += "version"
     productFlavors {
         Nancy {
             dimension "version"
-            resValue "string", "robot", "nancy"
+            buildConfigField "String", "ROBOT", "\"nancy\""
         }
         Ophelia {
             dimension "version"
-            resValue "string", "robot", "ophelia"
+            buildConfigField "String", "ROBOT", "\"ophelia\""
         }
         MentorBot {
             dimension "version"
-            resValue "string", "robot", "mentorbot"
+            buildConfigField "String", "ROBOT", "\"mentorbot\""
         }
     }
 }

@@ -51,43 +51,7 @@ import java.util.List;
 
 @Config
 public final class MecanumDrive {
-    public static class Params {
-        // IMU orientation
-        public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
-
-        // drive model parameters
-        public double inPerTick = 0.0019876368984914;
-        public double lateralInPerTick = 0.0009019917292751737;
-        public double trackWidthTicks = 6068.751343230888;
-
-        // feedforward parameters (in tick units)
-        public double kS = 1.2413263606256049;
-        public double kV = 0.00025279672456487;
-        public double kA = 0.00001;
-
-        // path profile parameters (in inches)
-        public double maxWheelVel = 100;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 80;
-
-        // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
-
-        // path controller gains
-        public double axialGain = 4.5;
-        public double lateralGain = 8.0;
-        public double headingGain = 15.0; // shared with turn
-
-        public double axialVelGain = 0.0;
-        public double lateralVelGain = 0.0;
-        public double headingVelGain = 0.0; // shared with turn
-    }
-
-    public static Params PARAMS = new Params();
+    public static Params.RobotParams PARAMS = Params.CURRENT;
 
     public final MecanumKinematics kinematics = new MecanumKinematics(
             PARAMS.inPerTick * PARAMS.trackWidthTicks, PARAMS.inPerTick / PARAMS.lateralInPerTick);

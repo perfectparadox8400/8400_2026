@@ -9,11 +9,12 @@ import org.firstinspires.ftc.teamcode.Robot;
 public class WhatRobot extends OpMode {
     @Override
     public void init() {
-        Robot.init(hardwareMap.appContext);
         telemetry.addData("Robot", Robot.robotName());
+        telemetry.update();
     }
     @Override
     public void loop() {
         telemetry.addData("Robot", Robot.robotName());
+        telemetry.update();
     }
 }

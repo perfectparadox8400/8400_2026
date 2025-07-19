@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static org.firstinspires.ftc.teamcode.modules.Controller.*;
 import static org.firstinspires.ftc.teamcode.modules.Drive.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,17 +14,17 @@ public class Strafe extends OpMode {
     @Override
     public void init() {
         init_drive(hardwareMap);
+        telemetry.addData("Press", "Start");
+        telemetry.update();
     }
     @Override
     public void loop() {
-        boolean change = !gamepad1.start && !gamepad2.start;
-
-        DrivePower = 2;
-        if ((change && gamepad1.b) || gamepad1.right_bumper){
+        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.b) || gamepad1.right_bumper){
             DrivePower = 1;
-        }
-        if ((change && gamepad1.a) || gamepad1.left_bumper){
+        } else if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.a) || gamepad1.left_bumper){
             DrivePower = DriveSlowPower;
+        } else {
+            DrivePower = 2;
         }
 
         if (!gamepad1.x) {
@@ -43,7 +44,6 @@ public class Strafe extends OpMode {
         }
 
         drive_telemetry(telemetry);
-
         telemetry.update();
     }
 }

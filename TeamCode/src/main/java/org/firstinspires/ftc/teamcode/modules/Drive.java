@@ -28,7 +28,6 @@ public class Drive {
     public static boolean driving = false;
 
     public static void init_drive(HardwareMap hardwareMap) {
-        Robot.init(hardwareMap.appContext);
         right_front = hardwareMap.get(DcMotor.class, "right_front");
         left_front = hardwareMap.get(DcMotor.class, "left_front");
         left_back = hardwareMap.get(DcMotor.class, "left_back");
@@ -52,6 +51,23 @@ public class Drive {
         right_front.setPower(-gamepad.left_stick_y/Power - gamepad.left_stick_x/Power - gamepad.right_stick_x/Power - turnFactor - strafeFactor);
         left_back.setPower(-gamepad.left_stick_y/Power - gamepad.left_stick_x/Power + gamepad.right_stick_x/Power + turnFactor - strafeFactor);
         right_back.setPower(-gamepad.left_stick_y/Power + gamepad.left_stick_x/Power - gamepad.right_stick_x/Power - turnFactor + strafeFactor);
+    }
+
+    public static void setPower(double power, String motor) {
+        switch (motor) {
+            case "left_front":
+                left_front.setPower(power);
+                break;
+            case "right_front":
+                right_front.setPower(power);
+                break;
+            case "left_back":
+                left_back.setPower(power);
+                break;
+            case "right_back":
+                right_back.setPower(power);
+                break;
+        }
     }
 
     public static void brake(boolean brake) {

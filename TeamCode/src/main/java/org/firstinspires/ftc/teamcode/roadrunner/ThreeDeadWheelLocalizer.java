@@ -22,13 +22,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.messages.ThreeDeadWheelInputsMe
 
 @Config
 public final class ThreeDeadWheelLocalizer implements Localizer {
-    public static class Params {
-        public double par0YTicks = 3202.635760339295; // y position of the first parallel encoder (in tick units)
-        public double par1YTicks = -3245.0016237683703; // y position of the second parallel encoder (in tick units)
-        public double perpXTicks = -1937.055067651397; // x position of the perpendicular encoder (in tick units)
-    }
-
-    public static Params PARAMS = new Params();
+    public static Params.RobotParams PARAMS = Params.CURRENT;
 
     public final Encoder par0, par1, perp;
 
@@ -39,7 +33,6 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
     private Pose2d pose;
 
     public ThreeDeadWheelLocalizer(HardwareMap hardwareMap, double inPerTick, Pose2d pose) {
-        Robot.init(hardwareMap.appContext);
         if (Robot.robotName().equals("ophelia") || Robot.robotName().equals("mentorbot")) {
             par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
             par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_front")));
