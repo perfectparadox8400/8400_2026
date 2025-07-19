@@ -45,8 +45,8 @@ public class PlayGame extends OpMode {
         hang2.setPosition(0);
         armLimitReset = false;
         armDownReset = false;
-        rummbleBlip(gamepad1, 1);
-        rummbleBlip(gamepad2, 2);
+        rumbleBlip(gamepad1, 1);
+        rumbleBlip(gamepad2, 2);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PlayGame extends OpMode {
 
         if (gamepad1.guide) {
             hang = false;
-            rummble(gamepad1, 1000, 1, 1);
+            rumble(gamepad1, 1000, 1, 1);
         }
 
         if (gamepad2.guide) {
@@ -104,7 +104,7 @@ public class PlayGame extends OpMode {
             goB = false;
             armTargetPosition = armPosition;
             slideTargetPosition = slidePosition;
-            rummble(gamepad2, 1000, 1, 1);
+            rumble(gamepad2, 1000, 1, 1);
         }
 
         drive(gamepad1, DrivePower);
@@ -142,11 +142,12 @@ public class PlayGame extends OpMode {
         //Controller2 Buttons
 
         turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
-        strafeFactor = 0.0;
         if (gamepad2.dpad_left) {
             strafeFactor = -1.0 / DrivePower; // Strafe left
         } else if (gamepad2.dpad_right) {
             strafeFactor = 1.0 / DrivePower; // Strafe right
+        } else {
+            strafeFactor = 0.0;
         }
 
         /* ------ SLIDE LOGIC ------ */
@@ -165,7 +166,7 @@ public class PlayGame extends OpMode {
             wrist2.setPosition(0.85);
             slideTargetPosition = 0;
             goHome = true;
-            rummble(gamepad2, 500, 0.8, 0.8);
+            rumble(gamepad2, 500, 0.8, 0.8);
         }
 
         /* ------WRIST LOGIC------ */
@@ -220,13 +221,13 @@ public class PlayGame extends OpMode {
         if ((change && gamepad2.b)) {
             armTargetPosition = 900;
             goB = true;
-            rummbleBlip(gamepad2, 1);
+            rumbleBlip(gamepad2, 1);
         }
 
         if ((change && gamepad2.a)) {
             wrist1.setPosition(0.8);
             wrist2.setPosition(0.2);
-            rummbleBlip(gamepad2, 1);
+            rumbleBlip(gamepad2, 1);
         }
 
         /* ------ PRESETS ------ */
@@ -245,7 +246,7 @@ public class PlayGame extends OpMode {
             goHome = false;
             wrist1.setPosition(0.4);
             wrist2.setPosition(0.6);
-            rummbleBlip(gamepad2, 1);
+            rumbleBlip(gamepad2, 1);
         }
 
         if (gamepad2.y) {
@@ -257,7 +258,7 @@ public class PlayGame extends OpMode {
             armTargetPosition = 1110;
             wrist1.setPosition(0.5);
             wrist2.setPosition(0.5);
-            rummbleBlip(gamepad2, 1);
+            rumbleBlip(gamepad2, 1);
         }
 
         if (goHome && (slidePosition <= 2000)) {
@@ -267,20 +268,20 @@ public class PlayGame extends OpMode {
 
         if (goHome && armDown.isPressed()) {
             goHome = false;
-            rummble(gamepad2, 1000, 0.8, 0.8);
+            rumble(gamepad2, 1000, 0.8, 0.8);
         }
 
         //Go X
         if (goX && (slidePosition <= 2000)) {
             armTargetPosition = 200;
             goX = false;
-            rummbleBlip(gamepad2, 2);
+            rumbleBlip(gamepad2, 2);
         }
 
         if (goLowX && (armPosition >= 175)) {
             slideTargetPosition = 0;
             goLowX = false;
-            rummbleBlip(gamepad2, 2);
+            rumbleBlip(gamepad2, 2);
         }
 
         //Go Y
@@ -289,7 +290,7 @@ public class PlayGame extends OpMode {
             wrist1.setPosition(0.75);
             wrist2.setPosition(0.25);
             goY = false;
-            rummbleBlip(gamepad2, 2);
+            rumbleBlip(gamepad2, 2);
         }
 
         //Go B
@@ -298,7 +299,7 @@ public class PlayGame extends OpMode {
             wrist1.setPosition(0.85);
             wrist2.setPosition(0.15);
             goB = false;
-            rummbleBlip(gamepad2, 2);
+            rumbleBlip(gamepad2, 2);
         }
 
         //Slide Power
@@ -308,15 +309,11 @@ public class PlayGame extends OpMode {
         arm();
 
         if (gamepad1.touchpadWasPressed()) {
-            rummbleStop(gamepad1);
-            gamepad1.setLedColor(94, 6, 138, 10000);
-            rummble(gamepad1, 10000, 1, 1);
+            rumbleWiiii(gamepad1, 5000);
         }
 
         if (gamepad2.touchpadWasPressed()) {
-            rummbleStop(gamepad1);
-            gamepad2.setLedColor(94, 6, 138, 10000);
-            rummble(gamepad2, 10000, 1, 1);
+            rumbleWiiii(gamepad2, 5000);
         }
     }
 }

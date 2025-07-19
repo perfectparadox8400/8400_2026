@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.Drawing;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
+/** @noinspection unused*/
 public class Drive {
     public static DcMotor right_front = null;
     public static DcMotor left_front = null;
@@ -36,8 +37,8 @@ public class Drive {
             right_back.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
         } else if (Robot.robotName().equals("mentorbot")) {
-            left_back.setDirection(DcMotor.Direction.REVERSE);
             left_front.setDirection(DcMotor.Direction.REVERSE);
+            left_back.setDirection(DcMotor.Direction.REVERSE);
         } else {
             right_back.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);

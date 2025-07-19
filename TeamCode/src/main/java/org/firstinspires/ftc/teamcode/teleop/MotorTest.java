@@ -17,6 +17,8 @@ public class MotorTest extends OpMode {
         left_front = hardwareMap.get(DcMotor.class, "left_front");
         left_back = hardwareMap.get(DcMotor.class, "left_back");
         right_back = hardwareMap.get(DcMotor.class, "right_back");
+        telemetry.addData("Press", "Start");
+        telemetry.update();
     }
     @Override
     public void loop() {
@@ -43,5 +45,8 @@ public class MotorTest extends OpMode {
         } else {
             right_back.setPower(0);
         }
+
+        telemetry.addData("Press", "Start");
+        telemetry.update();
     }
 }
