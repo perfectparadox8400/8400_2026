@@ -26,31 +26,31 @@ public class Params {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
 
-        public double inPerTick;
-        public double lateralInPerTick;
-        public double trackWidthTicks;
+        public double inPerTick = 1;
+        public double lateralInPerTick = inPerTick;
+        public double trackWidthTicks = 0.0;
 
-        public double kS;
-        public double kV;
-        public double kA;
+        public double kS = 0.0;
+        public double kV = 0.0;
+        public double kA = 0.0;
 
-        public double maxWheelVel;
-        public double minProfileAccel;
-        public double maxProfileAccel;
+        public double maxWheelVel = 50.0;
+        public double minProfileAccel = -30.0;
+        public double maxProfileAccel = 50.0;
 
-        public double maxAngVel;
-        public double maxAngAccel;
+        public double maxAngVel = Math.PI;
+        public double maxAngAccel = Math.PI;
 
-        public double axialGain;
-        public double lateralGain;
-        public double headingGain;
+        public double axialGain = 0.0;
+        public double lateralGain = 0.0;
+        public double headingGain = 0.0;
 
-        public double axialVelGain;
-        public double lateralVelGain;
-        public double headingVelGain;
-        public double par0YTicks;
-        public double par1YTicks;
-        public double perpXTicks;
+        public double axialVelGain = 0.0;
+        public double lateralVelGain = 0.0;
+        public double headingVelGain = 0.0;
+        public double par0YTicks = 0.0;
+        public double par1YTicks = 1.0;
+        public double perpXTicks = 0.0;
     }
 
     public static class NancyParams extends RobotParams {
@@ -101,8 +101,8 @@ public class Params {
             usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
             // drive model parameters
-            inPerTick = 0.0;
-            lateralInPerTick = 0.0;
+            inPerTick = 1;
+            lateralInPerTick = inPerTick;
             trackWidthTicks = 0.0;
 
             // feedforward parameters (in tick units)
@@ -111,9 +111,9 @@ public class Params {
             kA = 0.0;
 
             // path profile parameters (in inches)
-            maxWheelVel = 0;
-            minProfileAccel = 0;
-            maxProfileAccel = 0;
+            maxWheelVel = 50;
+            minProfileAccel = -30;
+            maxProfileAccel = 50;
 
             // turn profile parameters (in radians)
             maxAngVel = Math.PI;
@@ -130,7 +130,7 @@ public class Params {
 
             // Three Dead Wheels
             par0YTicks = 0.0; // y position of the first parallel encoder (in tick units)
-            par1YTicks = 0.0; // y position of the second parallel encoder (in tick units)
+            par1YTicks = 1.0; // y position of the second parallel encoder (in tick units)
             perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
         }
     }
