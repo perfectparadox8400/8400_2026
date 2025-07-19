@@ -35,13 +35,13 @@ public class MotorTest extends OpMode {
             setPower(0, "left_front");
         }
 
-        if (gamepad1.b && (controllerChange(gamepad1) || controllerChange(gamepad2))) {
+        if (gamepad1.b && controllerChange(gamepad1, gamepad2)) {
             setPower(1* power, "right_back");
         }else {
             setPower(0, "right_back");
         }
 
-        if (gamepad1.a && (controllerChange(gamepad1) || controllerChange(gamepad2))) {
+        if (gamepad1.a && controllerChange(gamepad1, gamepad2)) {
             setPower(1* power, "left_back");
         } else {
             setPower(0, "left_back");

@@ -56,10 +56,10 @@ public class PlayGame extends OpMode {
 
         //Controller1 Buttons
         DrivePower = 2;
-        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.b) || gamepad1.right_bumper){
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
             DrivePower = 1;
         }
-        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.a) || gamepad1.left_bumper){
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
             DrivePower = DriveSlowPower;
         }
 
@@ -215,13 +215,13 @@ public class PlayGame extends OpMode {
             intakeOther.setPower(0);
         }
 
-        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad2.b)) {
+        if ((controllerChange(gamepad1, gamepad2) && gamepad2.b)) {
             armTargetPosition = 900;
             goB = true;
             rumbleBlip(gamepad2, 1);
         }
 
-        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad2.a)) {
+        if ((controllerChange(gamepad1, gamepad2) && gamepad2.a)) {
             wrist1.setPosition(0.8);
             wrist2.setPosition(0.2);
             rumbleBlip(gamepad2, 1);

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.modules;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Controller {
-    public static boolean controllerChange(Gamepad gamepad) {
-        return !gamepad.start || !gamepad.startWasPressed() || !gamepad.startWasReleased();
+    public static boolean controllerChange(Gamepad gamepad1, Gamepad gamepad2) {
+        return !(gamepad1.start || gamepad1.startWasPressed() || gamepad1.startWasReleased() || gamepad2.start || gamepad2.startWasPressed() || gamepad2.startWasReleased());
     }
 
     public static void rumbleBlip(Gamepad gamepad, int blips) {

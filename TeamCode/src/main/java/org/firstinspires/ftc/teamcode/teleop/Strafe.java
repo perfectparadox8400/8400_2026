@@ -19,28 +19,26 @@ public class Strafe extends OpMode {
     }
     @Override
     public void loop() {
-        if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.b) || gamepad1.right_bumper){
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
             DrivePower = 1;
-        } else if (((controllerChange(gamepad1) || controllerChange(gamepad2)) && gamepad1.a) || gamepad1.left_bumper){
+        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
             DrivePower = DriveSlowPower;
         } else {
             DrivePower = 2;
         }
 
+        drive(gamepad1, DrivePower);
+
         if (!gamepad1.x) {
             drive(gamepad2, 2.5);
         }
 
-        drive(gamepad1, DrivePower);
-
         if (gamepad1.x) {
             brake(true);
             xButton = true;
-        } else {
-            if (xButton) {
-                xButton = false;
-                brake(false);
-            }
+        } else if (xButton) {
+            xButton = false;
+            brake(false);
         }
 
         drive_telemetry(telemetry);
