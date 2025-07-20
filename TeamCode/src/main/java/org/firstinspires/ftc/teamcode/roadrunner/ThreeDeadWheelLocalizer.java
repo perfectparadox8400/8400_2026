@@ -32,7 +32,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
     private boolean initialized;
     private Pose2d pose;
 
-    public ThreeDeadWheelLocalizer(HardwareMap hardwareMap, double inPerTick, Pose2d pose) {
+    public ThreeDeadWheelLocalizer(HardwareMap hardwareMap, double inPerTick, Pose2d initialPose) {
         if (Robot.robotName().equals("ophelia") || Robot.robotName().equals("mentorbot")) {
             par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_back")));
             par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_front")));
@@ -49,7 +49,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
         FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
 
-        this.pose = pose;
+        pose = initialPose;
     }
 
     @Override
