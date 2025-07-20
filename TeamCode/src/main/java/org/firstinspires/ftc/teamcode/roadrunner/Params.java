@@ -142,17 +142,17 @@ public class Params {
             usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
             // drive model parameters
-            inPerTick = 0.0019876368984914;
-            lateralInPerTick = 0.0009019917292751737;
-            trackWidthTicks = 6068.751343230888;
+            inPerTick = 0.0019634792852935;
+            lateralInPerTick = 0.0015725784625803187;
+            trackWidthTicks = 6688.675532912596;
 
             // feedforward parameters (in tick units)
-            kS = 1.2413263606256049;
-            kV = 0.00025279672456487;
+            kS = 0.8018814186196006;
+            kV = 0.00038417994989199157;
             kA = 0.00001;
 
             // path profile parameters (in inches)
-            maxWheelVel = 100;
+            maxWheelVel = 80;
             minProfileAccel = -30;
             maxProfileAccel = 80;
 
@@ -161,18 +161,18 @@ public class Params {
             maxAngAccel = Math.PI;
 
             // path controller gains
-            axialGain = 4.5;
-            lateralGain = 8.0;
-            headingGain = 15.0; // shared with turn
+            axialGain = 4;
+            lateralGain = 9;
+            headingGain = 10; // shared with turn
 
             axialVelGain = 0.0;
             lateralVelGain = 0.0;
             headingVelGain = 0.0; // shared with turn
 
             // Three Dead Wheels
-            par0YTicks = 3202.635760339295; // y position of the first parallel encoder (in tick units)
-            par1YTicks = -3245.0016237683703; // y position of the second parallel encoder (in tick units)
-            perpXTicks = -1937.055067651397; // x position of the perpendicular encoder (in tick units)
+            par0YTicks = -3000.2831713283877; // y position of the first parallel encoder (in tick units)
+            par1YTicks = 3046.458004663223; // y position of the second parallel encoder (in tick units)
+            perpXTicks = 3458.801960386832; // x position of the perpendicular encoder (in tick units)
         }
     }
 }
