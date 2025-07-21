@@ -25,13 +25,14 @@ public class Drive {
     public static DcMotor right_back = null;
     public static IMU imu = null;
 
-    public static double DrivePower = 2;
-    public static double DriveSlowPower = 3;
+    public static double DrivePower = 0.6;
+    public static double DriveSlowPower = 0.4;
     public static double turnFactor = 0;
     public static double strafeFactor = 0.0;
 
     public static boolean driving = false;
     public static boolean brakeMode = false;
+    public static boolean fieldDriving = false;
 
     public static void init_drive(HardwareMap hardwareMap) {
         right_front = hardwareMap.get(DcMotor.class, "right_front");
@@ -44,11 +45,13 @@ public class Drive {
             right_back.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
             brakeMode = true;
+            fieldDriving = true;
             imuPose = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD);
         } else if (Robot.robotName().equals("mentorbot")) {
             left_front.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
             brakeMode = true;
+            fieldDriving = true;
             imuPose = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         } else {
             right_back.setDirection(DcMotor.Direction.REVERSE);
@@ -63,18 +66,35 @@ public class Drive {
     }
 
     public static boolean motorsBusy() {
-        return left_front.isBusy() || right_front.isBusy() || left_back.isBusy() || right_back.isBusy();
+        return left_front.getPower() != 0 || right_front.getPower() != 0 || left_back.getPower() != 0 || right_back.getPower() != 0;
     }
 
-    public static void drive(Gamepad gamepad, double Power) {
+    public static void drive(Gamepad gamepad, double maxSpeed) {
         driving = motorsBusy();
-        left_front.setPower(-gamepad.left_stick_y/Power + gamepad.left_stick_x/Power + gamepad.right_stick_x/Power + turnFactor + strafeFactor);
-        right_front.setPower(-gamepad.left_stick_y/Power - gamepad.left_stick_x/Power - gamepad.right_stick_x/Power - turnFactor - strafeFactor);
-        left_back.setPower(-gamepad.left_stick_y/Power - gamepad.left_stick_x/Power + gamepad.right_stick_x/Power + turnFactor - strafeFactor);
-        right_back.setPower(-gamepad.left_stick_y/Power + gamepad.left_stick_x/Power - gamepad.right_stick_x/Power - turnFactor + strafeFactor);
+        // This calculates the power needed for each wheel based on the amount of forward,
+        // strafe right, and rotate
+        double frontLeftPower = -gamepad.left_stick_y + gamepad.left_stick_x + gamepad.right_stick_x + turnFactor + strafeFactor;
+        double frontRightPower = -gamepad.left_stick_y - gamepad.left_stick_x - gamepad.right_stick_x - turnFactor - strafeFactor;
+        double backRightPower = -gamepad.left_stick_y + gamepad.left_stick_x - gamepad.right_stick_x - turnFactor + strafeFactor;
+        double backLeftPower = -gamepad.left_stick_y - gamepad.left_stick_x + gamepad.right_stick_x + turnFactor - strafeFactor;
+
+        double maxPower = 1.0;
+
+        // This is needed to make sure we don't pass > 1.0 to any wheel
+        // It allows us to keep all of the motors in proportion to what they should
+        // be and not get clipped
+        maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(frontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
+
+        left_front.setPower(maxSpeed * (frontLeftPower / maxPower));
+        right_front.setPower(maxSpeed * (frontRightPower / maxPower));
+        left_back.setPower(maxSpeed * (backLeftPower / maxPower));
+        right_back.setPower(maxSpeed * (backRightPower / maxPower));
     }
 
-    public static void fieldDrive(Gamepad gamepad, double Power) {
+    public static void fieldDrive(Gamepad gamepad, double maxSpeed) {
         driving = motorsBusy();
         double y = -gamepad.left_stick_y;
         double x = gamepad.left_stick_x;
@@ -92,10 +112,20 @@ public class Drive {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-        left_front.setPower(frontLeftPower/Power);
-        left_back.setPower(backLeftPower/Power);
-        right_front.setPower(frontRightPower/Power);
-        right_back.setPower(backRightPower/Power);
+        double maxPower = 1.0;
+
+        // This is needed to make sure we don't pass > 1.0 to any wheel
+        // It allows us to keep all of the motors in proportion to what they should
+        // be and not get clipped
+        maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(frontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
+
+        left_front.setPower(maxSpeed * (frontLeftPower / maxPower));
+        right_front.setPower(maxSpeed * (frontRightPower / maxPower));
+        left_back.setPower(maxSpeed * (backLeftPower / maxPower));
+        right_back.setPower(maxSpeed * (backRightPower / maxPower));
     }
 
     public static void setPower(double power, String motor) {
@@ -158,6 +188,7 @@ public class Drive {
         telemetry.addData("RF POW", right_front.getPower());
         telemetry.addData("RB POW", right_back.getPower());
         telemetry.addData("Driving", driving);
+        telemetry.addData("Field Drive", fieldDriving);
         telemetry.addData("Brake Mode", brakeMode);
     }
 

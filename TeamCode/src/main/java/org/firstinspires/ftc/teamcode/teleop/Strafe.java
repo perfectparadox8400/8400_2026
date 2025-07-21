@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "! Strafe")
 public class Strafe extends OpMode {
-    private boolean fieldDriving = false;
     @Override
     public void init() {
         init_drive(hardwareMap);
@@ -18,16 +17,16 @@ public class Strafe extends OpMode {
     @Override
     public void loop() {
         if ((controllerChange(gamepad1, gamepad2) && gamepad1.bWasPressed()) || gamepad1.rightBumperWasPressed()) {
-            rumble(gamepad1, 250, 0.8, 0.8);
+            rumble(gamepad1, 250, 0.4, 0.4);
         } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.aWasPressed()) || gamepad1.leftBumperWasPressed()) {
-            rumble(gamepad1, 250, 0.3, 0.3);
+            rumble(gamepad1, 250, 0.2, 0.2);
         }
         if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
-            DrivePower = 1;
+            DrivePower = 1.0;
         } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
             DrivePower = DriveSlowPower;
         } else {
-            DrivePower = 2;
+            DrivePower = 0.6;
         }
 
         if (gamepad1.start && gamepad1.guideWasReleased()) {
@@ -40,24 +39,25 @@ public class Strafe extends OpMode {
             imu.resetYaw();
         }
 
-        if (fieldDriving) {
-            fieldDrive(gamepad1, DrivePower);
-        } else {
-            drive(gamepad1, DrivePower);
-        }
-
         if (gamepad1.xWasPressed()) {
             rumbleBlip(gamepad1, 3);
         }
 
         if (gamepad1.x) {
             brake(true);
-        } else {
-            drive(gamepad2, 2.5);
+        } else if (!controllerJoyStickActive(gamepad1)) {
+            drive(gamepad2, 0.5);
         }
 
         if (gamepad1.xWasReleased()) {
             brake(false);
+        }
+        if (controllerJoyStickActive(gamepad1)) {
+            if (fieldDriving) {
+                fieldDrive(gamepad1, DrivePower);
+            } else {
+                drive(gamepad1, DrivePower);
+            }
         }
 
         if (gamepad1.yWasReleased()){

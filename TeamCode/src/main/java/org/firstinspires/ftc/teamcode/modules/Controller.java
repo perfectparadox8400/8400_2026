@@ -7,6 +7,10 @@ public class Controller {
         return !(gamepad1.start || gamepad1.startWasPressed() || gamepad1.startWasReleased() || gamepad2.start || gamepad2.startWasPressed() || gamepad2.startWasReleased());
     }
 
+    public static boolean controllerJoyStickActive(Gamepad gamepad) {
+        return gamepad.left_stick_x >= 0.05 || gamepad.left_stick_x <= -0.05 || gamepad.left_stick_y >= 0.05 || gamepad.left_stick_y <= -0.05 || gamepad.right_stick_x >= 0.05 || gamepad.right_stick_x <= -0.05 || gamepad.right_stick_y >= 0.05 || gamepad.right_stick_y >= -0.05;
+    }
+
     public static void rumbleBlip(Gamepad gamepad, int blips) {
         gamepad.rumbleBlips(blips);
     }
