@@ -1,8 +1,25 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import static org.firstinspires.ftc.teamcode.modules.Drive.*;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Controller {
+    public static void speedControl(Gamepad gamepad1, Gamepad gamepad2) {
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.bWasPressed()) || gamepad1.rightBumperWasPressed()) {
+            rumble(gamepad1, 250, 0.4, 0.4);
+        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.aWasPressed()) || gamepad1.leftBumperWasPressed()) {
+            rumble(gamepad1, 250, 0.2, 0.2);
+        }
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
+            DrivePower = 1.0;
+        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
+            DrivePower = DriveSlowPower;
+        } else {
+            DrivePower = 0.6;
+        }
+    }
+
     public static boolean controllerChange(Gamepad gamepad1, Gamepad gamepad2) {
         return !(gamepad1.start || gamepad1.startWasPressed() || gamepad1.startWasReleased() || gamepad2.start || gamepad2.startWasPressed() || gamepad2.startWasReleased());
     }
@@ -21,7 +38,7 @@ public class Controller {
 
     public static void rumbleWiiii(Gamepad gamepad, int time) {
         gamepad.stopRumble();
-        gamepad.setLedColor(0.3686, 0.0235, 0.5412, time);
+        gamepad.setLedColor(0.2510, 0.0078, 0.3686, time);
         rumble(gamepad, time, 1, 1);
     }
 }
