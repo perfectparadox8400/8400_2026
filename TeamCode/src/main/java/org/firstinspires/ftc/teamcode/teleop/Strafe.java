@@ -16,18 +16,7 @@ public class Strafe extends OpMode {
     }
     @Override
     public void loop() {
-        if ((controllerChange(gamepad1, gamepad2) && gamepad1.bWasPressed()) || gamepad1.rightBumperWasPressed()) {
-            rumble(gamepad1, 250, 0.4, 0.4);
-        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.aWasPressed()) || gamepad1.leftBumperWasPressed()) {
-            rumble(gamepad1, 250, 0.2, 0.2);
-        }
-        if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
-            DrivePower = 1.0;
-        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
-            DrivePower = DriveSlowPower;
-        } else {
-            DrivePower = 0.6;
-        }
+        speedControl(gamepad1, gamepad2);
 
         if (gamepad1.start && gamepad1.guideWasReleased()) {
             rumbleBlip(gamepad1, 2);
