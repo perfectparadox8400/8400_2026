@@ -5,10 +5,13 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.*;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Controller {
+    private static long lastSwitchTime = 0;
+    private static boolean buttonsBlocked = false;
+    private static final long cooldownMillis = 1000;
     public static void speedControl(Gamepad gamepad1, Gamepad gamepad2) {
-        if ((controllerChange(gamepad1, gamepad2) && gamepad1.bWasPressed()) || gamepad1.rightBumperWasPressed()) {
+        if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.rightBumperWasPressed()) {
             rumble(gamepad1, 250, 0.4, 0.4);
-        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.aWasPressed()) || gamepad1.leftBumperWasPressed()) {
+        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.leftBumperWasPressed()) {
             rumble(gamepad1, 250, 0.2, 0.2);
         }
         if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
@@ -21,7 +24,25 @@ public class Controller {
     }
 
     public static boolean controllerChange(Gamepad gamepad1, Gamepad gamepad2) {
-        return !(gamepad1.start || gamepad1.startWasPressed() || gamepad1.startWasReleased() || gamepad2.start || gamepad2.startWasPressed() || gamepad2.startWasReleased());
+        // Detect switch combo (start + A or B)
+        boolean switched =
+                (gamepad1.start && (gamepad1.a || gamepad1.b)) ||
+                        (gamepad2.start && (gamepad2.a || gamepad2.b));
+
+        if (switched) {
+            lastSwitchTime = System.currentTimeMillis();
+            buttonsBlocked = true;
+        }
+
+        boolean cooldownPassed = (System.currentTimeMillis() - lastSwitchTime) > cooldownMillis;
+
+        // If cooldown passed and both A and B are released, unblock them
+        if (cooldownPassed && !gamepad2.a && !gamepad2.b) {
+            buttonsBlocked = false;
+        }
+
+        // Return true if we're safe to allow button input
+        return cooldownPassed && !buttonsBlocked;
     }
 
     public static boolean controllerJoyStickActive(Gamepad gamepad) {

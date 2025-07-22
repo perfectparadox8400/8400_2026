@@ -157,11 +157,11 @@ public class Teleop {
             }
 
             // Controller2 Buttons
-            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) / DriveSlowPower;
+            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) * DriveSlowPower;
             if (gamepad2.dpad_left) {
-                strafeFactor = -1.0 / DrivePower; // Strafe left
+                strafeFactor = -1.0 * DrivePower; // Strafe left
             } else if (gamepad2.dpad_right) {
-                strafeFactor = 1.0 / DrivePower; // Strafe right
+                strafeFactor = DrivePower; // Strafe right
             } else {
                 strafeFactor = 0.0;
             }
@@ -235,13 +235,13 @@ public class Teleop {
                 intakeOther.setPower(0);
             }
 
-            if ((controllerChange(gamepad1, gamepad2) && gamepad2.bWasPressed())) {
+            if ((controllerChange(gamepad1, gamepad2) && gamepad2.b)) {
                 armTargetPosition = 900;
                 goB = true;
                 rumbleBlip(gamepad2, 1);
             }
 
-            if ((controllerChange(gamepad1, gamepad2) && gamepad2.aWasPressed())) {
+            if ((controllerChange(gamepad1, gamepad2) && gamepad2.a)) {
                 wrist1.setPosition(0.8);
                 wrist2.setPosition(0.2);
                 rumbleBlip(gamepad2, 1);
