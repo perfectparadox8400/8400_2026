@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 public class Auto {

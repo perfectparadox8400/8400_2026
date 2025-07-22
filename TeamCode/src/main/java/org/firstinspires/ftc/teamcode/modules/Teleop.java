@@ -62,6 +62,16 @@ public class Teleop {
             // Speed Control
             speedControl(gamepad1, gamepad2);
 
+            if (gamepad1.start && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 2);
+                fieldDriving = !fieldDriving;
+            }
+
+            if (gamepad1.back && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 4);
+                imu.resetYaw();
+            }
+
             if (gamepad2.guideWasPressed()) {
                 start = false;
                 goX = false;
@@ -74,7 +84,16 @@ public class Teleop {
                 rumble(gamepad2, 750, 1, 1);
             }
 
-            drive(gamepad1, DrivePower);
+            if (fieldDriving) {
+                fieldDrive(gamepad1, DrivePower);
+            } else {
+                drive(gamepad1, DrivePower);
+            }
+
+            if (gamepad1.yWasReleased()){
+                rumbleBlip(gamepad1, 1);
+                setBrakeMode(!brakeMode);
+            }
 
             //Telemetry
             drive_telemetry(telemetry);
