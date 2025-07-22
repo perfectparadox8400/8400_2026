@@ -71,6 +71,7 @@ public class Arm {
         public static double hookClosed2 = 0.65;
 
         public static void init_arm(HardwareMap hardwareMap) {
+            armP = 0.005; armI = 0.0001; armD = 0.00;
             armController = new PIDController(armP, armI, armD);
             slideController = new PIDController(slideP, slideI, slideD);
 
@@ -94,7 +95,6 @@ public class Arm {
             intake.setPower(0);
             intakeOther.setPower(0);
 
-            armP = 0.005; armI = 0.0001; armD = 0.00;
             armTicks = 28 * 125;
             armTolerance = 50;
             armTarget = 0;
@@ -209,11 +209,93 @@ public class Arm {
     }
 
     public static class MentorBot {
-
         public static void init_arm(HardwareMap hardwareMap) {
+            armP = 0.005; armI = 0.0001; armD = 0.00;
+            armController = new PIDController(armP, armI, armD);
+            slideController = new PIDController(slideP, slideI, slideD);
+
+            mainBoom = hardwareMap.get(DcMotor.class, "main_arm");
+            slide = hardwareMap.get(DcMotor.class, "slide");
+            wrist1 = hardwareMap.get(Servo.class, "wrist1");
+            wrist2 = hardwareMap.get(Servo.class, "wrist2");
+            intake = hardwareMap.get(CRServo.class, "intake");
+            intakeOther = hardwareMap.get(CRServo.class, "intake2");
+            slideBack = hardwareMap.get(TouchSensor.class, "slide_limit");
+
+            mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            slide.setDirection(DcMotor.Direction.REVERSE);
+
+            intake.setPower(0);
+            intakeOther.setPower(0);
+
+            armTicks = 28 * 125;
+            armTolerance = 20;
+            armTarget = 0;
+            armTargetPosition = 0;
+            slideTarget = 0;
+            slideTargetPosition = 0;
+            armLimit = 900;
+            armDownLimit = 0;
+        }
+
+        public static void arm() {
+            if (armTarget < armTargetPosition) {
+                if ((armTargetPosition - armTarget) > 15) {
+                    armTarget += 15;
+                } else {
+                    armTarget = armTargetPosition;
+                }
+            } else if (armTarget > armTargetPosition) {
+                if ((armTarget - armTargetPosition) > 13) {
+                    armTarget -= 13;
+                } else {
+                    armTarget = armTargetPosition;
+                }
+            }
+            if (armTarget > armLimit) {
+                armTarget = armLimit;
+                armTargetPosition = armTarget;
+            }
+            if (armTarget < armDownLimit) {
+                armTarget = armDownLimit;
+                armTargetPosition = armTarget;
+            }
+
+            if (Math.abs(armPosition - armTarget) > armTolerance) {
+                armController.setPID(armP, armI, armD);
+                armPower = Math.max(armController.calculate(armPosition, armTarget), 1);
+                mainBoom.setPower(armPower);
+            } else {
+                mainBoom.setPower(0);
+            }
         }
 
         public static void arm_loop() {
+            slidePosition = slide.getCurrentPosition();
+            armPosition = mainBoom.getCurrentPosition();
+        }
+
+        public static void arm_telemetry(Telemetry telemetry) {
+            //Arm Telemetry
+            telemetry.addData("Arm Position", armPosition);
+            telemetry.addData("Arm Target", armTarget);
+            telemetry.addData("Arm Target Position", armTargetPosition);
+            telemetry.addData("Arm Ticks", armTicks);
+            telemetry.addData("Arm Power", armPower);
+
+            //Slide Telemetry
+            telemetry.addData("Slide Position", slidePosition);
+            telemetry.addData("Slide Target", slideTarget);
+            telemetry.addData("Slide Target Position", slideTargetPosition);
+            telemetry.addData("Slide Ticks", slideTicks);
+
+            //Intake Telemetry
+            telemetry.addData("Wrist 1", wrist1.getPosition());
+            telemetry.addData("Wrist 2", wrist2.getPosition());
         }
     }
 
