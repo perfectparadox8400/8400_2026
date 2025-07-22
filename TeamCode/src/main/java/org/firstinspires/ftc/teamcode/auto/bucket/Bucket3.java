@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.bucket;
 
-import static org.firstinspires.ftc.teamcode.auto.Auto.None;
-import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+import static org.firstinspires.ftc.teamcode.auto.Auto.*;
 
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -22,7 +21,7 @@ public class Bucket3 extends LinearOpMode {
     public void runOpMode()  {
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        init_arm(hardwareMap);
+        startArm(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(None)

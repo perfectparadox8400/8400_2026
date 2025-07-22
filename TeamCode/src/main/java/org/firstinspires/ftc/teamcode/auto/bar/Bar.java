@@ -8,8 +8,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import static org.firstinspires.ftc.teamcode.auto.Auto.None;
-import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+import static org.firstinspires.ftc.teamcode.auto.Auto.*;
 import static org.firstinspires.ftc.teamcode.modules.Bar.armBar;
 
 import org.firstinspires.ftc.teamcode.auto.Auto;
@@ -21,7 +20,7 @@ public class Bar extends LinearOpMode {
     public void runOpMode()  {
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        init_arm(hardwareMap);
+        startArm(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(None)

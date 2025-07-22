@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.specimen;
 
-import static org.firstinspires.ftc.teamcode.auto.Auto.None;
-import static org.firstinspires.ftc.teamcode.modules.Arm.init_arm;
+import static org.firstinspires.ftc.teamcode.auto.Auto.*;
 
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -20,7 +19,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class Specimen3 extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        init_arm(hardwareMap);
+        startArm(hardwareMap);
         Pose2d start = new Pose2d(-8, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
 

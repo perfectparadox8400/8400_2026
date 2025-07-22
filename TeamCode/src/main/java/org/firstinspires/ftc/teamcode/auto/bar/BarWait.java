@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.bar;
 
-import static org.firstinspires.ftc.teamcode.auto.Auto.Wait;
-import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+import static org.firstinspires.ftc.teamcode.auto.Auto.*;
 import static org.firstinspires.ftc.teamcode.modules.Bar.armBar;
 
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -21,7 +20,7 @@ public class BarWait extends LinearOpMode {
     public void runOpMode()  {
         Pose2d start = new Pose2d(31, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        init_arm(hardwareMap);
+        startArm(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(Wait)

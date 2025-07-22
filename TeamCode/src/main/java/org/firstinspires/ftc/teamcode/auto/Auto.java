@@ -6,7 +6,10 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 public class Auto {
@@ -18,24 +21,36 @@ public class Auto {
         wrist2.setPosition(0.85);
     }
 
+    public static void startArm(HardwareMap hardwareMap) {
+        if (Robot.robotName().equals("mentorbot")) {
+            MentorBot.init_arm(hardwareMap);
+        } else if (Robot.robotName().equals("nancy")) {
+            Nancy.init_arm(hardwareMap);
+        }
+    }
+
     public static class ArmStart implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             startWrist();
-            if (slideBack.isPressed()){
-                slide_reset(false);
-                if(armDown.isPressed()){
-                    arm_reset(false);
-                    packet.put("Resetting", "Done");
-                    return false;
+            if (Robot.robotName().equals("mentorbot")) {
+                return false;
+            } else if (Robot.robotName().equals("nancy")) {
+                if (slideBack.isPressed()){
+                    slide_reset(false);
+                    if(armDown.isPressed()){
+                        Nancy.arm_reset(false);
+                        packet.put("Resetting", "Done");
+                        return false;
+                    } else {
+                        packet.put("Resetting", "Arm");
+                        Nancy.arm_reset(true);
+                        Nancy.arm();
+                    }
                 } else {
-                    packet.put("Resetting", "Arm");
-                    arm_reset(true);
-                    arm();
+                    packet.put("Resetting", "Slide");
+                    slide_reset(true);
                 }
-            } else {
-                packet.put("Resetting", "Slide");
-                slide_reset(true);
             }
             return true;
         }
@@ -52,8 +67,12 @@ public class Auto {
             packet.put("Arm Target", armTargetPosition);
             packet.put("Slide Position", slidePosition);
             packet.put("Slide Target", slideTargetPosition);
-            arm_loop();
-            arm();
+            if (Robot.robotName().equals("mentorbot")) {
+                return false;
+            } else if (Robot.robotName().equals("nancy")) {
+                Nancy.arm_loop();
+                Nancy.arm();
+            }
             slide();
             return true;
         }
