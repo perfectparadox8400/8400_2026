@@ -55,6 +55,7 @@ public class Arm {
     private static final double slideMaxLimit = 5600; //limit 5650
     private static final double slideShortLimit = 3900;
     private static double slideError = 0;
+    private static double slidePower = 0;
     public static double slideLimit = slideMaxLimit;
     public static double slideTarget = 0;
     public static double slideTargetPosition = 0;
@@ -193,6 +194,7 @@ public class Arm {
             telemetry.addData("Slide Target", slideTarget);
             telemetry.addData("Slide Target Position", slideTargetPosition);
             telemetry.addData("Slide Ticks", slideTicks);
+            telemetry.addData("Slide Power", slidePower);
 
             //Intake Telemetry
             telemetry.addData("Wrist 1", wrist1.getPosition());
@@ -269,7 +271,7 @@ public class Arm {
 
             if (Math.abs(armPosition - armTarget) > armTolerance) {
                 armController.setPID(armP, armI, armD);
-                armPower = Math.max(armController.calculate(armPosition, armTarget), 1);
+                armPower = armController.calculate(armPosition, armTarget);
                 mainBoom.setPower(armPower);
             } else {
                 mainBoom.setPower(0);
@@ -300,6 +302,7 @@ public class Arm {
             telemetry.addData("Slide Target", slideTarget);
             telemetry.addData("Slide Target Position", slideTargetPosition);
             telemetry.addData("Slide Ticks", slideTicks);
+            telemetry.addData("Slide Power", slidePower);
 
             //Intake Telemetry
             telemetry.addData("Wrist 1", wrist1.getPosition());
@@ -359,7 +362,7 @@ public class Arm {
 
         if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
             slideController.setPID(slideP, slideI, slideD);
-            double slidePower = slideController.calculate(slidePosition, slideTarget);
+            slidePower = slideController.calculate(slidePosition, slideTarget);
             slide.setPower(slidePower);
         } else {
             slide.setPower(0);

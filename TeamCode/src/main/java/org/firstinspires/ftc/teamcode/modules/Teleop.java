@@ -355,8 +355,8 @@ public class Teleop {
             goA = false;
             goHome = false;
             start = true;
-            wrist1.setPosition(0.15);
-            wrist2.setPosition(0.85);
+            wrist1.setPosition(0.05);
+            wrist2.setPosition(0.95);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
@@ -450,9 +450,9 @@ public class Teleop {
 
             /* ------ MAIN BOOM LOGIC ------ */
             if (gamepad2.right_stick_y > 0.2){
-                armTargetPosition -= 15;
-            } else if (gamepad2.right_stick_y < -0.2){
                 armTargetPosition += 15;
+            } else if (gamepad2.right_stick_y < -0.2){
+                armTargetPosition -= 15;
             }
 
             /* ------ INTAKE LOGIC ------ */
