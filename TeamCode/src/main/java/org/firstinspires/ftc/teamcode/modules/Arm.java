@@ -197,6 +197,8 @@ public class Arm {
             //Intake Telemetry
             telemetry.addData("Wrist 1", wrist1.getPosition());
             telemetry.addData("Wrist 2", wrist2.getPosition());
+            telemetry.addData("Intake 1", intake.getPower());
+            telemetry.addData("Intake 2", intakeOther.getPower());
 
             //Hang Telemetry
             telemetry.addData("Hang 1", hang1.getPosition());
@@ -279,6 +281,12 @@ public class Arm {
             armPosition = mainBoom.getCurrentPosition();
         }
 
+        public static void arm_reset() {
+            mainBoom.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            mainBoom.setPower(0);
+        }
+
         public static void arm_telemetry(Telemetry telemetry) {
             //Arm Telemetry
             telemetry.addData("Arm Position", armPosition);
@@ -296,6 +304,8 @@ public class Arm {
             //Intake Telemetry
             telemetry.addData("Wrist 1", wrist1.getPosition());
             telemetry.addData("Wrist 2", wrist2.getPosition());
+            telemetry.addData("Intake 1", intake.getPower());
+            telemetry.addData("Intake 2", intakeOther.getPower());
         }
     }
 

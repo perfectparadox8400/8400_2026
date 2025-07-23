@@ -405,6 +405,7 @@ public class Teleop {
             if(start) {
                 if (slideBack.isPressed()){
                     slide_reset(false);
+                    Arm.MentorBot.arm_reset();
                     start = false;
                 } else {
                     slide_reset(true);
@@ -423,7 +424,7 @@ public class Teleop {
             }
 
             /* ------ SLIDE LOGIC ------ */
-            slideTargetPosition += (gamepad2.left_stick_y * 30);
+            slideTargetPosition += (-gamepad2.left_stick_y * 55);
 
             /* ------ RESET ------ */
             if (gamepad2.backWasPressed()) {
@@ -455,16 +456,16 @@ public class Teleop {
             }
 
             /* ------ INTAKE LOGIC ------ */
-            if (gamepad2.right_stick_x > 0.2){
+            if (gamepad2.right_stick_x > 0.5){
                 intake.setPower(-1);
                 intakeOther.setPower(1);
-            } else if (gamepad2.right_stick_x < -0.2){
+            } else if (gamepad2.right_stick_x < -0.5){
                 intake.setPower(1);
                 intakeOther.setPower(-1);
-            } else if (gamepad2.dpad_left){
+            } else if (gamepad2.dpad_right){
                 intake.setPower(-1);
                 intakeOther.setPower(-1);
-            } else if (gamepad2.dpad_right){
+            } else if (gamepad2.dpad_left){
                 intake.setPower(1);
                 intakeOther.setPower(1);
             } else {
