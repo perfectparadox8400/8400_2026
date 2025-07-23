@@ -25,8 +25,8 @@ public class Drive {
     public static DcMotor right_back = null;
     public static IMU imu = null;
 
-    public static double DrivePower = 0.6;
-    public static double DriveSlowPower = 0.4;
+    public static double DrivePower = 0.65;
+    public static double DriveSlowPower = 0.45;
     public static double turnFactor = 0;
     public static double strafeFactor = 0.0;
 

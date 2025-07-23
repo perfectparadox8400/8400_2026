@@ -213,8 +213,9 @@ public class Arm {
     }
 
     public static class MentorBot {
+        public static boolean armOverride = false;
         public static void init_arm(HardwareMap hardwareMap) {
-            armP = 0.005; armI = 0.0001; armD = 0.00;
+            armP = 0.009; armI = 0.0001; armD = 0.00;
             armController = new PIDController(armP, armI, armD);
             slideController = new PIDController(slideP, slideI, slideD);
 
@@ -236,37 +237,39 @@ public class Arm {
             intake.setPower(0);
             intakeOther.setPower(0);
 
-            armTicks = 28 * 125;
+            armTicks = (3.70588 * 5.181818 * 5.181818 * 28);
             armTolerance = 20;
             armTarget = 0;
             armTargetPosition = 0;
             slideTarget = 0;
             slideTargetPosition = 0;
-            armLimit = 900;
+            armLimit = 21000;
             armDownLimit = 0;
         }
 
         public static void arm() {
             if (armTarget < armTargetPosition) {
-                if ((armTargetPosition - armTarget) > 15) {
-                    armTarget += 15;
+                if ((armTargetPosition - armTarget) > 100) {
+                    armTarget += 100;
                 } else {
                     armTarget = armTargetPosition;
                 }
             } else if (armTarget > armTargetPosition) {
-                if ((armTarget - armTargetPosition) > 13) {
-                    armTarget -= 13;
+                if ((armTarget - armTargetPosition) > 100) {
+                    armTarget -= 100;
                 } else {
                     armTarget = armTargetPosition;
                 }
             }
-            if (armTarget > armLimit) {
-                armTarget = armLimit;
-                armTargetPosition = armTarget;
-            }
-            if (armTarget < armDownLimit) {
-                armTarget = armDownLimit;
-                armTargetPosition = armTarget;
+            if (!armOverride) {
+                if (armTarget > armLimit) {
+                    armTarget = armLimit;
+                    armTargetPosition = armTarget;
+                }
+                if (armTarget < armDownLimit) {
+                    armTarget = armDownLimit;
+                    armTargetPosition = armTarget;
+                }
             }
 
             if (Math.abs(armPosition - armTarget) > armTolerance) {
@@ -324,14 +327,14 @@ public class Arm {
 
     public static void slide() {
         if (slideTarget < slideTargetPosition) {
-            if ((slideTargetPosition - slideTarget) > 100) {
-                slideTarget += 100;
+            if ((slideTargetPosition - slideTarget) > 75) {
+                slideTarget += 75;
             } else {
                 slideTarget = slideTargetPosition;
             }
         } else if (slideTarget > slideTargetPosition) {
-            if ((slideTarget - slideTargetPosition) > 100) {
-                slideTarget -= 100;
+            if ((slideTarget - slideTargetPosition) > 75) {
+                slideTarget -= 75;
             } else {
                 slideTarget = slideTargetPosition;
             }
