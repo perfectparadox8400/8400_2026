@@ -29,6 +29,7 @@ public class Drive {
     public static double DriveSlowPower = 0.45;
     public static double turnFactor = 0;
     public static double strafeFactor = 0.0;
+    public static double driveFactor = 0.0;
 
     public static boolean driving = false;
     public static boolean brakeMode = false;
@@ -73,10 +74,10 @@ public class Drive {
         driving = motorsBusy();
         // This calculates the power needed for each wheel based on the amount of forward,
         // strafe right, and rotate
-        double frontLeftPower = -gamepad.left_stick_y + gamepad.left_stick_x + gamepad.right_stick_x + turnFactor + strafeFactor;
-        double frontRightPower = -gamepad.left_stick_y - gamepad.left_stick_x - gamepad.right_stick_x - turnFactor - strafeFactor;
-        double backRightPower = -gamepad.left_stick_y + gamepad.left_stick_x - gamepad.right_stick_x - turnFactor + strafeFactor;
-        double backLeftPower = -gamepad.left_stick_y - gamepad.left_stick_x + gamepad.right_stick_x + turnFactor - strafeFactor;
+        double frontLeftPower = -gamepad.left_stick_y + gamepad.left_stick_x + gamepad.right_stick_x + turnFactor + strafeFactor + driveFactor;
+        double frontRightPower = -gamepad.left_stick_y - gamepad.left_stick_x - gamepad.right_stick_x - turnFactor - strafeFactor + driveFactor;
+        double backRightPower = -gamepad.left_stick_y + gamepad.left_stick_x - gamepad.right_stick_x - turnFactor + strafeFactor + driveFactor;
+        double backLeftPower = -gamepad.left_stick_y - gamepad.left_stick_x + gamepad.right_stick_x + turnFactor - strafeFactor + driveFactor;
 
         double maxPower = 1.0;
 
@@ -107,10 +108,10 @@ public class Drive {
         rotX = rotX * 1.1;  // Counteract imperfect strafing
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = ((rotY + rotX + rx) / denominator) + turnFactor + strafeFactor;
-        double backLeftPower = ((rotY - rotX + rx) / denominator) + turnFactor - strafeFactor;
-        double frontRightPower = ((rotY - rotX - rx) / denominator) - turnFactor - strafeFactor ;
-        double backRightPower = ((rotY + rotX - rx) / denominator)  - turnFactor + strafeFactor;
+        double frontLeftPower = ((rotY + rotX + rx) / denominator) + turnFactor + strafeFactor + driveFactor;
+        double backLeftPower = ((rotY - rotX + rx) / denominator) + turnFactor - strafeFactor + driveFactor;
+        double frontRightPower = ((rotY - rotX - rx) / denominator) - turnFactor - strafeFactor + driveFactor;
+        double backRightPower = ((rotY + rotX - rx) / denominator)  - turnFactor + strafeFactor + driveFactor;
 
         double maxPower = 1.0;
 
@@ -147,9 +148,9 @@ public class Drive {
 
     public static void setBrakeMode(boolean enabled) {
         if (enabled) {
-            right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             brakeMode = true;
         } else {

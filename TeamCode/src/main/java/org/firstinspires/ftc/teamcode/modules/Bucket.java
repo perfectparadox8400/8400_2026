@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.auto.Auto.Intake;
+
 public class Bucket {
     private static boolean hasSample = true;
     private static boolean inPosition = false;
@@ -32,11 +35,24 @@ public class Bucket {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            int upTarget = 0;
+            int upGo = 0;
+            int back = 0;
+            boolean armWait = true;
+            if (Robot.robotName().equals("mentorbot")) {
+                upTarget = 20000;
+                upGo = 14000;
+                armWait = false;
+                back = 1000;
+            } else if (Robot.robotName().equals("nancy")) {
+                upTarget = 1105;
+                upGo = 1000;
+            }
             if (hasSample) {
                 switch (state) {
                     case MOVE_UP:
-                        armTargetPosition = 1105;
-                        if (armPosition >= 1000) {
+                        armTargetPosition = upTarget;
+                        if (armPosition >= upGo) {
                             wrist1.setPosition(0.5);
                             wrist2.setPosition(0.5);
                             state = ArmState.EXTEND;
@@ -54,8 +70,8 @@ public class Bucket {
 
                     case DISPENSE:
                         if (dispenseStartTime == 0) {
-                            intake.setPower(1);
-                            intakeOther.setPower(-1);
+                            intake.setPower(Intake.Out.intake1);
+                            intakeOther.setPower(Intake.Out.intake2);
                             dispenseStartTime = System.currentTimeMillis();
                         }
                         if (System.currentTimeMillis() - dispenseStartTime >= 600) {
@@ -69,8 +85,8 @@ public class Bucket {
                         break;
 
                     case RETRACT:
-                        slideTargetPosition = 0;
-                        if (slideBack.isPressed()) {
+                        slideTargetPosition = back;
+                        if (slideBack.isPressed() || !armWait) {
                             state = ArmState.MOVE_DOWN;
                         }
                         break;
@@ -100,13 +116,11 @@ public class Bucket {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (armBucketDone && !hasSample) {
-                armTargetPosition = 0;
                 wrist1.setPosition(0.5694);
                 wrist2.setPosition(0.4294);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
-                    slideTargetPosition = 0;
-                    intake.setPower(-1);
-                    intakeOther.setPower(1);
+                    intake.setPower(Intake.In.intake1);
+                    intakeOther.setPower(Intake.In.intake1);
                     hasSample = true;
                     return false;
                 }
@@ -128,8 +142,12 @@ public class Bucket {
                 grabStartTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - grabStartTime >= 500) {
+                armTargetPosition = 0;
+                slideTargetPosition = 0;
                 intake.setPower(0);
                 intakeOther.setPower(0);
+                wrist1.setPosition(0.15);
+                wrist2.setPosition(0.85);
                 return false;
             }
             return true;

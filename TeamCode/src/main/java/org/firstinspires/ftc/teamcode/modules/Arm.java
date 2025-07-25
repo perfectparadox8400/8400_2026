@@ -71,6 +71,17 @@ public class Arm {
         public static double hookClosed1 = 0.35;
         public static double hookClosed2 = 0.65;
 
+        public static class Intake {
+            public static class In {
+                public static int intake1 = -1;
+                public static int intake2 = 1;
+            }
+            public static class Out {
+                public static int intake1 = 1;
+                public static int intake2 = -1;
+            }
+        }
+
         public static void init_arm(HardwareMap hardwareMap) {
             armP = 0.005; armI = 0.0001; armD = 0.00;
             armController = new PIDController(armP, armI, armD);
@@ -214,8 +225,36 @@ public class Arm {
 
     public static class MentorBot {
         public static boolean armOverride = false;
+        public static class Intake {
+            public static class In {
+                public static int intake1 = 1;
+                public static int intake2 = -1;
+            }
+            public static class Out {
+                public static int intake1 = -1;
+                public static int intake2 = 1;
+            }
+        }
+        public static class Wrist {
+            public static class Home {
+                public static double wrist1 = 0;
+                public static double wrist2 = 0;
+            }
+            public static class Pickup {
+                public static double wrist1 = 0;
+                public static double wrist2 = 0;
+            }
+            public static class Grab {
+                public static double wrist1 = 0;
+                public static double wrist2 = 0;
+            }
+            public static class Drop {
+                public static double wrist1 = 0;
+                public static double wrist2 = 0;
+            }
+        }
         public static void init_arm(HardwareMap hardwareMap) {
-            armP = 0.009; armI = 0.0001; armD = 0.00;
+            armP = 0.005; armI = 0.0001; armD = 0.00;
             armController = new PIDController(armP, armI, armD);
             slideController = new PIDController(slideP, slideI, slideD);
 
@@ -228,7 +267,7 @@ public class Arm {
             slideBack = hardwareMap.get(TouchSensor.class, "slide_limit");
 
             mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            //mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -237,26 +276,26 @@ public class Arm {
             intake.setPower(0);
             intakeOther.setPower(0);
 
-            armTicks = (3.70588 * 5.181818 * 5.181818 * 28);
-            armTolerance = 20;
+            armTicks = (5.23 * 28);
+            armTolerance = 10;
             armTarget = 0;
             armTargetPosition = 0;
             slideTarget = 0;
             slideTargetPosition = 0;
-            armLimit = 21000;
+            armLimit = 1100;
             armDownLimit = 0;
         }
 
         public static void arm() {
             if (armTarget < armTargetPosition) {
-                if ((armTargetPosition - armTarget) > 100) {
-                    armTarget += 100;
+                if ((armTargetPosition - armTarget) > 25) {
+                    armTarget += 25;
                 } else {
                     armTarget = armTargetPosition;
                 }
             } else if (armTarget > armTargetPosition) {
-                if ((armTarget - armTargetPosition) > 100) {
-                    armTarget -= 100;
+                if ((armTarget - armTargetPosition) > 25) {
+                    armTarget -= 25;
                 } else {
                     armTarget = armTargetPosition;
                 }
@@ -406,44 +445,5 @@ public class Arm {
 
     public static Action moveSlide(int targetPosition) {
         return new MoveSlide(targetPosition);
-    }
-
-    public static class IntakeIn implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            intake.setPower(-1);
-            intakeOther.setPower(1);
-            return false;
-        }
-    }
-
-    public static Action intakeIn() {
-        return new IntakeIn();
-    }
-
-    public static class IntakeOut implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            intake.setPower(1);
-            intakeOther.setPower(-1);
-            return false;
-        }
-    }
-
-    public static Action intakeOut() {
-        return new IntakeOut();
-    }
-
-    public static class IntakeOff implements Action {
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            intake.setPower(0);
-            intakeOther.setPower(0);
-            return false;
-        }
-    }
-
-    public static Action intakeOff() {
-        return new IntakeOff();
     }
 }

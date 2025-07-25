@@ -24,16 +24,16 @@ public class Teleop {
         private static boolean start = false;
         private static boolean armLimitReset = false;
         private static boolean armDownReset = false;
-        private static RevBlinkinLedDriver blinkinLedDriver;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init Arm
             Arm.Nancy.init_arm(hardwareMap);
             // Init Wheels
             init_drive(hardwareMap);
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
-            blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
             telemetry.addData("Press", "Start");
             telemetry.update();
+            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
         }
 
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
@@ -353,6 +353,7 @@ public class Teleop {
             goA = false;
             goHome = false;
             start = true;
+            Arm.MentorBot.armOverride = false;
             wrist1.setPosition(0.05);
             wrist2.setPosition(0.95);
             rumbleBlip(gamepad1, 1);
@@ -419,6 +420,13 @@ public class Teleop {
             } else {
                 strafeFactor = 0.0;
             }
+            if (gamepad2.dpad_up) {
+                driveFactor = DriveSlowPower;
+            } else if (gamepad2.dpad_down) {
+                driveFactor = -DriveSlowPower;
+            } else {
+                driveFactor = 0;
+            }
 
             /* ------ SLIDE LOGIC ------ */
             slideTargetPosition += (-gamepad2.left_stick_y * 55);
@@ -436,17 +444,17 @@ public class Teleop {
             }
 
             /* ------WRIST LOGIC------ */
-            if (gamepad2.dpad_up) {
+            if (gamepad2.left_stick_x > 0.01) {
                 wrist1.setPosition(wrist1.getPosition() + .012);
                 wrist2.setPosition(wrist2.getPosition() - .012);
-            } else if (gamepad2.dpad_down) {
+            } else if (gamepad2.left_stick_x < -0.01) {
                 wrist1.setPosition(wrist1.getPosition() - .012);
                 wrist2.setPosition(wrist2.getPosition() + .012);
             }
 
             /* ------ MAIN BOOM LOGIC ------ */
-            if (gamepad2.right_stick_y > 0.2 || gamepad2.right_stick_y < -0.2){
-                armTargetPosition += (int) (52.5 * gamepad2.right_stick_y);
+            if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < -0.01){
+                armTargetPosition += (int) (22.5 * gamepad2.right_stick_y);
             }
 
             if (gamepad2.guideWasPressed()) {
@@ -491,7 +499,7 @@ public class Teleop {
                 goX = false;
                 goA = true;
                 goHome = false;
-                armTargetPosition = 20000;
+                armTargetPosition = 1100;
                 wrist1.setPosition(0.3);
                 wrist2.setPosition(0.7);
                 rumbleBlip(gamepad2, 1);
@@ -514,30 +522,35 @@ public class Teleop {
                 goX = false;
                 goHome = false;
                 goA = false;
-                armTargetPosition = 5000;
+                slideTargetPosition = 0;
                 wrist1.setPosition(0.1);
                 wrist2.setPosition(0.9);
                 rumbleBlip(gamepad2, 1);
             }
 
-            if (goHome && (slidePosition <= 5000)) {
+            if (goHome && (slidePosition <= 2000)) {
                 slideTargetPosition = 0;
                 armTargetPosition = 0;
             }
 
-            if (goHome && (armPosition <= 50)) {
+            if (goHome && (armPosition <= armTolerance)) {
                 goHome = false;
                 rumble(gamepad2, 500, 0.8, 0.8);
             }
 
             //Go X
-            if (goX && (slidePosition <= 5000)) {
-                armTargetPosition = 2000;
-                goX = false;
+            if (goX && (slidePosition <= 2000)) {
+                armTargetPosition = 200;
+                if (armPosition <= 200) {
+                    slideTargetPosition = 1350;
+                    wrist1.setPosition(0.82);
+                    wrist2.setPosition(0.18);
+                    goX = false;
+                }
             }
 
             //Go A
-            if (goA && (armPosition >= 14000)) {
+            if (goA && (armPosition >= 900)) {
                 slideTargetPosition = slideLimit;
                 wrist1.setPosition(0.75);
                 wrist2.setPosition(0.25);
@@ -545,8 +558,8 @@ public class Teleop {
             }
 
             //Go Y
-            if (goY && (armPosition <= 19000)) {
-                slideTargetPosition = 500;
+            if (goY && (slidePosition <= 400)) {
+                armTargetPosition = 250;
                 goY = false;
             }
 
