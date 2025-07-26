@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import static org.firstinspires.ftc.teamcode.modules.Arm.*;
+import static org.firstinspires.ftc.teamcode.modules.Bucket.inPosition;
 
 import androidx.annotation.NonNull;
 
@@ -44,8 +45,8 @@ public class Auto {
     }
 
     public static void startWrist() {
-        wrist1.setPosition(0.15);
-        wrist2.setPosition(0.85);
+        wrist1.setPosition(Wrist.Home.wrist1);
+        wrist2.setPosition(Wrist.Home.wrist2);
     }
 
     public static void startArm(HardwareMap hardwareMap) {
@@ -55,12 +56,28 @@ public class Auto {
             Intake.In.intake2 = MentorBot.Intake.In.intake2;
             Intake.Out.intake1 = MentorBot.Intake.Out.intake1;
             Intake.Out.intake2 = MentorBot.Intake.Out.intake2;
+            Wrist.Home.wrist1 = MentorBot.Wrist.Home.wrist1;
+            Wrist.Home.wrist2 = MentorBot.Wrist.Home.wrist2;
+            Wrist.Drop.wrist1 = MentorBot.Wrist.Drop.wrist1;
+            Wrist.Drop.wrist2 = MentorBot.Wrist.Drop.wrist2;
+            Wrist.Grab.wrist1 = MentorBot.Wrist.Grab.wrist1;
+            Wrist.Grab.wrist2 = MentorBot.Wrist.Grab.wrist2;
+            Wrist.Pickup.wrist1 = MentorBot.Wrist.Pickup.wrist1;
+            Wrist.Pickup.wrist2 = MentorBot.Wrist.Pickup.wrist2;
         } else if (Robot.robotName().equals("nancy")) {
             Nancy.init_arm(hardwareMap);
             Intake.In.intake1 = Nancy.Intake.In.intake1;
             Intake.In.intake2 = Nancy.Intake.In.intake2;
             Intake.Out.intake1 = Nancy.Intake.Out.intake1;
             Intake.Out.intake2 = Nancy.Intake.Out.intake2;
+            Wrist.Home.wrist1 = Nancy.Wrist.Home.wrist1;
+            Wrist.Home.wrist2 = Nancy.Wrist.Home.wrist2;
+            Wrist.Drop.wrist1 = Nancy.Wrist.Drop.wrist1;
+            Wrist.Drop.wrist2 = Nancy.Wrist.Drop.wrist2;
+            Wrist.Grab.wrist1 = Nancy.Wrist.Grab.wrist1;
+            Wrist.Grab.wrist2 = Nancy.Wrist.Grab.wrist2;
+            Wrist.Pickup.wrist1 = Nancy.Wrist.Pickup.wrist1;
+            Wrist.Pickup.wrist2 = Nancy.Wrist.Pickup.wrist2;
         }
     }
 
@@ -108,6 +125,7 @@ public class Auto {
             packet.put("Arm Target", armTargetPosition);
             packet.put("Slide Position", slidePosition);
             packet.put("Slide Target", slideTargetPosition);
+            packet.put("inPosition", inPosition);
             if (Robot.robotName().equals("mentorbot")) {
                 MentorBot.arm_loop();
                 MentorBot.arm();

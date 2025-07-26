@@ -81,6 +81,24 @@ public class Arm {
                 public static int intake2 = -1;
             }
         }
+        public static class Wrist {
+            public static class Home {
+                public static double wrist1 = 0.15;
+                public static double wrist2 = 0.85;
+            }
+            public static class Pickup {
+                public static double wrist1 = 0.6;
+                public static double wrist2 = 0.4;
+            }
+            public static class Grab {
+                public static double wrist1 = 0.9;
+                public static double wrist2 = 0.1;
+            }
+            public static class Drop {
+                public static double wrist1 = 0.75;
+                public static double wrist2 = 0.25;
+            }
+        }
 
         public static void init_arm(HardwareMap hardwareMap) {
             armP = 0.005; armI = 0.0001; armD = 0.00;
@@ -238,19 +256,19 @@ public class Arm {
         public static class Wrist {
             public static class Home {
                 public static double wrist1 = 0;
-                public static double wrist2 = 0;
+                public static double wrist2 = 1;
             }
             public static class Pickup {
-                public static double wrist1 = 0;
-                public static double wrist2 = 0;
+                public static double wrist1 = 0.6;
+                public static double wrist2 = 0.4;
             }
             public static class Grab {
-                public static double wrist1 = 0;
-                public static double wrist2 = 0;
+                public static double wrist1 = 0.7;
+                public static double wrist2 = 0.3;
             }
             public static class Drop {
-                public static double wrist1 = 0;
-                public static double wrist2 = 0;
+                public static double wrist1 = 0.5;
+                public static double wrist2 = 0.5;
             }
         }
         public static void init_arm(HardwareMap hardwareMap) {
@@ -277,7 +295,7 @@ public class Arm {
             intakeOther.setPower(0);
 
             armTicks = (5.23 * 28);
-            armTolerance = 10;
+            armTolerance = 50;
             armTarget = 0;
             armTargetPosition = 0;
             slideTarget = 0;

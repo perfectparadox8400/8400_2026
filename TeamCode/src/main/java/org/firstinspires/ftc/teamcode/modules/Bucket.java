@@ -8,11 +8,11 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.auto.Auto.Intake;
+import org.firstinspires.ftc.teamcode.auto.Auto.*;
 
 public class Bucket {
     private static boolean hasSample = true;
-    private static boolean inPosition = false;
+    public static boolean inPosition = false;
     private static boolean armBucketDone = false;
 
     public static void resetBucket() {
@@ -38,15 +38,15 @@ public class Bucket {
             int upTarget = 0;
             int upGo = 0;
             int back = 0;
-            boolean armWait = true;
+            int pickup = 0;
             if (Robot.robotName().equals("mentorbot")) {
-                upTarget = 20000;
-                upGo = 14000;
-                armWait = false;
-                back = 1000;
+                upTarget = 1100;
+                upGo = 900;
+                pickup = 100;
             } else if (Robot.robotName().equals("nancy")) {
                 upTarget = 1105;
                 upGo = 1000;
+                pickup = 200;
             }
             if (hasSample) {
                 switch (state) {
@@ -62,40 +62,40 @@ public class Bucket {
                     case EXTEND:
                         slideTargetPosition = slideLimit;
                         if (Math.abs(slidePosition - slideTargetPosition) < slideTolerance) {
-                            wrist1.setPosition(0.6);
-                            wrist2.setPosition(0.4);
+                            wrist1.setPosition(Wrist.Drop.wrist1);
+                            wrist2.setPosition(Wrist.Drop.wrist2);
                             state = ArmState.DISPENSE;
                         }
                         break;
 
                     case DISPENSE:
-                        if (dispenseStartTime == 0) {
-                            intake.setPower(Intake.Out.intake1);
-                            intakeOther.setPower(Intake.Out.intake2);
-                            dispenseStartTime = System.currentTimeMillis();
-                        }
-                        if (System.currentTimeMillis() - dispenseStartTime >= 600) {
-                            intake.setPower(0);
-                            intakeOther.setPower(0);
-                            wrist1.setPosition(0.15);
-                            wrist2.setPosition(0.85);
-                            inPosition = false;
-                            state = ArmState.RETRACT;
+                        if (inPosition) {
+                            if (dispenseStartTime == 0) {
+                                intake.setPower(Intake.Out.intake1);
+                                intakeOther.setPower(Intake.Out.intake2);
+                                dispenseStartTime = System.currentTimeMillis();
+                            }
+                            if (System.currentTimeMillis() - dispenseStartTime >= 600) {
+                                intake.setPower(0);
+                                intakeOther.setPower(0);
+                                wrist1.setPosition(0.15);
+                                wrist2.setPosition(0.85);
+                                inPosition = false;
+                                state = ArmState.RETRACT;
+                            }
                         }
                         break;
 
                     case RETRACT:
                         slideTargetPosition = back;
-                        if (slideBack.isPressed() || !armWait) {
+                        if (slidePosition < 800) {
                             state = ArmState.MOVE_DOWN;
                         }
                         break;
 
                     case MOVE_DOWN:
-                        armTargetPosition = 0;
-                        if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
-                            state = ArmState.DONE;
-                        }
+                        armTargetPosition = pickup;
+                        state = ArmState.DONE;
                         break;
 
                     case DONE:
@@ -115,12 +115,20 @@ public class Bucket {
     public static class GetSample implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            int slideOut = 0;
+            if (Robot.robotName().equals("mentorbot")) {
+                slideOut = 600;
+            } else if (Robot.robotName().equals("nancy")) {
+                slideOut = 300;
+            }
             if (armBucketDone && !hasSample) {
-                wrist1.setPosition(0.5694);
-                wrist2.setPosition(0.4294);
+                slideTargetPosition = slideOut;
+                Arm.MentorBot.armOverride = true;
+                wrist1.setPosition(Wrist.Grab.wrist1);
+                wrist2.setPosition(Wrist.Grab.wrist2);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
                     intake.setPower(Intake.In.intake1);
-                    intakeOther.setPower(Intake.In.intake1);
+                    intakeOther.setPower(Intake.In.intake2);
                     hasSample = true;
                     return false;
                 }
@@ -141,14 +149,16 @@ public class Bucket {
             if (grabStartTime == 0) {
                 grabStartTime = System.currentTimeMillis();
             }
-            if (System.currentTimeMillis() - grabStartTime >= 500) {
-                armTargetPosition = 0;
-                slideTargetPosition = 0;
-                intake.setPower(0);
-                intakeOther.setPower(0);
-                wrist1.setPosition(0.15);
-                wrist2.setPosition(0.85);
-                return false;
+            if (System.currentTimeMillis() - grabStartTime >= 100) {
+                if (System.currentTimeMillis() - grabStartTime >= 700) {
+                    intake.setPower(0);
+                    intakeOther.setPower(0);
+                    Arm.MentorBot.armOverride = false;
+                    wrist1.setPosition(Wrist.Home.wrist1);
+                    wrist2.setPosition(Wrist.Home.wrist2);
+                    return false;
+                }
+                armTargetPosition = -20;
             }
             return true;
         }

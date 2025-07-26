@@ -1,6 +1,7 @@
 package com.perfectparadox.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -27,37 +28,25 @@ public class MeepMeepTesting {
 
         //Center of bot is w = 7.5 & h = = 9
         myBot.runAction(myBot.getDrive().actionBuilder(start) //Put Code below this
-                .lineToY(52)
-
-                .turnTo(Math.toRadians(0))
-                .lineToX(52.5)
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
+                .lineToY(55)
+                .strafeToConstantHeading(new Vector2d(-35, 55))
+                .strafeTo(new Vector2d(-35, 10))
+                .turnTo(Math.toRadians(90))
+                .strafeToConstantHeading(new Vector2d(-44, 10))
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(10)
+                .strafeToConstantHeading(new Vector2d(-54, 10))
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(10)
+                .strafeToConstantHeading(new Vector2d(-63, 10))
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(48)
+                .strafeToConstantHeading(new Vector2d(-48, 48))
                 .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(58.5,45))
-                .turnTo(Math.toRadians(270))
-                .lineToY(44)
-
-                .lineToY(36)
-
-                .strafeToConstantHeading(new Vector2d(52.5,52))
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
-                .turnTo(Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(47,45))
-                .turnTo(Math.toRadians(270))
-                .lineToY(44)
-
-                .lineToY(36)
-
-                .strafeToConstantHeading(new Vector2d(52.5,52))
-                .turnTo(Math.toRadians(45))
-                .lineToX(54)
-
-                .lineToX(50)
-                .turnTo(Math.toRadians(290))
+                .lineToY(60)
 
                 .build()); //Put Code above this
 

@@ -242,8 +242,8 @@ public class Teleop {
             }
 
             if (controllerChange(gamepad1, gamepad2) && gamepad2.a) {
-                wrist1.setPosition(0.8);
-                wrist2.setPosition(0.2);
+                wrist1.setPosition(0.7);
+                wrist2.setPosition(0.4);
                 rumbleBlip(gamepad2, 1);
             }
 
@@ -252,7 +252,7 @@ public class Teleop {
                 if (armPosition < 300) {
                     goLowX = true;
                     goX = false;
-                    armTargetPosition = 200;
+                    armTargetPosition = 175;
                 } else {
                     goX = true;
                     goLowX = false;
@@ -261,8 +261,8 @@ public class Teleop {
                 goY = false;
                 goB = false;
                 goHome = false;
-                wrist1.setPosition(0.4);
-                wrist2.setPosition(0.6);
+                wrist1.setPosition(0.6);
+                wrist2.setPosition(0.4);
                 rumbleBlip(gamepad2, 1);
             }
 
@@ -290,7 +290,7 @@ public class Teleop {
 
             //Go X
             if (goX && (slidePosition <= 2000)) {
-                armTargetPosition = 200;
+                armTargetPosition = 175;
                 goX = false;
             }
 
@@ -319,7 +319,7 @@ public class Teleop {
             slide();
 
             //Arm Power
-            //Arm.Nancy.arm();
+            Arm.Nancy.arm();
 
             if (gamepad1.touchpadWasPressed()) {
                 rumbleWiiii(gamepad1, 5000);
@@ -354,8 +354,8 @@ public class Teleop {
             goHome = false;
             start = true;
             Arm.MentorBot.armOverride = false;
-            wrist1.setPosition(0.05);
-            wrist2.setPosition(0.95);
+            wrist1.setPosition(0);
+            wrist2.setPosition(1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }

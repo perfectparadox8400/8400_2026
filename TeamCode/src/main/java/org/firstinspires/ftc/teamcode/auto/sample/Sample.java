@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -22,37 +23,70 @@ public class Sample extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startArm(hardwareMap);
 
-        TrajectoryActionBuilder step1 = drive.actionBuilder(start)
-                .waitSeconds(None)
-                .lineToY(55)
-                .turnTo(Math.toRadians(180))
-                .lineToX(-36)
-                .turnTo(Math.toRadians(270))
-                .lineToY(10)
-                .turnTo(Math.toRadians(180))
-                .lineToX(-42)
-                .turnTo(Math.toRadians(90))
-                .lineToY(55)
-                .lineToY(10)
-                .strafeToConstantHeading(new Vector2d(-53,10))
-                .turnTo(Math.toRadians(90))
-                .lineToY(55)
-                .lineToY(10)
-                .strafeToConstantHeading(new Vector2d(-63,10))
-                .turnTo(Math.toRadians(90))
-                .lineToY(55)
-                .lineToY(48)
-                .strafeToConstantHeading(new Vector2d(-48,48))
-                .turnTo(Math.toRadians(270))
-                .lineToY(60);
+        if (Robot.robotName().equals("mentorbot")) {
+            TrajectoryActionBuilder step1 = drive.actionBuilder(start)
+                    .waitSeconds(None)
+                    .lineToY(55)
+                    .strafeToConstantHeading(new Vector2d(-35, 55))
+                    .strafeTo(new Vector2d(-35, 10))
+                    .turnTo(Math.toRadians(90))
+                    .strafeToConstantHeading(new Vector2d(-44, 10))
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(10)
+                    .strafeToConstantHeading(new Vector2d(-54, 10))
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(10)
+                    .strafeToConstantHeading(new Vector2d(-63, 10))
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(48)
+                    .strafeToConstantHeading(new Vector2d(-48, 48))
+                    .turnTo(Math.toRadians(270))
+                    .lineToY(60);
 
-        waitForStart();
-        startWrist();
-        Actions.runBlocking(new ParallelAction(
-                Auto.setPose(drive),
-                new SequentialAction(
-                        step1.build()
-                )
-        ));
+            waitForStart();
+            startWrist();
+            Actions.runBlocking(new ParallelAction(
+                    Auto.setPose(drive),
+                    new SequentialAction(
+                            step1.build()
+                    )
+            ));
+        } else if (Robot.robotName().equals("nancy")) {
+            TrajectoryActionBuilder step1 = drive.actionBuilder(start)
+                    .waitSeconds(None)
+                    .lineToY(55)
+                    .turnTo(Math.toRadians(180))
+                    .lineToX(-36)
+                    .turnTo(Math.toRadians(270))
+                    .lineToY(10)
+                    .turnTo(Math.toRadians(180))
+                    .lineToX(-42)
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(10)
+                    .strafeToConstantHeading(new Vector2d(-53, 10))
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(10)
+                    .strafeToConstantHeading(new Vector2d(-63, 10))
+                    .turnTo(Math.toRadians(90))
+                    .lineToY(55)
+                    .lineToY(48)
+                    .strafeToConstantHeading(new Vector2d(-48, 48))
+                    .turnTo(Math.toRadians(270))
+                    .lineToY(60);
+
+            waitForStart();
+            startWrist();
+            Actions.runBlocking(new ParallelAction(
+                    Auto.setPose(drive),
+                    new SequentialAction(
+                            step1.build()
+                    )
+            ));
+        }
     }
 }
