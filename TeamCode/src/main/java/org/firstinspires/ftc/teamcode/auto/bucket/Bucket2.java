@@ -39,10 +39,10 @@ public class Bucket2 extends LinearOpMode {
                     .turnTo(Math.toRadians(270))
                     .strafeToConstantHeading(new Vector2d(58.5, 45))
                     .turnTo(Math.toRadians(270))
-                    .lineToY(44);
+                    .lineToY(43.5);
 
             TrajectoryActionBuilder step4 = step3.endTrajectory().fresh()
-                    .lineToY(36);
+                    .lineToY(36.5);
 
             TrajectoryActionBuilder step5 = step4.endTrajectory().fresh()
                     .strafeToConstantHeading(new Vector2d(52.5, 52))
@@ -88,8 +88,8 @@ public class Bucket2 extends LinearOpMode {
                                                             new SequentialAction(
                                                                     step5.build(),
                                                                     Bucket.setInPosition(),
-                                                                    Bucket.bucketDone()
-                                                                    //step6.build()
+                                                                    Bucket.bucketDone(),
+                                                                    step6.build()
                                                             )
                                                     )
                                             )
@@ -161,8 +161,8 @@ public class Bucket2 extends LinearOpMode {
                                                             new SequentialAction(
                                                                     step5.build(),
                                                                     Bucket.setInPosition(),
-                                                                    Bucket.bucketDone()
-                                                                    //step6.build()
+                                                                    Bucket.bucketDone(),
+                                                                    step6.build()
                                                             )
                                                     )
                                             )

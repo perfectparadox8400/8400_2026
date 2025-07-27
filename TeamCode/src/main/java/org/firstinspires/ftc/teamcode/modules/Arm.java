@@ -121,6 +121,7 @@ public class Arm {
 
             slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            slide.setDirection(DcMotor.Direction.REVERSE);
 
             intake.setPower(0);
             intakeOther.setPower(0);
@@ -188,7 +189,7 @@ public class Arm {
         }
 
         public static void arm_loop() {
-            slidePosition = slide.getCurrentPosition() * -1;
+            slidePosition = slide.getCurrentPosition();
             armPosition = mainBoom.getCurrentPosition();
         }
 

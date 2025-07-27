@@ -46,7 +46,7 @@ public class Bucket {
             } else if (Robot.robotName().equals("nancy")) {
                 upTarget = 1105;
                 upGo = 1000;
-                pickup = 200;
+                pickup = 250;
             }
             if (hasSample) {
                 switch (state) {
@@ -119,11 +119,10 @@ public class Bucket {
             if (Robot.robotName().equals("mentorbot")) {
                 slideOut = 600;
             } else if (Robot.robotName().equals("nancy")) {
-                slideOut = 300;
+                slideOut = 250;
             }
             if (armBucketDone && !hasSample) {
                 slideTargetPosition = slideOut;
-                Arm.MentorBot.armOverride = true;
                 wrist1.setPosition(Wrist.Grab.wrist1);
                 wrist2.setPosition(Wrist.Grab.wrist2);
                 if (Math.abs(armPosition - armTargetPosition) < armTolerance) {
@@ -153,12 +152,11 @@ public class Bucket {
                 if (System.currentTimeMillis() - grabStartTime >= 700) {
                     intake.setPower(0);
                     intakeOther.setPower(0);
-                    Arm.MentorBot.armOverride = false;
                     wrist1.setPosition(Wrist.Home.wrist1);
                     wrist2.setPosition(Wrist.Home.wrist2);
                     return false;
                 }
-                armTargetPosition = -20;
+                armTargetPosition = 0;
             }
             return true;
         }

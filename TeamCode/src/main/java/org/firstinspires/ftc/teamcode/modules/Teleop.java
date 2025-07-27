@@ -242,8 +242,8 @@ public class Teleop {
             }
 
             if (controllerChange(gamepad1, gamepad2) && gamepad2.a) {
-                wrist1.setPosition(0.7);
-                wrist2.setPosition(0.4);
+                wrist1.setPosition(0.9);
+                wrist2.setPosition(0.1);
                 rumbleBlip(gamepad2, 1);
             }
 

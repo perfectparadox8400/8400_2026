@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.auto.Auto;
+import org.firstinspires.ftc.teamcode.modules.Arm;
 import org.firstinspires.ftc.teamcode.modules.Bucket;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -131,7 +132,7 @@ public class Bucket3 extends LinearOpMode {
                     .lineToY(44);
 
             TrajectoryActionBuilder step4 = step3.endTrajectory().fresh()
-                    .lineToY(36);
+                    .lineToY(37);
 
             TrajectoryActionBuilder step5 = step4.endTrajectory().fresh()
                     .strafeToConstantHeading(new Vector2d(52.5, 52))
@@ -145,7 +146,7 @@ public class Bucket3 extends LinearOpMode {
                     .lineToY(44);
 
             TrajectoryActionBuilder step7 = step6.endTrajectory().fresh()
-                    .lineToY(36);
+                    .lineToY(37);
 
             TrajectoryActionBuilder step8 = step7.endTrajectory().fresh()
                     .strafeToConstantHeading(new Vector2d(52.5, 52))
@@ -192,7 +193,8 @@ public class Bucket3 extends LinearOpMode {
                                                                                     step8.build(),
                                                                                     Bucket.setInPosition(),
                                                                                     Bucket.bucketDone(),
-                                                                                    step9.build()
+                                                                                    step9.build(),
+                                                                                    Arm.moveArm(0)
                                                                             )
                                                                     )
                                                             )

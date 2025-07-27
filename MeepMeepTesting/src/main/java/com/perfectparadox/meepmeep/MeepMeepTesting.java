@@ -1,7 +1,6 @@
 package com.perfectparadox.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -40,7 +39,7 @@ public class MeepMeepTesting {
                 .turnTo(Math.toRadians(90))
                 .lineToY(55)
                 .lineToY(10)
-                .strafeToConstantHeading(new Vector2d(-63, 10))
+                .strafeToConstantHeading(new Vector2d(-62, 10))
                 .turnTo(Math.toRadians(90))
                 .lineToY(55)
                 .lineToY(48)
