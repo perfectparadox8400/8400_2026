@@ -36,7 +36,7 @@ public class Sample extends LinearOpMode {
                 .turnTo(Math.toRadians(90))
                 .lineToY(55)
                 .lineToY(10)
-                .strafeToConstantHeading(new Vector2d(-62, 10))
+                .strafeToConstantHeading(new Vector2d(-61, 10))
                 .turnTo(Math.toRadians(90))
                 .lineToY(55)
                 .lineToY(48)
