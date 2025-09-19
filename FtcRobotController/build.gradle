@@ -18,12 +18,7 @@ android {
         buildConfig = true
     }
 
-    tasks.withType(JavaCompile).configureEach {
-        options.compilerArgs << "-Xlint:-options"
-    }
-
-    //noinspection GradleDependency
-    compileSdkVersion 34
+    compileSdkVersion 30
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
