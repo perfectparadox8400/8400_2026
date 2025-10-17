@@ -1,0 +1,615 @@
+package org.firstinspires.ftc.teamcode.modules;
+
+import static org.firstinspires.ftc.teamcode.modules.Arm.armDown;
+import static org.firstinspires.ftc.teamcode.modules.Arm.armDownLimit;
+import static org.firstinspires.ftc.teamcode.modules.Arm.armLimit;
+import static org.firstinspires.ftc.teamcode.modules.Arm.armPosition;
+import static org.firstinspires.ftc.teamcode.modules.Arm.armTargetPosition;
+import static org.firstinspires.ftc.teamcode.modules.Arm.armTolerance;
+import static org.firstinspires.ftc.teamcode.modules.Arm.hang;
+import static org.firstinspires.ftc.teamcode.modules.Arm.hang1;
+import static org.firstinspires.ftc.teamcode.modules.Arm.hang2;
+import static org.firstinspires.ftc.teamcode.modules.Arm.intake;
+import static org.firstinspires.ftc.teamcode.modules.Arm.intakeOther;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slide;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slideBack;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slideLimit;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slidePosition;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slideTargetPosition;
+import static org.firstinspires.ftc.teamcode.modules.Arm.slide_reset;
+import static org.firstinspires.ftc.teamcode.modules.Arm.wrist1;
+import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
+import static org.firstinspires.ftc.teamcode.modules.Controller.controllerChange;
+import static org.firstinspires.ftc.teamcode.modules.Controller.rumble;
+import static org.firstinspires.ftc.teamcode.modules.Controller.rumbleBlip;
+import static org.firstinspires.ftc.teamcode.modules.Controller.rumbleWiiii;
+import static org.firstinspires.ftc.teamcode.modules.Controller.speedControl;
+import static org.firstinspires.ftc.teamcode.modules.Drive.DrivePower;
+import static org.firstinspires.ftc.teamcode.modules.Drive.DriveSlowPower;
+import static org.firstinspires.ftc.teamcode.modules.Drive.brakeMode;
+import static org.firstinspires.ftc.teamcode.modules.Drive.drive;
+import static org.firstinspires.ftc.teamcode.modules.Drive.driveFactor;
+import static org.firstinspires.ftc.teamcode.modules.Drive.drive_telemetry;
+import static org.firstinspires.ftc.teamcode.modules.Drive.fieldDrive;
+import static org.firstinspires.ftc.teamcode.modules.Drive.fieldDriving;
+import static org.firstinspires.ftc.teamcode.modules.Drive.imu;
+import static org.firstinspires.ftc.teamcode.modules.Drive.init_drive;
+import static org.firstinspires.ftc.teamcode.modules.Drive.setBrakeMode;
+import static org.firstinspires.ftc.teamcode.modules.Drive.strafeFactor;
+import static org.firstinspires.ftc.teamcode.modules.Drive.turnFactor;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public class Teleop {
+    public static Telemetry telemetry;
+    public static final FtcDashboard dashboard = FtcDashboard.getInstance();
+    public static class Nancy {
+        private static boolean goX = false;
+        private static boolean goY = false;
+        private static boolean goLowX = false;
+        private static boolean goB = false;
+        private static boolean goHome = false;
+        private static boolean start = false;
+        private static boolean armLimitReset = false;
+        private static boolean armDownReset = false;
+        public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
+            // Init Arm
+            Arm.Nancy.init_arm(hardwareMap);
+            // Init Wheels
+            init_drive(hardwareMap);
+            telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
+            telemetry.addData("Press", "Start");
+            telemetry.update();
+            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+        }
+
+        public static void start(Gamepad gamepad1, Gamepad gamepad2) {
+            goX = false;
+            goY = false;
+            goB = false;
+            goLowX = false;
+            goHome = false;
+            start = true;
+            hang = false;
+            wrist1.setPosition(0.15);
+            wrist2.setPosition(0.85);
+            hang1.setPosition(1);
+            hang2.setPosition(0);
+            armLimitReset = false;
+            armDownReset = false;
+            rumbleBlip(gamepad1, 1);
+            rumbleBlip(gamepad2, 2);
+        }
+
+        public static void loop(Gamepad gamepad1, Gamepad gamepad2) {
+            // Arm Loop
+            Arm.Nancy.arm_loop();
+
+            // Controller1 Buttons
+            // Speed Control
+            speedControl(gamepad1, gamepad2);
+
+            if (gamepad1.start && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 2);
+                fieldDriving = !fieldDriving;
+            }
+
+            if (gamepad1.back && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 4);
+                imu.resetYaw();
+            }
+
+            if (gamepad2.guideWasPressed()) {
+                start = false;
+                goX = false;
+                goLowX = false;
+                goY = false;
+                goHome = false;
+                goB = false;
+                armTargetPosition = armPosition;
+                slideTargetPosition = slidePosition;
+                rumble(gamepad2, 750, 1, 1);
+            }
+
+            if (fieldDriving) {
+                fieldDrive(gamepad1, DrivePower);
+            } else {
+                drive(gamepad1, DrivePower);
+            }
+
+            if (gamepad1.yWasReleased()){
+                rumbleBlip(gamepad1, 1);
+                setBrakeMode(!brakeMode);
+            }
+
+            //Telemetry
+            drive_telemetry(telemetry);
+            Arm.Nancy.arm_telemetry(telemetry);
+
+            telemetry.addData("Start", start);
+            telemetry.addData("goLowX", goLowX);
+            telemetry.addData("goX", goX);
+            telemetry.addData("goY", goY);
+            telemetry.addData("goB", goB);
+            telemetry.addData("goHome", goHome);
+            telemetry.update();
+
+            if(start) {
+                if (slideBack.isPressed()){
+                    slide_reset(false);
+                    if(armDown.isPressed()){
+                        Arm.Nancy.arm_reset(false);
+                        start = false;
+                    } else {
+                        Arm.Nancy.arm_reset(true);
+                        Arm.Nancy.arm();
+                    }
+                } else {
+                    slide_reset(true);
+                }
+                return;
+            }
+
+            if (gamepad1.guideWasPressed()) {
+                hang = false;
+                rumble(gamepad1, 500, 1, 1);
+            }
+
+            if (gamepad1.dpad_down && (hang1.getPosition() <= Arm.Nancy.hookOpen1 && hang2.getPosition() >= Arm.Nancy.hookOpen2)) {
+                hang1.setPosition(hang1.getPosition() + .013);
+                hang2.setPosition(hang2.getPosition() - .013);
+            } else if (gamepad1.dpad_up && (hang1.getPosition() >= Arm.Nancy.hookClosed1 && hang2.getPosition() <= Arm.Nancy.hookClosed2)) {
+                hang1.setPosition(hang1.getPosition() - .013);
+                hang2.setPosition(hang2.getPosition() + .013);
+            } else if (gamepad1.dpadLeftWasPressed()) {
+                hang1.setPosition(Arm.Nancy.hookOpen1);
+                hang2.setPosition(Arm.Nancy.hookOpen2);
+                rumbleBlip(gamepad1, 1);
+            } else if (gamepad1.dpadRightWasPressed()) {
+                hang1.setPosition(Arm.Nancy.hookClosed1);
+                hang2.setPosition(Arm.Nancy.hookClosed2);
+                rumbleBlip(gamepad1, 1);
+            }
+
+            if (gamepad1.xWasPressed()) {
+                armTargetPosition = -350;
+                slideTargetPosition = 0;
+                wrist1.setPosition(0);
+                wrist2.setPosition(1);
+                hang1.setPosition(0);
+                hang2.setPosition(1);
+                hang = true;
+                rumbleBlip(gamepad1, 1);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            // Controller2 Buttons
+            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) * DriveSlowPower;
+            if (gamepad2.dpad_left) {
+                strafeFactor = -1.0 * DrivePower; // Strafe left
+            } else if (gamepad2.dpad_right) {
+                strafeFactor = DrivePower; // Strafe right
+            } else {
+                strafeFactor = 0.0;
+            }
+
+            /* ------ SLIDE LOGIC ------ */
+            if (gamepad2.left_bumper) {
+                slideTargetPosition -= 65;
+            } else if (gamepad2.right_bumper) {
+                slideTargetPosition += 65;
+            }
+
+            /* ------ RESET ------ */
+            if (gamepad2.backWasPressed()) {
+                goY = false;
+                goX = false;
+                goLowX = false;
+                wrist1.setPosition(0.15);
+                wrist2.setPosition(0.85);
+                slideTargetPosition = 0;
+                goHome = true;
+                rumble(gamepad2, 500, 0.6, 0.6);
+            }
+
+            /* ------WRIST LOGIC------ */
+            if (gamepad2.dpad_up) {
+                wrist1.setPosition(wrist1.getPosition() + .012);
+                wrist2.setPosition(wrist2.getPosition() - .012);
+            } else if (gamepad2.dpad_down) {
+                wrist1.setPosition(wrist1.getPosition() - .012);
+                wrist2.setPosition(wrist2.getPosition() + .012);
+            }
+
+            /* ------ MAIN BOOM LOGIC ------ */
+            if (gamepad2.left_stick_y > 0.2){
+                armTargetPosition -= 13;
+            } else if (gamepad2.left_stick_y < -0.2){
+                armTargetPosition += 15;
+            }
+
+            if (gamepad2.leftStickButtonWasPressed() && !armLimitReset) {
+                armLimit += 50;
+                armLimitReset = true;
+                rumble(gamepad2, 250, 1, 1);
+            } else if (!gamepad2.left_stick_button) {
+                armLimitReset = false;
+            }
+
+            if (gamepad2.rightStickButtonWasPressed() && !armDownReset) {
+                armDownLimit -= 10;
+                armDownReset = true;
+                rumble(gamepad2, 250, 1, 1);
+            } else if (!gamepad2.right_stick_button) {
+                armDownReset = false;
+            }
+
+            /* ------ INTAKE LOGIC ------ */
+            if (gamepad2.right_stick_y > 0.2){
+                intake.setPower(-1);
+                intakeOther.setPower(1);
+            } else if (gamepad2.right_stick_y < -0.2){
+                intake.setPower(1);
+                intakeOther.setPower(-1);
+            } else if (gamepad2.right_stick_x > 0.2){
+                intake.setPower(-1);
+                intakeOther.setPower(-1);
+            } else if (gamepad2.right_stick_x < -0.2){
+                intake.setPower(1);
+                intakeOther.setPower(1);
+            } else {
+                intake.setPower(0);
+                intakeOther.setPower(0);
+            }
+
+            if (controllerChange(gamepad1, gamepad2) && gamepad2.b) {
+                armTargetPosition = 900;
+                goB = true;
+                rumbleBlip(gamepad2, 1);
+            }
+
+            if (controllerChange(gamepad1, gamepad2) && gamepad2.a) {
+                wrist1.setPosition(0.7);
+                wrist2.setPosition(0.4);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            /* ------ PRESETS ------ */
+            if (gamepad2.xWasPressed()) {
+                if (armPosition < 300) {
+                    goLowX = true;
+                    goX = false;
+                    armTargetPosition = 175;
+                } else {
+                    goX = true;
+                    goLowX = false;
+                    slideTargetPosition = 0;
+                }
+                goY = false;
+                goB = false;
+                goHome = false;
+                wrist1.setPosition(0.6);
+                wrist2.setPosition(0.4);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            if (gamepad2.yWasPressed()) {
+                goY = true;
+                goX = false;
+                goLowX = false;
+                goHome = false;
+                goB = false;
+                armTargetPosition = 1110;
+                wrist1.setPosition(0.5);
+                wrist2.setPosition(0.5);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            if (goHome && (slidePosition <= 2000)) {
+                slideTargetPosition = 0;
+                armTargetPosition = 0;
+            }
+
+            if (goHome && armDown.isPressed()) {
+                goHome = false;
+                rumble(gamepad2, 500, 0.8, 0.8);
+            }
+
+            //Go X
+            if (goX && (slidePosition <= 2000)) {
+                armTargetPosition = 175;
+                goX = false;
+            }
+
+            if (goLowX && (armPosition >= 175)) {
+                slideTargetPosition = 0;
+                goLowX = false;
+            }
+
+            //Go Y
+            if (goY && (armPosition >= 950)) {
+                slideTargetPosition = slideLimit;
+                wrist1.setPosition(0.75);
+                wrist2.setPosition(0.25);
+                goY = false;
+            }
+
+            //Go B
+            if (goB && (armPosition >= 800)) {
+                slideTargetPosition = 1500;
+                wrist1.setPosition(0.85);
+                wrist2.setPosition(0.15);
+                goB = false;
+            }
+
+            //Slide Power
+            slide();
+
+            //Arm Power
+            Arm.Nancy.arm();
+
+            if (gamepad1.touchpadWasPressed()) {
+                rumbleWiiii(gamepad1, 5000);
+            }
+
+            if (gamepad2.touchpadWasPressed()) {
+                rumbleWiiii(gamepad2, 5000);
+            }
+        }
+    }
+
+    public static class MentorBot {
+        private static boolean goY = false;
+        private static boolean goX = false;
+        private static boolean goA = false;
+        private static boolean goHome = false;
+        private static boolean start = false;
+        public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
+            // Init Arm
+            Arm.MentorBot.init_arm(hardwareMap);
+            // Init Wheels
+            init_drive(hardwareMap);
+            telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
+            telemetry.addData("Press", "Start");
+            telemetry.update();
+        }
+
+        public static void start(Gamepad gamepad1, Gamepad gamepad2) {
+            goX = false;
+            goY = false;
+            goA = false;
+            goHome = false;
+            start = true;
+            Arm.MentorBot.armOverride = false;
+            wrist1.setPosition(0);
+            wrist2.setPosition(1);
+            rumbleBlip(gamepad1, 1);
+            rumbleBlip(gamepad2, 2);
+        }
+
+        public static void loop(Gamepad gamepad1, Gamepad gamepad2) {
+            // Arm Loop
+            Arm.MentorBot.arm_loop();
+
+            // Controller1 Buttons
+            // Speed Control
+            speedControl(gamepad1, gamepad2);
+
+            if (gamepad1.start && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 2);
+                fieldDriving = !fieldDriving;
+            }
+
+            if (gamepad1.back && gamepad1.guideWasReleased()) {
+                rumbleBlip(gamepad1, 4);
+                imu.resetYaw();
+            }
+
+            if (fieldDriving) {
+                fieldDrive(gamepad1, DrivePower);
+            } else {
+                drive(gamepad1, DrivePower);
+            }
+
+            if (gamepad1.yWasReleased()){
+                rumbleBlip(gamepad1, 1);
+                setBrakeMode(!brakeMode);
+            }
+
+            //Telemetry
+            drive_telemetry(telemetry);
+            Arm.MentorBot.arm_telemetry(telemetry);
+
+            telemetry.addData("Start", start);
+            telemetry.addData("goA", goA);
+            telemetry.addData("goX", goX);
+            telemetry.addData("goY", goY);
+            telemetry.addData("goHome", goHome);
+            telemetry.update();
+
+            if(start) {
+                if (slideBack.isPressed()){
+                    slide_reset(false);
+                    Arm.MentorBot.arm_reset();
+                    start = false;
+                } else {
+                    slide_reset(true);
+                }
+                return;
+            }
+
+            // Controller2 Buttons
+            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) * DriveSlowPower;
+            if (gamepad2.left_bumper) {
+                strafeFactor = -1.0 * DriveSlowPower; // Strafe left
+            } else if (gamepad2.right_bumper) {
+                strafeFactor = DriveSlowPower; // Strafe right
+            } else {
+                strafeFactor = 0.0;
+            }
+            if (gamepad2.dpad_up) {
+                driveFactor = DriveSlowPower;
+            } else if (gamepad2.dpad_down) {
+                driveFactor = -DriveSlowPower;
+            } else {
+                driveFactor = 0;
+            }
+
+            /* ------ SLIDE LOGIC ------ */
+            slideTargetPosition += (-gamepad2.left_stick_y * 55);
+
+            /* ------ RESET ------ */
+            if (gamepad2.backWasPressed()) {
+                goY = false;
+                goX = false;
+                goA = false;
+                wrist1.setPosition(0.05);
+                wrist2.setPosition(0.95);
+                slideTargetPosition = 0;
+                goHome = true;
+                rumble(gamepad2, 500, 0.6, 0.6);
+            }
+
+            /* ------WRIST LOGIC------ */
+            if (gamepad2.left_stick_x > 0.01) {
+                wrist1.setPosition(wrist1.getPosition() + .012);
+                wrist2.setPosition(wrist2.getPosition() - .012);
+            } else if (gamepad2.left_stick_x < -0.01) {
+                wrist1.setPosition(wrist1.getPosition() - .012);
+                wrist2.setPosition(wrist2.getPosition() + .012);
+            }
+
+            /* ------ MAIN BOOM LOGIC ------ */
+            if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < -0.01){
+                armTargetPosition += (int) (22.5 * gamepad2.right_stick_y);
+            }
+
+            if (gamepad2.guideWasPressed()) {
+                Arm.MentorBot.armOverride = true;
+            } else if (gamepad2.guideWasReleased()) {
+                armTargetPosition = armPosition;
+                Arm.MentorBot.arm_reset();
+                Arm.MentorBot.armOverride = false;
+            }
+
+            /* ------ INTAKE LOGIC ------ */
+            if (gamepad2.right_stick_x > 0.5){
+                intake.setPower(-1);
+                intakeOther.setPower(1);
+            } else if (gamepad2.right_stick_x < -0.5){
+                intake.setPower(1);
+                intakeOther.setPower(-1);
+            } else if (gamepad2.dpad_right){
+                intake.setPower(-1);
+                intakeOther.setPower(-1);
+            } else if (gamepad2.dpad_left){
+                intake.setPower(1);
+                intakeOther.setPower(1);
+            } else {
+                intake.setPower(0);
+                intakeOther.setPower(0);
+            }
+
+            if (controllerChange(gamepad1, gamepad2) && gamepad2.b) {
+                start = false;
+                goX = false;
+                goA = false;
+                goY = false;
+                goHome = false;
+                armTargetPosition = armPosition;
+                slideTargetPosition = slidePosition;
+                rumble(gamepad2, 500, 1, 1);
+            }
+
+            if (controllerChange(gamepad1, gamepad2) && gamepad2.a) {
+                goY = false;
+                goX = false;
+                goA = true;
+                goHome = false;
+                armTargetPosition = 1100;
+                wrist1.setPosition(0.3);
+                wrist2.setPosition(0.7);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            /* ------ PRESETS ------ */
+            if (gamepad2.xWasPressed()) {
+                goX = true;
+                goY = false;
+                goA = false;
+                goHome = false;
+                slideTargetPosition = 0;
+                wrist1.setPosition(0.6);
+                wrist2.setPosition(0.4);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            if (gamepad2.yWasPressed()) {
+                goY = true;
+                goX = false;
+                goHome = false;
+                goA = false;
+                slideTargetPosition = 0;
+                wrist1.setPosition(0.1);
+                wrist2.setPosition(0.9);
+                rumbleBlip(gamepad2, 1);
+            }
+
+            if (goHome && (slidePosition <= 2000)) {
+                slideTargetPosition = 0;
+                armTargetPosition = 0;
+            }
+
+            if (goHome && (armPosition <= armTolerance)) {
+                goHome = false;
+                rumble(gamepad2, 500, 0.8, 0.8);
+            }
+
+            //Go X
+            if (goX && (slidePosition <= 2000)) {
+                armTargetPosition = 200;
+                if (armPosition <= 200) {
+                    slideTargetPosition = 1350;
+                    wrist1.setPosition(0.82);
+                    wrist2.setPosition(0.18);
+                    goX = false;
+                }
+            }
+
+            //Go A
+            if (goA && (armPosition >= 900)) {
+                slideTargetPosition = slideLimit;
+                wrist1.setPosition(0.75);
+                wrist2.setPosition(0.25);
+                goA = false;
+            }
+
+            //Go Y
+            if (goY && (slidePosition <= 400)) {
+                armTargetPosition = 250;
+                goY = false;
+            }
+
+            //Slide Power
+            slide();
+
+            //Arm Power
+            Arm.MentorBot.arm();
+
+            if (gamepad1.touchpadWasPressed()) {
+                rumbleWiiii(gamepad1, 5000);
+            }
+
+            if (gamepad2.touchpadWasPressed()) {
+                rumbleWiiii(gamepad2, 5000);
+            }
+        }
+    }
+}
