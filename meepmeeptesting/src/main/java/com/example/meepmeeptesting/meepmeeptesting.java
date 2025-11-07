@@ -29,9 +29,19 @@ public class meepmeeptesting {
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,14.5,3.142))
 //                radians are degrees
                 .waitSeconds(5)
-                .lineToX(35)
+                .lineToX(36)
                 .turnTo(Math.toRadians(90))
-                .lineToY(38)
+                .lineToY(36)
+                .waitSeconds(0.5)
+                .lineToY(40)
+                .waitSeconds(0.5)
+                .lineToY(45)
+                .waitSeconds(0.5)
+                .lineToY(14.5)
+                .turnTo(Math.toRadians(180))
+                .lineToX(61.5)
+
+
                         .build());
 
         Image img = null;
