@@ -55,9 +55,10 @@ public class Drive {
             fieldDriving = true;
             imuPose = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         } else {
-            right_back.setDirection(DcMotor.Direction.REVERSE);
+//            right_back.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
-            right_front.setDirection(DcMotor.Direction.REVERSE);
+//            right_front.setDirection(DcMotor.Direction.REVERSE);
+            left_front.setDirection(DcMotor.Direction.REVERSE);
             brakeMode = true;
             imuPose = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD);
         }

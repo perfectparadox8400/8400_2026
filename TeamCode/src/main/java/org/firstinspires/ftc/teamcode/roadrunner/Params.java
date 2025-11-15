@@ -26,7 +26,8 @@ public class Params {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
 
-        public double inPerTick = 1;
+        public double inPerTick = 1;//changed from 1
+
         public double lateralInPerTick = inPerTick;
         public double trackWidthTicks = 0.0;
 
@@ -56,18 +57,18 @@ public class Params {
     public static class NancyParams extends RobotParams {
         public NancyParams() {
             // IMU orientation
-            logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-            usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+            logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.DOWN;
+            usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
             // drive model parameters
-            inPerTick = 0.0019876368984914;
-            lateralInPerTick = 0.0009019917292751737;
-            trackWidthTicks = 6068.751343230888;
+            inPerTick = 0.00201061156101647584473610723262;
+            lateralInPerTick = -0.0015513578094417196;
+            trackWidthTicks = 6818.23603629532;
 
             // feedforward parameters (in tick units)
-            kS = 1.2413263606256049;
-            kV = 0.00025279672456487;
-            kA = 0.00001;
+            kS = 1.203671153696226;
+            kV = 0.0003112672491329851;
+            kA = 0.000005;
 
             // path profile parameters (in inches)
             maxWheelVel = 100;
@@ -80,17 +81,17 @@ public class Params {
 
             // path controller gains
             axialGain = 4.5;
-            lateralGain = 8.0;
-            headingGain = 15.0; // shared with turn
+            lateralGain = 5;
+            headingGain = 3.7; // shared with turn
 
             axialVelGain = 0.0;
             lateralVelGain = 0.0;
             headingVelGain = 0.0; // shared with turn
 
             // Three Dead Wheels
-            par0YTicks = 3202.635760339295; // y position of the first parallel encoder (in tick units)
-            par1YTicks = -3245.0016237683703; // y position of the second parallel encoder (in tick units)
-            perpXTicks = -1937.055067651397; // x position of the perpendicular encoder (in tick units)
+            par0YTicks = 2801.9593888115314; // y position of the first parallel encoder (in tick units)
+            par1YTicks = -3087.1335070570067; // y position of the second parallel encoder (in tick units)
+            perpXTicks = 3127.2491537283527; // x position of the perpendicular encoder (in tick units)
         }
     }
 

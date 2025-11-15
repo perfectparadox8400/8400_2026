@@ -218,9 +218,8 @@ public final class MecanumDrive {
             leftFront.setDirection(DcMotor.Direction.REVERSE);
             leftBack.setDirection(DcMotor.Direction.REVERSE);
         } else {
-            rightBack.setDirection(DcMotor.Direction.REVERSE);
             leftBack.setDirection(DcMotor.Direction.REVERSE);
-            rightFront.setDirection(DcMotor.Direction.REVERSE);
+            leftFront.setDirection(DcMotor.Direction.REVERSE);
         }
 
         lazyImu = new LazyHardwareMapImu(hardwareMap, "imu", new RevHubOrientationOnRobot(

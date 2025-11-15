@@ -26,7 +26,7 @@ public class Arm {
     public static Servo hang2 = null;
 
     private static DcMotor mainBoom = null;
-    private static DcMotor slide = null;
+//    private static DcMotor slide = null;
 
     // Switchs
     public static TouchSensor armDown = null;
@@ -106,7 +106,7 @@ public class Arm {
             slideController = new PIDController(slideP, slideI, slideD);
 
             mainBoom = hardwareMap.get(DcMotor.class, "main_arm");
-            slide = hardwareMap.get(DcMotor.class, "slide");
+//            slide = hardwareMap.get(DcMotor.class, "slide");
             wrist1 = hardwareMap.get(Servo.class, "wrist1");
             wrist2 = hardwareMap.get(Servo.class, "wrist2");
             hang1 = hardwareMap.get(Servo.class, "hang1");
@@ -119,8 +119,8 @@ public class Arm {
             mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             intake.setPower(0);
             intakeOther.setPower(0);
@@ -188,7 +188,7 @@ public class Arm {
         }
 
         public static void arm_loop() {
-            slidePosition = slide.getCurrentPosition() * -1;
+//            slidePosition = slide.getCurrentPosition() * -1;
             armPosition = mainBoom.getCurrentPosition();
         }
 
@@ -277,7 +277,7 @@ public class Arm {
             slideController = new PIDController(slideP, slideI, slideD);
 
             mainBoom = hardwareMap.get(DcMotor.class, "main_arm");
-            slide = hardwareMap.get(DcMotor.class, "slide");
+//            slide = hardwareMap.get(DcMotor.class, "slide");
             wrist1 = hardwareMap.get(Servo.class, "wrist1");
             wrist2 = hardwareMap.get(Servo.class, "wrist2");
             intake = hardwareMap.get(CRServo.class, "intake");
@@ -287,9 +287,9 @@ public class Arm {
             mainBoom.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //mainBoom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            slide.setDirection(DcMotor.Direction.REVERSE);
+//            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            slide.setDirection(DcMotor.Direction.REVERSE);
 
             intake.setPower(0);
             intakeOther.setPower(0);
@@ -339,7 +339,7 @@ public class Arm {
         }
 
         public static void arm_loop() {
-            slidePosition = slide.getCurrentPosition();
+//            slidePosition = slide.getCurrentPosition();
             armPosition = mainBoom.getCurrentPosition();
         }
 
@@ -374,11 +374,11 @@ public class Arm {
 
     public static void slide_reset(boolean limit) {
         if (limit) {
-            slide.setPower(-0.3);
+//            slide.setPower(-0.3);
         } else {
-            slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            slide.setPower(0);
+//            slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            slide.setPower(0);
         }
     }
 
@@ -406,7 +406,7 @@ public class Arm {
         }
         if (slideBack.isPressed() && !previousSlideBack) {
             slideTarget = slidePosition;
-            slide.setPower(0);
+//            slide.setPower(0);
             previousSlideBack = true;
         } else if (!slideBack.isPressed()) {
             previousSlideBack = false;
@@ -423,9 +423,9 @@ public class Arm {
         if (Math.abs(slidePosition - slideTarget) > slideTolerance) {
             slideController.setPID(slideP, slideI, slideD);
             slidePower = slideController.calculate(slidePosition, slideTarget);
-            slide.setPower(slidePower);
+//            slide.setPower(slidePower);
         } else {
-            slide.setPower(0);
+//            slide.setPower(0);
         }
     }
 
