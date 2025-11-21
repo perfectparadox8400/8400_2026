@@ -37,6 +37,8 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.init_drive;
 import static org.firstinspires.ftc.teamcode.modules.Drive.setBrakeMode;
 import static org.firstinspires.ftc.teamcode.modules.Drive.strafeFactor;
 import static org.firstinspires.ftc.teamcode.modules.Drive.turnFactor;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -60,7 +62,7 @@ public class Teleop {
         private static boolean armDownReset = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init Arm
-            Arm.Nancy.init_arm(hardwareMap);
+            Launcher.Nancy.init_launcher(hardwareMap);
             // Init Wheels
             init_drive(hardwareMap);
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
@@ -71,19 +73,8 @@ public class Teleop {
         }
 
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
-            goX = false;
-            goY = false;
-            goB = false;
-            goLowX = false;
-            goHome = false;
-            start = true;
-            hang = false;
-            wrist1.setPosition(0.15);
-            wrist2.setPosition(0.85);
-            hang1.setPosition(1);
-            hang2.setPosition(0);
-            armLimitReset = false;
-            armDownReset = false;
+            loader.setPosition(0);
+            flyWheel.setPower(0);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
