@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * @noinspection ALL
  */
 public class Arm {
-    public static CRServo intake = null;
+
     public static CRServo intakeOther = null;
     public static Servo wrist1 = null;
     public static Servo wrist2 = null;
