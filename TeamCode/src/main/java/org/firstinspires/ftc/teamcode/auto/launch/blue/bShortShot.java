@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.launch.red;
+package org.firstinspires.ftc.teamcode.auto.launch.blue;
 
 import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startLauncher;
@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Park", group = "park")
-public class ShortShot extends LinearOpMode {
+public class bShortShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
         Pose2d start = new Pose2d(61.5,14.5, 3.142);

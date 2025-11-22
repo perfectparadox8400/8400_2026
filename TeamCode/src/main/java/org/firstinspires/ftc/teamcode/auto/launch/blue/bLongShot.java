@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Park", group = "park")
-public class LongShot extends LinearOpMode {
+public class bLongShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
         Pose2d start = new Pose2d(61.5,14.5, 3.142);

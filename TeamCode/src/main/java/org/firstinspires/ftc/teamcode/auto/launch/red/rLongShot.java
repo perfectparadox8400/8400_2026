@@ -3,10 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.launch.red;
 import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startLauncher;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
-import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -20,7 +17,7 @@ import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Park", group = "park")
-public class LongShot extends LinearOpMode {
+public class rLongShot extends LinearOpMode {
 
 
     @Override

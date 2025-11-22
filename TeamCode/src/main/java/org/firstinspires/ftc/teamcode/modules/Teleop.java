@@ -127,7 +127,7 @@ public class Teleop {
 //            }
 
             /* -------LOADER LOGIC-------*/
-            if (gamepad1.aWasPressed()){
+            if (gamepad1.aWasPressed()) {
                 loader.setPosition(1);
             }
             if (loader.getPosition() == 1) {
