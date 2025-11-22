@@ -15,11 +15,14 @@ import static org.firstinspires.ftc.teamcode.modules.Arm.slide_reset;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist1;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
 import static org.firstinspires.ftc.teamcode.modules.Bucket.inPosition;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Robot;
@@ -54,6 +57,28 @@ public class Auto {
         public static class Drop {
             public static double wrist1 = 0;
             public static double wrist2 = 0;
+        }
+    }
+
+    public static void startLauncher(HardwareMap hardwareMap) {
+        loader.setPosition(0);
+        flyWheel.setPower(1);
+        intake.setPower(-1); // possibly 1
+    }
+
+    public static class Shoot implements InstantFunction {
+        @Override
+        public void run() {
+
+//            for(int i = 0; i >= 3; i++){
+            while (loader.getPosition() != 1) {
+                loader.setPosition(1);
+            }
+            while (loader.getPosition() != 0) {
+                loader.setPosition(0);
+            }
+//            }
+
         }
     }
 
@@ -92,7 +117,9 @@ public class Auto {
             Wrist.Pickup.wrist1 = Nancy.Wrist.Pickup.wrist1;
             Wrist.Pickup.wrist2 = Nancy.Wrist.Pickup.wrist2;
         }
+
     }
+
 
     public static class ArmStart implements Action {
         @Override
