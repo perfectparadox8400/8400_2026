@@ -57,7 +57,7 @@ public class Teleop {
         private static boolean goLowX = false;
         private static boolean goB = false;
         private static boolean goHome = false;
-
+        private static boolean start = false;
         private static boolean armLimitReset = false;
         private static boolean armDownReset = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
