@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.park;
 
 import static org.firstinspires.ftc.teamcode.auto.Auto.Wait;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startArm;
+import static org.firstinspires.ftc.teamcode.auto.Auto.startLauncher;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
 
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -21,7 +22,7 @@ public class ParkWait extends LinearOpMode {
     public void runOpMode()  {
         Pose2d start = new Pose2d(-16, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
-        startArm(hardwareMap);
+        startLauncher(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(Wait)
