@@ -9,6 +9,7 @@ public class Controller {
     private static long lastSwitchTime = 0;
     private static boolean buttonsBlocked = false;
     private static final long cooldownMillis = 1000;
+    //speedControl allows to press "b" to change speed
     public static void speedControl(Gamepad gamepad1, Gamepad gamepad2) {
         if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.rightBumperWasPressed()) {
             rumble(gamepad1, 250, 0.4, 0.4);

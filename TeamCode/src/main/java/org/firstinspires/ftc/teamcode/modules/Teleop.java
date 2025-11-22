@@ -57,7 +57,7 @@ public class Teleop {
         private static boolean goLowX = false;
         private static boolean goB = false;
         private static boolean goHome = false;
-        private static boolean start = false;
+
         private static boolean armLimitReset = false;
         private static boolean armDownReset = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
@@ -74,285 +74,85 @@ public class Teleop {
 
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
             loader.setPosition(0);
-            flyWheel.setPower(0);
+            flyWheel.setPower(1); // 1 is full power
+            intake.setPower(-1); //TODO: Figure out if the power is -1 or 1
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
 
         public static void loop(Gamepad gamepad1, Gamepad gamepad2) {
-            // Arm Loop
-            Arm.Nancy.arm_loop();
+            // Launcher Loop
+//            Launcher.Nancy.launcher_loop();
 
             // Controller1 Buttons
             // Speed Control
             speedControl(gamepad1, gamepad2);
 
-            if (gamepad1.start && gamepad1.guideWasReleased()) {
+            // Hold start and release guide to disable field driving
+            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
                 rumbleBlip(gamepad1, 2);
+                rumbleBlip(gamepad2, 2);
                 fieldDriving = !fieldDriving;
             }
 
-            if (gamepad1.back && gamepad1.guideWasReleased()) {
+            // Resets the internal geography
+            if ((gamepad1.back && gamepad1.guideWasReleased()) || (gamepad2.back && gamepad2.guideWasReleased())) {
                 rumbleBlip(gamepad1, 4);
+                rumbleBlip(gamepad2, 4);
                 imu.resetYaw();
             }
 
-            if (gamepad2.guideWasPressed()) {
-                start = false;
-                goX = false;
-                goLowX = false;
-                goY = false;
-                goHome = false;
-                goB = false;
-                armTargetPosition = armPosition;
-                slideTargetPosition = slidePosition;
-                rumble(gamepad2, 750, 1, 1);
-            }
 
+
+            // Moves everything back to default position
+//            if (gamepad1.guideWasPressed() || gamepad2.guideWasPressed()) {
+//                // TODO: Put logic to reset to default positions
+//                rumble(gamepad2, 750, 1, 1);
+//            }
+
+            // fieldDrive is the field centric driving, drive is normal driving
+            // Toggles between the two.
             if (fieldDriving) {
                 fieldDrive(gamepad1, DrivePower);
+                fieldDrive(gamepad2, DrivePower);
             } else {
                 drive(gamepad1, DrivePower);
+                drive(gamepad2, DrivePower);
             }
 
-            if (gamepad1.yWasReleased()){
-                rumbleBlip(gamepad1, 1);
-                setBrakeMode(!brakeMode);
+//            // Turns off breakMode
+//            if (gamepad1.yWasReleased()){
+//                rumbleBlip(gamepad1, 1);
+//                setBrakeMode(!brakeMode);
+//            }
+
+            /* -------LOADER LOGIC-------*/
+            if (gamepad1.aWasPressed()){
+                loader.setPosition(1);
+            }
+            if (loader.getPosition() == 1) {
+                loader.setPosition(0);
             }
 
             //Telemetry
             drive_telemetry(telemetry);
-            Arm.Nancy.arm_telemetry(telemetry);
+            Launcher.Nancy.launcher_telemetry(telemetry);
 
-            telemetry.addData("Start", start);
-            telemetry.addData("goLowX", goLowX);
-            telemetry.addData("goX", goX);
-            telemetry.addData("goY", goY);
-            telemetry.addData("goB", goB);
-            telemetry.addData("goHome", goHome);
+            telemetry.addData("loader", loader);
+            telemetry.addData("flyWheel", flyWheel);
+            telemetry.addData("intake", intake);
             telemetry.update();
 
-            if(start) {
-                if (slideBack.isPressed()){
-                    slide_reset(false);
-                    if(armDown.isPressed()){
-                        Arm.Nancy.arm_reset(false);
-                        start = false;
-                    } else {
-                        Arm.Nancy.arm_reset(true);
-                        Arm.Nancy.arm();
-                    }
-                } else {
-                    slide_reset(true);
-                }
-                return;
-            }
+            // This code runs the slow-strafe and allows strafing on controller 2
+//            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) * DriveSlowPower;
+//            if (gamepad2.dpad_left) {
+//                strafeFactor = -1.0 * DrivePower; // Strafe left
+//            } else if (gamepad2.dpad_right) {
+//                strafeFactor = DrivePower; // Strafe right
+//            } else {
+//                strafeFactor = 0.0;
+//            }
 
-            if (gamepad1.guideWasPressed()) {
-                hang = false;
-                rumble(gamepad1, 500, 1, 1);
-            }
-
-            if (gamepad1.dpad_down && (hang1.getPosition() <= Arm.Nancy.hookOpen1 && hang2.getPosition() >= Arm.Nancy.hookOpen2)) {
-                hang1.setPosition(hang1.getPosition() + .013);
-                hang2.setPosition(hang2.getPosition() - .013);
-            } else if (gamepad1.dpad_up && (hang1.getPosition() >= Arm.Nancy.hookClosed1 && hang2.getPosition() <= Arm.Nancy.hookClosed2)) {
-                hang1.setPosition(hang1.getPosition() - .013);
-                hang2.setPosition(hang2.getPosition() + .013);
-            } else if (gamepad1.dpadLeftWasPressed()) {
-                hang1.setPosition(Arm.Nancy.hookOpen1);
-                hang2.setPosition(Arm.Nancy.hookOpen2);
-                rumbleBlip(gamepad1, 1);
-            } else if (gamepad1.dpadRightWasPressed()) {
-                hang1.setPosition(Arm.Nancy.hookClosed1);
-                hang2.setPosition(Arm.Nancy.hookClosed2);
-                rumbleBlip(gamepad1, 1);
-            }
-
-            if (gamepad1.xWasPressed()) {
-                armTargetPosition = -350;
-                slideTargetPosition = 0;
-                wrist1.setPosition(0);
-                wrist2.setPosition(1);
-                hang1.setPosition(0);
-                hang2.setPosition(1);
-                hang = true;
-                rumbleBlip(gamepad1, 1);
-                rumbleBlip(gamepad2, 1);
-            }
-
-            // Controller2 Buttons
-            turnFactor = (gamepad2.right_trigger - gamepad2.left_trigger) * DriveSlowPower;
-            if (gamepad2.dpad_left) {
-                strafeFactor = -1.0 * DrivePower; // Strafe left
-            } else if (gamepad2.dpad_right) {
-                strafeFactor = DrivePower; // Strafe right
-            } else {
-                strafeFactor = 0.0;
-            }
-
-            /* ------ SLIDE LOGIC ------ */
-            if (gamepad2.left_bumper) {
-                slideTargetPosition -= 65;
-            } else if (gamepad2.right_bumper) {
-                slideTargetPosition += 65;
-            }
-
-            /* ------ RESET ------ */
-            if (gamepad2.backWasPressed()) {
-                goY = false;
-                goX = false;
-                goLowX = false;
-                wrist1.setPosition(0.15);
-                wrist2.setPosition(0.85);
-                slideTargetPosition = 0;
-                goHome = true;
-                rumble(gamepad2, 500, 0.6, 0.6);
-            }
-
-            /* ------WRIST LOGIC------ */
-            if (gamepad2.dpad_up) {
-                wrist1.setPosition(wrist1.getPosition() + .012);
-                wrist2.setPosition(wrist2.getPosition() - .012);
-            } else if (gamepad2.dpad_down) {
-                wrist1.setPosition(wrist1.getPosition() - .012);
-                wrist2.setPosition(wrist2.getPosition() + .012);
-            }
-
-            /* ------ MAIN BOOM LOGIC ------ */
-            if (gamepad2.left_stick_y > 0.2){
-                armTargetPosition -= 13;
-            } else if (gamepad2.left_stick_y < -0.2){
-                armTargetPosition += 15;
-            }
-
-            if (gamepad2.leftStickButtonWasPressed() && !armLimitReset) {
-                armLimit += 50;
-                armLimitReset = true;
-                rumble(gamepad2, 250, 1, 1);
-            } else if (!gamepad2.left_stick_button) {
-                armLimitReset = false;
-            }
-
-            if (gamepad2.rightStickButtonWasPressed() && !armDownReset) {
-                armDownLimit -= 10;
-                armDownReset = true;
-                rumble(gamepad2, 250, 1, 1);
-            } else if (!gamepad2.right_stick_button) {
-                armDownReset = false;
-            }
-
-            /* ------ INTAKE LOGIC ------ */
-            if (gamepad2.right_stick_y > 0.2){
-                intake.setPower(-1);
-                intakeOther.setPower(1);
-            } else if (gamepad2.right_stick_y < -0.2){
-                intake.setPower(1);
-                intakeOther.setPower(-1);
-            } else if (gamepad2.right_stick_x > 0.2){
-                intake.setPower(-1);
-                intakeOther.setPower(-1);
-            } else if (gamepad2.right_stick_x < -0.2){
-                intake.setPower(1);
-                intakeOther.setPower(1);
-            } else {
-                intake.setPower(0);
-                intakeOther.setPower(0);
-            }
-
-            if (controllerChange(gamepad1, gamepad2) && gamepad2.b) {
-                armTargetPosition = 900;
-                goB = true;
-                rumbleBlip(gamepad2, 1);
-            }
-
-            if (controllerChange(gamepad1, gamepad2) && gamepad2.a) {
-                wrist1.setPosition(0.7);
-                wrist2.setPosition(0.4);
-                rumbleBlip(gamepad2, 1);
-            }
-
-            /* ------ PRESETS ------ */
-            if (gamepad2.xWasPressed()) {
-                if (armPosition < 300) {
-                    goLowX = true;
-                    goX = false;
-                    armTargetPosition = 175;
-                } else {
-                    goX = true;
-                    goLowX = false;
-                    slideTargetPosition = 0;
-                }
-                goY = false;
-                goB = false;
-                goHome = false;
-                wrist1.setPosition(0.6);
-                wrist2.setPosition(0.4);
-                rumbleBlip(gamepad2, 1);
-            }
-
-            if (gamepad2.yWasPressed()) {
-                goY = true;
-                goX = false;
-                goLowX = false;
-                goHome = false;
-                goB = false;
-                armTargetPosition = 1110;
-                wrist1.setPosition(0.5);
-                wrist2.setPosition(0.5);
-                rumbleBlip(gamepad2, 1);
-            }
-
-            if (goHome && (slidePosition <= 2000)) {
-                slideTargetPosition = 0;
-                armTargetPosition = 0;
-            }
-
-            if (goHome && armDown.isPressed()) {
-                goHome = false;
-                rumble(gamepad2, 500, 0.8, 0.8);
-            }
-
-            //Go X
-            if (goX && (slidePosition <= 2000)) {
-                armTargetPosition = 175;
-                goX = false;
-            }
-
-            if (goLowX && (armPosition >= 175)) {
-                slideTargetPosition = 0;
-                goLowX = false;
-            }
-
-            //Go Y
-            if (goY && (armPosition >= 950)) {
-                slideTargetPosition = slideLimit;
-                wrist1.setPosition(0.75);
-                wrist2.setPosition(0.25);
-                goY = false;
-            }
-
-            //Go B
-            if (goB && (armPosition >= 800)) {
-                slideTargetPosition = 1500;
-                wrist1.setPosition(0.85);
-                wrist2.setPosition(0.15);
-                goB = false;
-            }
-
-            //Slide Power
-            slide();
-
-            //Arm Power
-            Arm.Nancy.arm();
-
-            if (gamepad1.touchpadWasPressed()) {
-                rumbleWiiii(gamepad1, 5000);
-            }
-
-            if (gamepad2.touchpadWasPressed()) {
-                rumbleWiiii(gamepad2, 5000);
-            }
         }
     }
 
