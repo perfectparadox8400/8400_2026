@@ -20,18 +20,18 @@ public class Launcher {
     //loader will input artifacts into the launcher
     public static Servo loader = null;
     public static DcMotor flyWheel = null;
-    public static CRServo intake = null;
+    public static CRServo ballIntake = null;
     public static class Nancy {
         public static void init_launcher(HardwareMap hardwareMap) { // This defines which Servo goes to which port, we need to apply this on the robot servos.
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
-            intake = hardwareMap.get(CRServo.class, "intake");
+            ballIntake = hardwareMap.get(CRServo.class, "ballIntake");
         }
         // calls the data
         public static void launcher_telemetry(Telemetry telemetry) {
             telemetry.addData("loader", loader.getPosition());
             telemetry.addData("flyWheel" , flyWheel.getPower());
-            telemetry.addData("intake" , intake.getPower());
+            telemetry.addData("ballIntake" , ballIntake.getPower());
 
         }
 

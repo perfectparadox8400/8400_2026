@@ -9,7 +9,7 @@ import static org.firstinspires.ftc.teamcode.modules.Arm.armTolerance;
 import static org.firstinspires.ftc.teamcode.modules.Arm.hang;
 import static org.firstinspires.ftc.teamcode.modules.Arm.hang1;
 import static org.firstinspires.ftc.teamcode.modules.Arm.hang2;
-import static org.firstinspires.ftc.teamcode.modules.Arm.intake;
+//import static org.firstinspires.ftc.teamcode.modules.Arm.intake;
 import static org.firstinspires.ftc.teamcode.modules.Arm.intakeOther;
 import static org.firstinspires.ftc.teamcode.modules.Arm.slide;
 import static org.firstinspires.ftc.teamcode.modules.Arm.slideBack;
@@ -37,6 +37,7 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.init_drive;
 import static org.firstinspires.ftc.teamcode.modules.Drive.setBrakeMode;
 import static org.firstinspires.ftc.teamcode.modules.Drive.strafeFactor;
 import static org.firstinspires.ftc.teamcode.modules.Drive.turnFactor;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 
@@ -52,14 +53,14 @@ public class Teleop {
     public static Telemetry telemetry;
     public static final FtcDashboard dashboard = FtcDashboard.getInstance();
     public static class Nancy {
-        private static boolean goX = false;
-        private static boolean goY = false;
-        private static boolean goLowX = false;
-        private static boolean goB = false;
-        private static boolean goHome = false;
-        private static boolean start = false;
-        private static boolean armLimitReset = false;
-        private static boolean armDownReset = false;
+//        private static boolean goX = false;
+//        private static boolean goY = false;
+//        private static boolean goLowX = false;
+//        private static boolean goB = false;
+//        private static boolean goHome = false;
+//        private static boolean start = false;
+//        private static boolean armLimitReset = false;
+//        private static boolean armDownReset = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init Arm
             Launcher.Nancy.init_launcher(hardwareMap);
@@ -75,7 +76,7 @@ public class Teleop {
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
             loader.setPosition(0);
             flyWheel.setPower(1); // 1 is full power
-            intake.setPower(-1); //TODO: Figure out if the power is -1 or 1
+//            ballIntake.setPower(-1); //TODO: Figure out if the power is -1 or 1
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
@@ -128,19 +129,28 @@ public class Teleop {
 
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(1);
+                loader.setPosition(-1);
             }
-            if (loader.getPosition() == 1) {
-                loader.setPosition(0);
+//            if (loader.getPosition() == 1) {
+//                loader.setPosition(0);
+//            }
+
+            if (gamepad1.yWasPressed()) {
+                if(ballIntake.getPower() == -1){
+                    ballIntake.setPower(0);
+                }
+                else{
+                    ballIntake.setPower(-1);
+                }
             }
 
             //Telemetry
             drive_telemetry(telemetry);
             Launcher.Nancy.launcher_telemetry(telemetry);
 
-            telemetry.addData("loader", loader);
-            telemetry.addData("flyWheel", flyWheel);
-            telemetry.addData("intake", intake);
+//            telemetry.addData("loader", loader);
+//            telemetry.addData("flyWheel", flyWheel);
+//            telemetry.addData("ballIntake", ballIntake);
             telemetry.update();
 
             // This code runs the slow-strafe and allows strafing on controller 2
@@ -291,22 +301,22 @@ public class Teleop {
             }
 
             /* ------ INTAKE LOGIC ------ */
-            if (gamepad2.right_stick_x > 0.5){
-                intake.setPower(-1);
-                intakeOther.setPower(1);
-            } else if (gamepad2.right_stick_x < -0.5){
-                intake.setPower(1);
-                intakeOther.setPower(-1);
-            } else if (gamepad2.dpad_right){
-                intake.setPower(-1);
-                intakeOther.setPower(-1);
-            } else if (gamepad2.dpad_left){
-                intake.setPower(1);
-                intakeOther.setPower(1);
-            } else {
-                intake.setPower(0);
-                intakeOther.setPower(0);
-            }
+//            if (gamepad2.right_stick_x > 0.5){
+//                intake.setPower(-1);
+//                intakeOther.setPower(1);
+//            } else if (gamepad2.right_stick_x < -0.5){
+//                intake.setPower(1);
+//                intakeOther.setPower(-1);
+//            } else if (gamepad2.dpad_right){
+//                intake.setPower(-1);
+//                intakeOther.setPower(-1);
+//            } else if (gamepad2.dpad_left){
+//                intake.setPower(1);
+//                intakeOther.setPower(1);
+//            } else {
+//                intake.setPower(0);
+//                intakeOther.setPower(0);
+//            }
 
             if (controllerChange(gamepad1, gamepad2) && gamepad2.b) {
                 start = false;
