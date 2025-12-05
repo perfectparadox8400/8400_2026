@@ -17,6 +17,7 @@ import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
 import static org.firstinspires.ftc.teamcode.modules.Bucket.inPosition;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 
 import androidx.annotation.NonNull;
 
@@ -31,6 +32,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class Auto {
     public static final double Wait = 5;
     public static final double None = 0;
+
     public static class Intake {
         public static class In {
             public static int intake1 = 0;
@@ -63,7 +65,7 @@ public class Auto {
     public static void startLauncher(HardwareMap hardwareMap) {
         loader.setPosition(0);
         flyWheel.setPower(1);
-        intake.setPower(-1); // possibly 1
+        ballIntake.setPower(-1);
     }
 
     public static class Shoot implements InstantFunction {

@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Park", group = "park")
+@Autonomous(name="bShortShot", group = "auto")
 public class bShortShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
