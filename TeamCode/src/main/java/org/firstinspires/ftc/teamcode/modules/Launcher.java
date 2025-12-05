@@ -17,12 +17,14 @@ public class Launcher {
     public static Servo loader = null;
     public static DcMotor flyWheel = null;
     public static CRServo ballIntake = null;
+    public static CRServo ballIntakeRear = null;
 
     public static class Nancy {
         public static void init_launcher(HardwareMap hardwareMap) { // This defines which Servo goes to which port, we need to apply this on the robot servos.
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
             ballIntake = hardwareMap.get(CRServo.class, "ballIntake");
+            ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
         }
 
         // calls the data
@@ -30,6 +32,7 @@ public class Launcher {
             telemetry.addData("loader", loader.getPosition());
             telemetry.addData("flyWheel", flyWheel.getPower());
             telemetry.addData("ballIntake", ballIntake.getPower());
+            telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
 
 
         }
@@ -39,12 +42,14 @@ public class Launcher {
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
             ballIntake = hardwareMap.get(CRServo.class, "ballIntake");
+            ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
         }
         // calls the data
         public static void launcher_telemetry(Telemetry telemetry) {
             telemetry.addData("loader", loader.getPosition());
             telemetry.addData("flyWheel" , flyWheel.getPower());
             telemetry.addData("ballIntake" , ballIntake.getPower());
+            telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
 
 
 

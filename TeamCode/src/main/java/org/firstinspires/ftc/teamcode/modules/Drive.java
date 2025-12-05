@@ -52,7 +52,7 @@ public class Drive {
             left_front.setDirection(DcMotor.Direction.REVERSE);
             left_back.setDirection(DcMotor.Direction.REVERSE);
             brakeMode = true;
-            fieldDriving = true;
+            fieldDriving = false;
             imuPose = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         } else {
 //            right_back.setDirection(DcMotor.Direction.REVERSE);
