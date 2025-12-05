@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Park", group = "park")
+@Autonomous(name="rLongShot", group = "auto")
 public class rLongShot extends LinearOpMode {
 
 

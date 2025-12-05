@@ -35,6 +35,7 @@ public class PlayGame extends OpMode {
             Teleop.MentorBot.loop(gamepad1, gamepad2);
         } else if (Robot.robotName().equals("nancy")) {
             Teleop.Nancy.loop(gamepad1, gamepad2);
+            telemetry.update();
         }
     }
 }
