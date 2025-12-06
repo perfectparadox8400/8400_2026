@@ -15,6 +15,7 @@ import static org.firstinspires.ftc.teamcode.modules.Arm.slide_reset;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist1;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
 import static org.firstinspires.ftc.teamcode.modules.Bucket.inPosition;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
@@ -25,13 +26,16 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 public class Auto {
     public static final double Wait = 5;
     public static final double None = 0;
+    private static ElapsedTime autoRunTime = new ElapsedTime();
 
     public static class Intake {
         public static class In {
@@ -61,29 +65,45 @@ public class Auto {
             public static double wrist2 = 0;
         }
     }
-
+    /* -----------LAUNCHER AUTO LOGIC--------------*/
     public static void startLauncher(HardwareMap hardwareMap) {
         loader.setPosition(0);
         flyWheel.setPower(1);
         ballIntake.setPower(-1);
     }
 
+    /* --------SHOOT IN AUTO LOGIC---------*/
+
     public static class Shoot implements InstantFunction {
         @Override
         public void run() {
+            loader.setPosition(0.15);
+            autoRunTime.reset();
 
-//            for(int i = 0; i >= 3; i++){
-            while (loader.getPosition() != 1) {
-                loader.setPosition(1);
-            }
-            while (loader.getPosition() != 0) {
-                loader.setPosition(0);
-            }
-//            }
+            while (autoRunTime.milliseconds() <= 250) {}
+                loader.setPosition(0.325);
 
+        }
+
+    }
+
+    /* --------INTAKE AUTO LOGIC---------*/
+
+    public static class StartIntake implements InstantFunction {
+        @Override
+        public void run() {
+            ballIntake.setPower(-1);
+            ballIntakeRear.setPower(-1);
         }
     }
 
+    /*----------- FLYWHEEL AUTO LOGIC ----------*/
+    public static class StartFlyWheel implements InstantFunction {
+        @Override
+        public void run() {
+            flyWheel.setPower(1);
+        }
+    }
     public static void startWrist() {
         wrist1.setPosition(Wrist.Home.wrist1);
         wrist2.setPosition(Wrist.Home.wrist2);

@@ -19,36 +19,32 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class bLongShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(61.5,14.5, 3.142);
+        Pose2d start = new Pose2d(61.5,-14.5, 3.142);
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(None)
+                .stopAndAdd(new Auto.StartIntake())
+                .stopAndAdd(new Auto.StartFlyWheel())
                 .lineToX(55)
                 .turnTo(Math.toRadians(195))
                 .stopAndAdd(new Auto.Shoot())
+                .stopAndAdd(new Auto.Shoot())
+                .stopAndAdd(new Auto.Shoot())
                 .lineToX(36)
                 .turnTo(Math.toRadians(-90))
-                .lineToY(-36)
-                .waitSeconds(0.5)
-                .lineToY(-40)
-                .waitSeconds(0.5)
-                .lineToY(-45)
-                .waitSeconds(0.5)
+                .lineToY(-62.5)
                 .lineToY(-14.5)
                 .turnTo(Math.toRadians(180))
                 .lineToX(55)
                 .turnTo(Math.toRadians(195))
                 .stopAndAdd(new Auto.Shoot())
+                .stopAndAdd(new Auto.Shoot())
+                .stopAndAdd(new Auto.Shoot())
                 .lineToX(12)
                 .turnTo(Math.toRadians(-90))
-                .lineToY(-36)
-                .waitSeconds(0.5)
-                .lineToY(-40)
-                .waitSeconds(0.5)
-                .lineToY(-45)
-                .waitSeconds(0.5)
+                .lineToY(-62.5)
                 .lineToY(-14.5)
                 .turnTo(Math.toRadians(180))
                 .lineToX(40);

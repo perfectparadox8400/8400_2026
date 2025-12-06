@@ -38,6 +38,7 @@ public class Teleop {
 
     public static class Nancy {
         private static boolean start = false;
+        private static ElapsedTime runTime = new ElapsedTime();
 
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init the launcher
@@ -108,9 +109,9 @@ public class Teleop {
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
                 loader.setPosition(0.15);
-                MentorBot.runTime.reset();
+                runTime.reset();
             }
-            if (MentorBot.runTime.milliseconds() > 250){
+            if (runTime.milliseconds() > 250){
                 loader.setPosition(0.325);
             }
 
