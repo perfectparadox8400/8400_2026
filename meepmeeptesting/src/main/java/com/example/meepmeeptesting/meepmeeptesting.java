@@ -26,23 +26,24 @@ public class meepmeeptesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,-14.5, 3.142))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,14.5, 3.142))
+
 
                 .lineToX(55)
-                .turnTo(Math.toRadians(195))
+                .turnTo(Math.toRadians(165))
 
                 .lineToX(36)
-                .turnTo(Math.toRadians(-90))
-                .lineToY(-62.5)
-                .lineToY(-14.5)
+                .turnTo(Math.toRadians(90))
+                .lineToY(62.5)
+                .lineToY(14.5)
                 .turnTo(Math.toRadians(180))
                 .lineToX(55)
-                .turnTo(Math.toRadians(195))
+                .turnTo(Math.toRadians(165))
 
                 .lineToX(12)
-                .turnTo(Math.toRadians(-90))
-                .lineToY(-62.5)
-                .lineToY(-14.5)
+                .turnTo(Math.toRadians(90))
+                .lineToY(62.5)
+                .lineToY(14.5)
                 .turnTo(Math.toRadians(180))
                 .lineToX(40)
 

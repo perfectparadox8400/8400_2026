@@ -30,7 +30,9 @@ public class bShortShot extends LinearOpMode {
                 .lineToX(-25)
                 .turnTo(Math.toRadians(234))
                 .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
                 .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
                 .stopAndAdd(new Auto.Shoot())
                 .turnTo(Math.toRadians(180))
                 .lineToX(-11.5)
@@ -41,11 +43,12 @@ public class bShortShot extends LinearOpMode {
                 .lineToX(-25)
                 .turnTo(Math.toRadians(234))
                 .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
                 .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
                 .stopAndAdd(new Auto.Shoot());
 
         waitForStart();
-        startWrist();
         Actions.runBlocking(new ParallelAction(
                 Auto.setPose(drive),
                 new SequentialAction(

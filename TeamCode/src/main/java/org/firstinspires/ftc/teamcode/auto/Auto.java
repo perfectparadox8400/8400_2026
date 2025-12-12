@@ -15,6 +15,7 @@ import static org.firstinspires.ftc.teamcode.modules.Arm.slide_reset;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist1;
 import static org.firstinspires.ftc.teamcode.modules.Arm.wrist2;
 import static org.firstinspires.ftc.teamcode.modules.Bucket.inPosition;
+import static org.firstinspires.ftc.teamcode.modules.Drive.init_drive;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
@@ -25,10 +26,14 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantFunction;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.modules.Launcher;
 import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -67,9 +72,10 @@ public class Auto {
     }
     /* -----------LAUNCHER AUTO LOGIC--------------*/
     public static void startLauncher(HardwareMap hardwareMap) {
-        loader.setPosition(0);
-        flyWheel.setPower(1);
-        ballIntake.setPower(-1);
+        Launcher.Nancy.init_launcher(hardwareMap);
+//        loader.setPosition(0);
+//        flyWheel.setPower(1);
+//        ballIntake.setPower(-1);
     }
 
     /* --------SHOOT IN AUTO LOGIC---------*/
@@ -80,9 +86,8 @@ public class Auto {
             loader.setPosition(0.15);
             autoRunTime.reset();
 
-            while (autoRunTime.milliseconds() <= 250) {}
-                loader.setPosition(0.325);
-
+            while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
+            loader.setPosition(0.325);
         }
 
     }
