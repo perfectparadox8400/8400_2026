@@ -22,6 +22,7 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -185,7 +186,7 @@ public class Teleop {
             loader.setPosition(.325);
             start = true;
 //            flyWheel.setPower(1); // 1 is full power
-//            ballIntake.setPower(-1); //TODO: Figure out if the power is -1 or 1
+//            ballIntake.setPower(-1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
