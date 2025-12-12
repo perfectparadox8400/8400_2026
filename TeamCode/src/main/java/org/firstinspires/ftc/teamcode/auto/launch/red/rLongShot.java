@@ -29,37 +29,36 @@ public class rLongShot extends LinearOpMode {
         if (Robot.robotName().equals("nancy")) {
             TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                     .waitSeconds(None)
-                    .lineToX(55)
-                    .turnTo(Math.toRadians(165))
+                    .stopAndAdd(new Auto.StartIntake())
+                    .stopAndAdd(new Auto.StartFlyWheel())
+//                    .lineToX(55)
+//                    .turnTo(Math.toRadians(165))
                     .stopAndAdd(new Auto.Shoot())
-                    .lineToX(36)
-                    .turnTo(Math.toRadians(90))
-                    .lineToY(36)
                     .waitSeconds(0.5)
-                    .lineToY(40)
-                    .waitSeconds(0.5)
-                    .lineToY(45)
-                    .waitSeconds(0.5)
-                    .lineToY(14.5)
-                    .turnTo(Math.toRadians(180))
-                    .lineToX(55)
-                    .turnTo(Math.toRadians(165))
                     .stopAndAdd(new Auto.Shoot())
-                    .lineToX(12)
-                    .turnTo(Math.toRadians(90))
-                    .lineToY(36)
                     .waitSeconds(0.5)
-                    .lineToY(40)
-                    .waitSeconds(0.5)
-                    .lineToY(45)
-                    .waitSeconds(0.5)
-                    .lineToY(14.5)
-                    .turnTo(Math.toRadians(180))
-                    .lineToX(40);
+                    .stopAndAdd(new Auto.Shoot());
+//                    .lineToX(36)
+//                    .turnTo(Math.toRadians(90))
+//                    .lineToY(62.5)
+//                    .lineToY(14.5)
+//                    .turnTo(Math.toRadians(180))
+//                    .lineToX(55)
+//                    .turnTo(Math.toRadians(165))
+//                    .stopAndAdd(new Auto.Shoot())
+//                    .waitSeconds(0.5)
+//                    .stopAndAdd(new Auto.Shoot())
+//                    .waitSeconds(0.5)
+//                    .stopAndAdd(new Auto.Shoot())
+//                    .lineToX(12)
+//                    .turnTo(Math.toRadians(90))
+//                    .lineToY(62.5)
+//                    .lineToY(14.5)
+//                    .turnTo(Math.toRadians(180))
+//                    .lineToX(40);
 
 
             waitForStart();
-            startWrist();
             Actions.runBlocking(new ParallelAction(
                     Auto.setPose(drive),
                     new SequentialAction(

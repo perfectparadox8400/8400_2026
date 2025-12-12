@@ -19,27 +19,36 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class rShortShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(61.5,14.5, 3.142);
+        Pose2d start = new Pose2d(-49,49, 5.340708);
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
 
         TrajectoryActionBuilder step1 = drive.actionBuilder(start)
                 .waitSeconds(None)
-                .waitSeconds(5)
-                .lineToX(36)
-                .turnTo(Math.toRadians(90))
-                .lineToY(36)
+                .stopAndAdd(new Auto.StartIntake())
+                .stopAndAdd(new Auto.StartFlyWheel())
+                .lineToX(-25)
+                .turnTo(Math.toRadians(126))
+                .stopAndAdd(new Auto.Shoot())
                 .waitSeconds(0.5)
-                .lineToY(40)
+                .stopAndAdd(new Auto.Shoot())
                 .waitSeconds(0.5)
-                .lineToY(45)
-                .waitSeconds(0.5)
-                .lineToY(14.5)
+                .stopAndAdd(new Auto.Shoot())
                 .turnTo(Math.toRadians(180))
-                .lineToX(61.5);
+                .lineToX(-11.5)
+                .turnTo(Math.toRadians(90))
+                .lineToY(55)
+                .lineToY(16)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-25)
+                .turnTo(Math.toRadians(126))
+                .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
+                .stopAndAdd(new Auto.Shoot())
+                .waitSeconds(0.5)
+                .stopAndAdd(new Auto.Shoot());
 
         waitForStart();
-        startWrist();
         Actions.runBlocking(new ParallelAction(
                 Auto.setPose(drive),
                 new SequentialAction(
