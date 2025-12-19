@@ -22,6 +22,7 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -44,6 +45,7 @@ public class Teleop {
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init the launcher
             Launcher.Nancy.init_launcher(hardwareMap);
+            Spindexer.Nancy.init_spindexer(hardwareMap);
             // Init drive
             init_drive(hardwareMap);
             // start telemetry
@@ -137,6 +139,16 @@ public class Teleop {
                     loader.setPosition(.325);
                 }
             }
+
+            /*------Spindexer Servo LOGIC-------- */
+            if (gamepad1.leftBumperWasPressed()) {
+                axon.changeTargetRotation(-45);
+            } else if (gamepad1.rightBumperWasPressed()) {
+                axon.changeTargetRotation(45);
+            }
+            //These variables are for setting the
+            //axon.setTargetRotation(90);    // Move to 90 degrees absolute
+            //axon.changeTargetRotation(45); // Move 45 degrees from current position
 
             /* ------- TELEMETRY --------*/
             drive_telemetry(telemetry);
