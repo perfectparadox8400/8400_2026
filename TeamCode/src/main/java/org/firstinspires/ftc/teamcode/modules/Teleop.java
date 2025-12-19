@@ -23,6 +23,7 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
+import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -153,10 +154,10 @@ public class Teleop {
             drive_telemetry(telemetry);
             Launcher.Nancy.launcher_telemetry(telemetry);
 
-            telemetry.addData("Start", start);
-            telemetry.addData("loader", loader);
-            telemetry.addData("flyWheel", flyWheel);
-            telemetry.addData("ballIntake", ballIntake);
+//            telemetry.addData("Start", start);
+//            telemetry.addData("loader", loader);
+//            telemetry.addData("flyWheel", flyWheel);
+//            telemetry.addData("ballIntake", ballIntake);
             telemetry.update();
 
             // This code runs the slow-strafe and allows strafing on controller 2
@@ -180,7 +181,6 @@ public class Teleop {
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init Arm
             Launcher.Mentorbot.init_launcher(hardwareMap);
-            Arm.MentorBot.init_arm(hardwareMap);
             // Init Wheels
             init_drive(hardwareMap);
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
@@ -197,14 +197,13 @@ public class Teleop {
             loader.setPosition(.325);
             start = true;
 //            flyWheel.setPower(1); // 1 is full power
-//            ballIntake.setPower(-1); //TODO: Figure out if the power is -1 or 1
+//            ballIntake.setPower(-1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
 
         public static void loop(Gamepad gamepad1, Gamepad gamepad2) {
             // Arm Loop
-            Arm.MentorBot.arm_loop();
 
             // Controller1 Buttons
             // Speed Control
@@ -277,7 +276,6 @@ public class Teleop {
 
             //Telemetry
             drive_telemetry(telemetry);
-            Arm.MentorBot.arm_telemetry(telemetry);
 
             telemetry.addData("Start", start);
             telemetry.update();
@@ -441,7 +439,7 @@ public class Teleop {
 //            slide();
 
             //Arm Power
-            Arm.MentorBot.arm();
+//            Arm.MentorBot.arm();
 
             if (gamepad1.touchpadWasPressed()) {
                 rumbleWiiii(gamepad1, 5000);

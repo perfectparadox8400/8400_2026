@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 public class Launcher {
     //loader will input artifacts into the launcher
     public static Servo loader = null;
@@ -20,11 +21,13 @@ public class Launcher {
     public static CRServo ballIntakeRear = null;
 
     public static class Nancy {
+
         public static void init_launcher(HardwareMap hardwareMap) { // This defines which Servo goes to which port, we need to apply this on the robot servos.
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
             ballIntake = hardwareMap.get(CRServo.class, "ballIntake");
             ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
+
         }
 
         // calls the data
@@ -35,6 +38,7 @@ public class Launcher {
             telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
 
 
+
         }
     }
     public static class Mentorbot {
@@ -43,6 +47,7 @@ public class Launcher {
             flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
             ballIntake = hardwareMap.get(CRServo.class, "ballIntake");
             ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
+
         }
         // calls the data
         public static void launcher_telemetry(Telemetry telemetry) {
