@@ -24,6 +24,10 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateLeft;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateRight;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_telemetry;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -41,7 +45,8 @@ public class Teleop {
     public static class Nancy {
         private static boolean start = false;
         private static ElapsedTime runTime = new ElapsedTime();
-
+        private static boolean lastLeftBumper = false;
+        private static boolean lastRightBumper = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init the launcher
             Launcher.Nancy.init_launcher(hardwareMap);
@@ -141,11 +146,19 @@ public class Teleop {
             }
 
             /*------Spindexer Servo LOGIC-------- */
-            if (gamepad1.leftBumperWasPressed()) {
-                axon.changeTargetRotation(-45);
-            } else if (gamepad1.rightBumperWasPressed()) {
-                axon.changeTargetRotation(45);
+            // 2. BUTTON LOGIC (Change Targets)
+            if (gamepad1.left_bumper && !lastLeftBumper) {
+                rotateLeft();
             }
+            else if (gamepad1.right_bumper && !lastRightBumper) {
+                rotateRight();
+            }
+
+            lastLeftBumper = gamepad1.left_bumper;
+            lastRightBumper = gamepad1.right_bumper;
+
+            // 3. MANDATORY LOOP UPDATE (Calculates PID)
+            spindexer_loop();
             //These variables are for setting the
             //axon.setTargetRotation(90);    // Move to 90 degrees absolute
             //axon.changeTargetRotation(45); // Move 45 degrees from current position
@@ -153,7 +166,7 @@ public class Teleop {
             /* ------- TELEMETRY --------*/
             drive_telemetry(telemetry);
             Launcher.Nancy.launcher_telemetry(telemetry);
-
+            spindexer_telemetry(telemetry);
 //            telemetry.addData("Start", start);
 //            telemetry.addData("loader", loader);
 //            telemetry.addData("flyWheel", flyWheel);
@@ -221,10 +234,10 @@ public class Teleop {
 //                }
 
             if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == 1) {
+                if (flyWheel.getPower() == .1) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(1);
+                    flyWheel.setPower(.1);
                 }
             }
 

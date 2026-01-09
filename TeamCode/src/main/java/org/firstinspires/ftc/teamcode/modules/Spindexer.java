@@ -1,66 +1,52 @@
-//Info for this module comes from https://github.com/The-Robotics-Catalyst-Foundation/FIRST-Opensource/tree/main/FTC/RTPAxon
-
 package org.firstinspires.ftc.teamcode.modules;
-
-import static org.firstinspires.ftc.teamcode.modules.Teleop.telemetry;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Spindexer {
-    public static CRServo spindexerServo = null;
-    public static AnalogInput spindexerEncoder = null;
-    public static RTPAxon axon = null;
+
+    // The single static instance of the axon helper
+    public static RTPAxon axon;
+
+    // A static class to handle initialization and operation, similar to your other modules
     public static class Nancy {
 
-        public static void init_spindexer(HardwareMap hardwareMap) { // This defines which Servo goes to which port, we need to apply this on the robot servos.
-            spindexerServo = hardwareMap.get(CRServo.class, "spindexerServo");
-            spindexerEncoder = hardwareMap.get(AnalogInput.class, "Spinencoder");
-            axon = new RTPAxon(spindexerServo, spindexerEncoder);
-            axon.setMaxPower(0.5);  // Limit max power to 50%
-            axon.setPidCoeffs(0.02, 0.0005, 0.0025);  // Set PID coefficients
+        public static void init_spindexer(HardwareMap hardwareMap) {
+            // Get hardware from config
+            // MAKE SURE CONFIG NAMES MATCH: "spindexerServo" and "spindexerEncoder"
+            CRServo servo = hardwareMap.get(CRServo.class, "spindexerServo");
+            AnalogInput encoder = hardwareMap.get(AnalogInput.class, "spindexerEncoder");
+
+            // Initialize the RTPAxon wrapper
+            axon = new RTPAxon(servo, encoder);
         }
 
-            //@Override
-            public void spindexerLoop() {
-                axon.update(); // Must be called every loop
-
-                telemetry.addData("Servo Position", axon.getCurrentAngle());
-                telemetry.addData("Total Rotation", axon.getTotalRotation());
-                telemetry.addData("Target Rotation", axon.getTargetRotation());
-                telemetry.update();
+        public static void spindexer_loop() {
+            // This MUST be called every loop cycle
+            if (axon != null) {
+                axon.update();
             }
         }
 
-        // calls the data
-
-
-
-    public static class Mentorbot {
-        public static void init_spindexer(HardwareMap hardwareMap) { // This defines which Servo goes to which port, we need to apply this on the robot servos.
-            spindexerServo = hardwareMap.get(CRServo.class, "spindexerServo");
-            spindexerEncoder = hardwareMap.get(AnalogInput.class, "Spinencoder");
-            axon = new RTPAxon(spindexerServo, spindexerEncoder);
-            axon.setMaxPower(0.5);  // Limit max power to 50%
-            axon.setPidCoeffs(0.02, 0.0005, 0.0025);  // Set PID coefficients
+        public static void rotateLeft() {
+            if (axon != null) axon.changeTargetRotation(-45);
         }
 
-        //@Override
-        public void spindexerLoop() {
-            axon.update(); // Must be called every loop
+        public static void rotateRight() {
+            if (axon != null) axon.changeTargetRotation(45);
+        }
 
-            telemetry.addData("Servo Position", axon.getCurrentAngle());
-            telemetry.addData("Total Rotation", axon.getTotalRotation());
-            telemetry.addData("Target Rotation", axon.getTargetRotation());
-            telemetry.update();
+        public static void spindexer_telemetry(Telemetry telemetry) {
+            // Inside spindexer_telemetry
+            if (axon != null) {
+                telemetry.addData("Axon Target", "%.1f", axon.getTargetAngle());
+                telemetry.addData("Axon Current", "%.1f", axon.getCurrentAngle());
+                telemetry.addData("Axon Raw Volts", "%.3f", axon.getRawVoltage());
 
-
+            }
 
         }
     }
 }
-
