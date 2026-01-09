@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.auto.park;
 
 import static org.firstinspires.ftc.teamcode.auto.Auto.Wait;
-import static org.firstinspires.ftc.teamcode.auto.Auto.startArm;
+//import static org.firstinspires.ftc.teamcode.auto.Auto.startArm;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startLauncher;
-import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
+//import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
 
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -33,7 +33,7 @@ public class ParkWait extends LinearOpMode {
                 .lineToY(63);
 
         waitForStart();
-        startWrist();
+        //startWrist();
         Actions.runBlocking(new ParallelAction(
                 Auto.setPose(drive),
                 new SequentialAction(

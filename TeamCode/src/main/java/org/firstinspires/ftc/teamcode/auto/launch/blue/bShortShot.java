@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.launch.blue;
 
 import static org.firstinspires.ftc.teamcode.auto.Auto.None;
 import static org.firstinspires.ftc.teamcode.auto.Auto.startLauncher;
-import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
+//import static org.firstinspires.ftc.teamcode.auto.Auto.startWrist;
 
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
