@@ -133,7 +133,8 @@ public class Teleop {
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() < 0) {
+                if (ballIntake.getPower() <
+                        0) {
                     ballIntake.setPower(0);
                     ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
