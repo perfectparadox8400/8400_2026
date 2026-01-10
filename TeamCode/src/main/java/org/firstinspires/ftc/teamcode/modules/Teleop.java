@@ -116,7 +116,7 @@ public class Teleop {
 
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(0.15);
+                loader.setPosition(0.10);
                 runTime.reset();
             }
             if (runTime.milliseconds() > 250){
@@ -125,21 +125,21 @@ public class Teleop {
 
             /* --------FLY WHEEL LOGIC--------*/
             if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == 1) {
+                if (flyWheel.getPower() > 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(1);
+                    flyWheel.setPower(0.8);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
+                if (ballIntake.getPower() < 0) {
                     ballIntake.setPower(0);
                     ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
-                    ballIntake.setPower(-1);
+                    ballIntake.setPower(-0.75);
                     ballIntakeRear.setPower(-1);
                     loader.setPosition(.325);
                 }
