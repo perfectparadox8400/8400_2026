@@ -117,10 +117,10 @@ public class Teleop {
 
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(0);
+                loader.setPosition(0.1);
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 1000){
+            if (runTime.milliseconds() > 300){
                 loader.setPosition(0.325);
             }
 
@@ -129,7 +129,7 @@ public class Teleop {
                 if (flyWheel.getPower() > 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(0.75);
+                    flyWheel.setPower(0.8);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
