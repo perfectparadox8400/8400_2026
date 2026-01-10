@@ -32,6 +32,7 @@ import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_t
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -116,31 +117,31 @@ public class Teleop {
 
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(0.15);
+                loader.setPosition(0);
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 250){
+            if (runTime.milliseconds() > 1000){
                 loader.setPosition(0.325);
             }
 
             /* --------FLY WHEEL LOGIC--------*/
             if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == 1) {
+                if (flyWheel.getPower() > 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(1);
+                    flyWheel.setPower(0.75);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
+                if (ballIntake.getPower() < 0) {
                     ballIntake.setPower(0);
-                    ballIntakeRear.setPower(0);
+//                    ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
-                    ballIntake.setPower(-1);
-                    ballIntakeRear.setPower(-1);
+                    ballIntake.setPower(-0.65);
+//                    ballIntakeRear.setPower(-1);
                     loader.setPosition(.325);
                 }
             }
@@ -223,10 +224,10 @@ public class Teleop {
             speedControl(gamepad1, gamepad2);
 
             if (gamepad1.aWasPressed()) {
-                    loader.setPosition(0.15);
+                    loader.setPosition(-2);
                     runTime.reset();
             }
-            if (runTime.milliseconds() > 250){
+            if (runTime.milliseconds() > 500){
                 loader.setPosition(0.325);
             }
 //                if (loader.getPosition() <= 0.1) {
@@ -234,22 +235,23 @@ public class Teleop {
 //                }
 
             if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == .1) {
+                flyWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                if (flyWheel.getPower() == 0.1) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(.1);
+                    flyWheel.setPower(0.1);
                 }
             }
 
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
+                if (ballIntake.getPower() == -0.5) {
                     ballIntake.setPower(0);
-                    ballIntakeRear.setPower(0);
+//                    ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
-                    ballIntake.setPower(-1);
-                    ballIntakeRear.setPower(-1);
+                    ballIntake.setPower(-0.5);
+//                    ballIntakeRear.setPower(-1);
                     loader.setPosition(.325);
                 }
             }
