@@ -22,6 +22,10 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setRotationSpeed;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinLeft;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
@@ -44,6 +48,9 @@ public class Teleop {
 
     public static class Nancy {
         private static boolean start = false;
+
+        private static int loadPosition = 1;
+        private static int launchPosition = 4;
         private static ElapsedTime runTime = new ElapsedTime();
         private static boolean lastLeftBumper = false;
         private static boolean lastRightBumper = false;
@@ -115,7 +122,7 @@ public class Teleop {
 //            }
 
             /* -------LOADER LOGIC-------*/
-            if (gamepad1.aWasPressed()) {
+            if (gamepad2.aWasPressed()) {
                 loader.setPosition(0.15);
                 runTime.reset();
             }
@@ -124,11 +131,11 @@ public class Teleop {
             }
 
             /* --------FLY WHEEL LOGIC--------*/
-            if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == 1) {
+            if (gamepad2.xWasPressed()) {
+                if (flyWheel.getPower() > 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(1);
+                    flyWheel.setPower(0.8);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
@@ -147,11 +154,13 @@ public class Teleop {
 
             /*------Spindexer Servo LOGIC-------- */
             // 2. BUTTON LOGIC (Change Targets)
-            if (gamepad1.left_bumper && !lastLeftBumper) {
-                rotateLeft();
-            }
-            else if (gamepad1.right_bumper && !lastRightBumper) {
-                rotateRight();
+
+            if (gamepad2.left_bumper && !lastLeftBumper) {
+                loadPosition++;
+                setPosition(loadPosition);
+            } else if (gamepad2.right_bumper && !lastRightBumper) {
+                launchPosition++;
+                setPosition(launchPosition);
             }
 
             lastLeftBumper = gamepad1.left_bumper;
