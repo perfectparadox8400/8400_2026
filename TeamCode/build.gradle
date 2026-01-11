@@ -38,6 +38,7 @@ android {
         Nancy {
             dimension "version"
             buildConfigField "String", "ROBOT", "\"nancy\""
+            isDefault = true
         }
         Ophelia {
             dimension "version"

@@ -116,10 +116,10 @@ public class Teleop {
 
             /* -------LOADER LOGIC-------*/
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(0.10);
+                loader.setPosition(0);
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 250){
+            if (runTime.milliseconds() > 500){
                 loader.setPosition(0.325);
             }
 
@@ -133,8 +133,7 @@ public class Teleop {
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() <
-                        0) {
+                if (ballIntake.getPower() < 0) {
                     ballIntake.setPower(0);
                     ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)

@@ -39,7 +39,7 @@ public class Auto {
     public static class Shoot implements InstantFunction {
         @Override
         public void run() {
-            loader.setPosition(0.15);
+            loader.setPosition(0.05);
             autoRunTime.reset();
 
             while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
@@ -54,7 +54,7 @@ public class Auto {
         @Override
         public void run() {
             ballIntake.setPower(-1);
-            ballIntakeRear.setPower(-1);
+//            ballIntakeRear.setPower(-1);
         }
     }
 
