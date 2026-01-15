@@ -4,6 +4,9 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
+import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.launchPosition;
+import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.loadPosition;
 
 import androidx.annotation.NonNull;
 
@@ -44,6 +47,30 @@ public class Auto {
 
             while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
             loader.setPosition(0.325);
+        }
+
+    }
+
+    /*---------Spindexer Logic---------*/
+
+    public static class ShootSpindexer implements InstantFunction {
+        @Override
+        public void run() {
+            if (launchPosition > 5)
+                launchPosition = 4;
+            else launchPosition++;
+            setPosition(launchPosition);
+        }
+
+    }
+
+    public static class LoadSpindexer implements InstantFunction {
+        @Override
+        public void run() {
+            if (loadPosition > 2)
+                loadPosition = 1;
+            else loadPosition++;
+            setPosition(loadPosition);
         }
 
     }

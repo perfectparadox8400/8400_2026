@@ -49,8 +49,8 @@ public class Teleop {
     public static class Nancy {
         private static boolean start = false;
 
-        private static int loadPosition = 0;
-        private static int launchPosition = 3;
+        public static int loadPosition = 0;
+        public static int launchPosition = 3;
         private static ElapsedTime runTime = new ElapsedTime();
 
         private static boolean previousGamepad2LeftBumper = false;
