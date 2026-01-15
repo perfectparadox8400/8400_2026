@@ -12,6 +12,9 @@ public class Spindexer {
 
     // A static class to handle initialization and operation, similar to your other modules
     public static class Nancy {
+        public static void setRotationSpeed(double speed) {
+            if (axon != null) axon.changeTargetRotation(speed);
+        }
 
         public static void init_spindexer(HardwareMap hardwareMap) {
             // Get hardware from config
@@ -30,12 +33,49 @@ public class Spindexer {
             }
         }
 
+
+
+        public static void setTargetRotation(double rot){
+            if (axon != null) axon.changeTargetRotation(-axon.getAbsolutePosition()); //TODO This may be an issue, if the getAbsolutePosition wouldn't work.
+            if (axon != null) axon.changeTargetRotation(rot);
+        }
+
         public static void rotateLeft() {
-            if (axon != null) axon.changeTargetRotation(-45);
+            if (axon != null) axon.changeTargetRotation(-30);
         }
 
         public static void rotateRight() {
-            if (axon != null) axon.changeTargetRotation(45);
+            if (axon != null) axon.changeTargetRotation(30);
+        }
+
+        public static void spinRight() {
+            setRotationSpeed(-5);
+        }
+
+        public static void spinLeft() {
+            setRotationSpeed(5);
+        }
+
+        public static void setPosition(int position) {
+            if (axon != null) {
+                switch (position) {
+                    /* This function is called using setPosition(x);
+                    * Below, it specifies the degrees to set the position to based on what it is.
+                    * For example, if the position is 1, it sets it to 60 degrees.*/
+                    case 1: setTargetRotation(60);
+                            break;
+                    case 2: setTargetRotation(180);
+                        break;
+                    case 3: setTargetRotation(300);
+                        break;
+                    case 4: setTargetRotation(0);
+                        break;
+                    case 5: setTargetRotation(120);
+                        break;
+                    case 6: setTargetRotation(240);
+                        break;
+                }
+            }
         }
 
         public static void spindexer_telemetry(Telemetry telemetry) {

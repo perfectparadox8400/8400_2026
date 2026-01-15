@@ -22,6 +22,10 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setRotationSpeed;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinLeft;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
@@ -44,9 +48,13 @@ public class Teleop {
 
     public static class Nancy {
         private static boolean start = false;
+
+        private static int loadPosition = 0;
+        private static int launchPosition = 3;
         private static ElapsedTime runTime = new ElapsedTime();
-        private static boolean lastLeftBumper = false;
-        private static boolean lastRightBumper = false;
+
+        private static boolean previousGamepad2LeftBumper = false;
+        private static boolean previousGamepad2RightBumper = false;
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init the launcher
             Launcher.Nancy.init_launcher(hardwareMap);
@@ -115,8 +123,8 @@ public class Teleop {
 //            }
 
             /* -------LOADER LOGIC-------*/
-            if (gamepad1.aWasPressed()) {
-                loader.setPosition(0);
+            if (gamepad2.aWasPressed()) {
+                loader.setPosition(0.0);
                 runTime.reset();
             }
             if (runTime.milliseconds() > 500){
@@ -124,11 +132,11 @@ public class Teleop {
             }
 
             /* --------FLY WHEEL LOGIC--------*/
-            if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() > 0) {
+            if (gamepad2.xWasPressed()) {
+                if (flyWheel.getPower() < 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(0.8);
+                    flyWheel.setPower(-1);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
@@ -147,15 +155,24 @@ public class Teleop {
 
             /*------Spindexer Servo LOGIC-------- */
             // 2. BUTTON LOGIC (Change Targets)
-            if (gamepad1.left_bumper && !lastLeftBumper) {
-                rotateLeft();
-            }
-            else if (gamepad1.right_bumper && !lastRightBumper) {
-                rotateRight();
-            }
 
-            lastLeftBumper = gamepad1.left_bumper;
-            lastRightBumper = gamepad1.right_bumper;
+
+
+            if (!gamepad2.left_bumper && previousGamepad2LeftBumper) {
+                if (loadPosition > 2)
+                    loadPosition = 1;
+                else loadPosition++;
+                setPosition(loadPosition);
+            }
+            if (!gamepad2.right_bumper && previousGamepad2RightBumper) {
+                if (launchPosition > 5)
+                    launchPosition = 4;
+                else launchPosition++;
+                setPosition(launchPosition);
+            }
+            previousGamepad2LeftBumper = gamepad2.left_bumper;
+            previousGamepad2RightBumper = gamepad2.right_bumper;
+
 
             // 3. MANDATORY LOOP UPDATE (Calculates PID)
             spindexer_loop();
@@ -171,6 +188,8 @@ public class Teleop {
 //            telemetry.addData("loader", loader);
 //            telemetry.addData("flyWheel", flyWheel);
 //            telemetry.addData("ballIntake", ballIntake);
+            telemetry.addData("loadPosition", loadPosition);
+            telemetry.addData("launchPosition", launchPosition);
             telemetry.update();
 
             // This code runs the slow-strafe and allows strafing on controller 2
