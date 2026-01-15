@@ -61,14 +61,14 @@ public class Params {
             usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
             // drive model parameters
-            inPerTick = 0.00201061156101647584473610723262;
-            lateralInPerTick = -0.0015513578094417196;
-            trackWidthTicks = 6818.23603629532;
+            inPerTick = 0.0020398912058024;
+            lateralInPerTick = 0.0015366414307509274;
+            trackWidthTicks = 6842.574924748621;
 
             // feedforward parameters (in tick units)
-            kS = 1.203671153696226;
-            kV = 0.0003112672491329851;
-            kA = 0.000005;
+            kS = 0.9954579502770668;
+            kV = 0.00032997435610453564;
+            kA = 0.000001;
 
             // path profile parameters (in inches)
             maxWheelVel = 100;
@@ -89,9 +89,9 @@ public class Params {
             headingVelGain = 0.0; // shared with turn
 
             // Three Dead Wheels
-            par0YTicks = 2801.9593888115314; // y position of the first parallel encoder (in tick units)
-            par1YTicks = -3087.1335070570067; // y position of the second parallel encoder (in tick units)
-            perpXTicks = 3127.2491537283527; // x position of the perpendicular encoder (in tick units)
+            par0YTicks = -3090.4060516250215; // y position of the first parallel encoder (in tick units)
+            par1YTicks = 2952.090518832225; // y position of the second parallel encoder (in tick units)
+            perpXTicks = -3276.931060189824; // x position of the perpendicular encoder (in tick units)
         }
     }
 

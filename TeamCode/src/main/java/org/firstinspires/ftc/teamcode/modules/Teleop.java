@@ -127,7 +127,7 @@ public class Teleop {
                 loader.setPosition(0.0);
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 250){
+            if (runTime.milliseconds() > 500){
                 loader.setPosition(0.325);
             }
 
@@ -141,13 +141,13 @@ public class Teleop {
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
+                if (ballIntake.getPower() < 0) {
                     ballIntake.setPower(0);
                     ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
-                    ballIntake.setPower(-1);
+                    ballIntake.setPower(-0.75);
                     ballIntakeRear.setPower(-1);
                     loader.setPosition(.325);
                 }
