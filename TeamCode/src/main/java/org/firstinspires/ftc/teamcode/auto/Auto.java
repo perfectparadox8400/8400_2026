@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
+import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop;
 import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.launchPosition;
 import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.loadPosition;
 
@@ -58,27 +59,55 @@ public class Auto {
 
     /*---------Spindexer Logic---------*/
 
-    public static class ShootSpindexer implements InstantFunction {
+    public static class setSpindexerPos1 implements InstantFunction {
+        @Override
+        public void run() {
+            setPosition(1);
+            autoRunTimeSpindexer.reset();
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
+        }
+    }
+    public static class setSpindexerPos2 implements InstantFunction {
+        @Override
+        public void run() {
+            setPosition(2);
+            autoRunTimeSpindexer.reset();
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
+        }
+    }
+    public static class setSpindexerPos3 implements InstantFunction {
+        @Override
+        public void run() {
+            setPosition(3);
+            autoRunTimeSpindexer.reset();
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
+        }
+    }
+    public static class setSpindexerPos4 implements InstantFunction {
+        @Override
+        public void run() {
+            setPosition(4);
+            autoRunTimeSpindexer.reset();
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
+        }
+    }
+    public static class setSpindexerPos5 implements InstantFunction {
+        @Override
+        public void run() {
+            setPosition(5);
+            autoRunTimeSpindexer.reset();
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
+        }
+    }
+    public static class setSpindexerPos6 implements InstantFunction {
         @Override
         public void run() {
             setPosition(6);
             autoRunTimeSpindexer.reset();
-
-            while (autoRunTimeSpindexer.milliseconds() <= 500) {}
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {spindexer_loop();}
         }
-
     }
 
-    public static class LoadSpindexer implements InstantFunction {
-        @Override
-        public void run() {
-            if (loadPosition > 2)
-                loadPosition = 1;
-            else loadPosition++;
-            setPosition(loadPosition);
-        }
-
-    }
 
     /* --------INTAKE AUTO LOGIC---------*/
 
