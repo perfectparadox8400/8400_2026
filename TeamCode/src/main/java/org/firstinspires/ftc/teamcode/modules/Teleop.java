@@ -72,6 +72,7 @@ public class Teleop {
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
             loader.setPosition(0.325);
             start = true;
+            ballIntake.setPower(-1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
@@ -136,19 +137,28 @@ public class Teleop {
                 if (flyWheel.getPower() < 0) {
                     flyWheel.setPower(0);
                 } else {
-                    flyWheel.setPower(-1);
+                    flyWheel.setPower(-0.85);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
                 if (ballIntake.getPower() < 0) {
                     ballIntake.setPower(0);
-                    ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
-                    ballIntake.setPower(-0.75);
-                    ballIntakeRear.setPower(-1);
+                    ballIntake.setPower(-1);
+                    loader.setPosition(.325);
+                }
+            }
+
+            if (gamepad1.bWasPressed()) {
+                if (ballIntake.getPower() > 0) {
+                    ballIntake.setPower(0);
+                    if (loader.getPosition() != .325)
+                        loader.setPosition(.325);
+                } else {
+                    ballIntake.setPower(1);
                     loader.setPosition(.325);
                 }
             }

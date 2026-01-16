@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.modules.Launcher;
+import org.firstinspires.ftc.teamcode.modules.Spindexer;
 import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -28,6 +29,7 @@ public class Auto {
     public static final double Wait = 5;
     public static final double None = 0;
     private static ElapsedTime autoRunTime = new ElapsedTime();
+    private static ElapsedTime autoRunTimeSpindexer = new ElapsedTime();
 
     /* -----------LAUNCHER AUTO LOGIC--------------*/
     public static void startLauncher(HardwareMap hardwareMap) {
@@ -35,6 +37,9 @@ public class Auto {
 //        loader.setPosition(0);
 //        flyWheel.setPower(1);
 //        ballIntake.setPower(-1);
+    }
+    public static void startSpindexer(HardwareMap hardwareMap) {
+        Spindexer.Nancy.init_spindexer(hardwareMap);
     }
 
     /* --------SHOOT IN AUTO LOGIC---------*/
@@ -56,10 +61,10 @@ public class Auto {
     public static class ShootSpindexer implements InstantFunction {
         @Override
         public void run() {
-            if (launchPosition > 5)
-                launchPosition = 4;
-            else launchPosition++;
-            setPosition(launchPosition);
+            setPosition(6);
+            autoRunTimeSpindexer.reset();
+
+            while (autoRunTimeSpindexer.milliseconds() <= 500) {}
         }
 
     }
@@ -89,7 +94,7 @@ public class Auto {
     public static class StartFlyWheel implements InstantFunction {
         @Override
         public void run() {
-            flyWheel.setPower(1);
+            flyWheel.setPower(-1);
         }
     }
 

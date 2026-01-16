@@ -82,12 +82,12 @@ public class RTPAxon {
     public void setTargetAngle(double angle) {
         this.targetAngle = angle;
         // Normalize target to 0-360
-        while (this.targetAngle > 360) this.targetAngle -= 360;
-        while (this.targetAngle < 0)   this.targetAngle += 360;
+//        while (this.targetAngle > 360) this.targetAngle -= 360;
+//        while (this.targetAngle < 0)   this.targetAngle += 360;
     }
 
     public void changeTargetRotation(double delta) {
-        setTargetAngle(targetAngle + delta);
+        setTargetAngle(delta);
     }
 
     // Getters for Telemetry
