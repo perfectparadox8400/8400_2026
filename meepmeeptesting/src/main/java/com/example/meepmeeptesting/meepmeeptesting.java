@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 //import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -26,28 +27,47 @@ public class meepmeeptesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,14.5, 3.142))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49,49, 5.340708))
+                .lineToX(-25)
+                .turnTo(Math.toRadians(126))
+                .waitSeconds(1)
 
+                .waitSeconds(0.5)
 
-                .lineToX(55)
-                .turnTo(Math.toRadians(165))
+                .waitSeconds(1)
 
-                .lineToX(36)
-                .turnTo(Math.toRadians(90))
-                .lineToY(62.5)
-                .lineToY(14.5)
+                .waitSeconds(0.5)
+
+                .waitSeconds(1)
+
                 .turnTo(Math.toRadians(180))
-                .lineToX(55)
-                .turnTo(Math.toRadians(165))
-
-                .lineToX(12)
+                .lineToX(-11.5)
                 .turnTo(Math.toRadians(90))
-                .lineToY(62.5)
-                .lineToY(14.5)
-                .turnTo(Math.toRadians(180))
-                .lineToX(40)
 
-                        .build());
+                .lineToY(36)
+
+                .lineToY(42)
+
+                .lineToY(55)
+                .lineToY(16)
+                .turnTo(Math.toRadians(180))
+                .lineToX(-25)
+                .turnTo(Math.toRadians(126))
+
+                .waitSeconds(1)
+
+                .waitSeconds(1)
+
+                .waitSeconds(1)
+
+                .waitSeconds(1)
+
+                .waitSeconds(1)
+
+                .strafeTo(new Vector2d(10, 16))
+
+
+                .build());
 
         Image img = null;
         try {

@@ -36,6 +36,7 @@ import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_t
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -65,6 +66,7 @@ public class Teleop {
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();
+//            flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 //            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
         }
@@ -136,8 +138,10 @@ public class Teleop {
             if (gamepad2.xWasPressed()) {
                 if (flyWheel.getPower() < 0) {
                     flyWheel.setPower(0);
+//                    flyWheel.setVelocity(0);
                 } else {
-                    flyWheel.setPower(-0.85);
+                    flyWheel.setPower(-0.8);
+//                    flyWheel.setVelocity(1500);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */
