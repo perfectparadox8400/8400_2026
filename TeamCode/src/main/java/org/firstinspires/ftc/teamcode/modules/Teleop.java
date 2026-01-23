@@ -136,12 +136,12 @@ public class Teleop {
 
             /* --------FLY WHEEL LOGIC--------*/
             if (gamepad2.xWasPressed()) {
-                if (flyWheel.getPower() < 0) {
-                    flyWheel.setPower(0);
-//                    flyWheel.setVelocity(0);
+                if (flyWheel.getVelocity() < 0) {
+//                    flyWheel.setPower(0);
+                    flyWheel.setVelocity(0);
                 } else {
-                    flyWheel.setPower(-0.8);
-//                    flyWheel.setVelocity(1500);
+//                    flyWheel.setPower(-0.8);
+                    flyWheel.setVelocity(-2350);
                 }
             }
             /* -------BALL INTAKE LOGIC-------- */

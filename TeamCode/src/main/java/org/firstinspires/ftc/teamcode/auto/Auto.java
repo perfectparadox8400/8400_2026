@@ -50,13 +50,21 @@ public class Auto {
     public static class Shoot implements InstantFunction {
         @Override
         public void run() {
-            loader.setPosition(0.05);
             autoRunTime.reset();
+            loader.setPosition(0.05);
+// :)
 
             while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
             loader.setPosition(0.325);
         }
 
+    }
+
+    public static class loaderDown implements InstantFunction {
+        @Override
+        public void run() {
+            loader.setPosition(0.325);
+    }
     }
 
     /*---------Spindexer Logic---------*/
@@ -121,7 +129,7 @@ public class Auto {
     public static class StartFlyWheel implements InstantFunction {
         @Override
         public void run() {
-            flyWheel.setPower(-0.8);
+            flyWheel.setVelocity(-2350);
         }
     }
 

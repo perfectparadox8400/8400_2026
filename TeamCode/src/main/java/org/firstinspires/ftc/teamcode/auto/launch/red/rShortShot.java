@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class rShortShot extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(-49,49, 5.340708);
+        Pose2d start = new Pose2d(-55.5,45.5, 5.340708);
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
         startSpindexer(hardwareMap);
@@ -31,7 +31,8 @@ public class rShortShot extends LinearOpMode {
                 .stopAndAdd(new Auto.StartIntake())
                 .stopAndAdd(new Auto.StartFlyWheel())
                 .stopAndAdd(new Auto.setSpindexerPos4())
-                .lineToX(-25)
+                .stopAndAdd(new Auto.loaderDown())
+                .lineToX(-30)
                 .turnTo(Math.toRadians(126))
                 .waitSeconds(1)
                 .stopAndAdd(new Auto.Shoot())
@@ -52,9 +53,9 @@ public class rShortShot extends LinearOpMode {
                 .lineToY(42)
                 .stopAndAdd(new Auto.setSpindexerPos3())
                 .lineToY(55)
-                .lineToY(16)
+                .lineToY(10)
                 .turnTo(Math.toRadians(180))
-                .lineToX(-25)
+                .lineToX(-30)
                 .turnTo(Math.toRadians(126))
                 .stopAndAdd(new Auto.setSpindexerPos4())
                 .waitSeconds(1)
