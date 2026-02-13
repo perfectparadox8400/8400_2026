@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.turret;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop;
 import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.launchPosition;
@@ -52,6 +53,7 @@ public class Auto {
         public void run() {
             autoRunTime.reset();
             loader.setPosition(0.05);
+            turret.setPosition(0.5);
 // :)
 
             while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}

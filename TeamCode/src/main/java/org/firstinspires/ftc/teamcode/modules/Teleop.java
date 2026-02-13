@@ -22,12 +22,15 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
+import static org.firstinspires.ftc.teamcode.modules.Launcher.turret;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setRotationSpeed;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
+import static org.firstinspires.ftc.teamcode.modules.Limelight.init_limelight;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
+import static org.firstinspires.ftc.teamcode.modules.Limelight.limelightTelemetry;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateRight;
@@ -40,6 +43,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -62,6 +66,8 @@ public class Teleop {
             Spindexer.Nancy.init_spindexer(hardwareMap);
             // Init drive
             init_drive(hardwareMap);
+            // Init Limelight
+            init_limelight(hardwareMap);
             // start telemetry
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
@@ -144,6 +150,7 @@ public class Teleop {
                     flyWheel.setVelocity(-2350);
                 }
             }
+
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
                 if (ballIntake.getPower() < 0) {
@@ -198,6 +205,7 @@ public class Teleop {
             drive_telemetry(telemetry);
             Launcher.Nancy.launcher_telemetry(telemetry);
             spindexer_telemetry(telemetry);
+            limelightTelemetry(telemetry);
 //            telemetry.addData("Start", start);
 //            telemetry.addData("loader", loader);
 //            telemetry.addData("flyWheel", flyWheel);
@@ -229,6 +237,8 @@ public class Teleop {
             Launcher.Mentorbot.init_launcher(hardwareMap);
             // Init Wheels
             init_drive(hardwareMap);
+            // Init Limelight
+            init_limelight(hardwareMap);
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();
@@ -290,6 +300,7 @@ public class Teleop {
             //Telemetry
             drive_telemetry(telemetry);
             Launcher.Mentorbot.launcher_telemetry(telemetry);
+            limelightTelemetry(telemetry);
 
             telemetry.addData("Start", start);
 //            telemetry.addData("goA", goA);

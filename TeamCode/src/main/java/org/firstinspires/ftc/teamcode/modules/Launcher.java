@@ -20,6 +20,8 @@ public class Launcher {
     public static DcMotorEx flyWheel = null;
     public static DcMotor ballIntake = null;
     public static CRServo ballIntakeRear = null;
+    public static Servo turret = null;
+
 
     public static class Nancy {
 
@@ -28,7 +30,11 @@ public class Launcher {
             flyWheel = hardwareMap.get(DcMotorEx.class, "flyWheel");
             ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
             ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
+            turret = hardwareMap.get(Servo.class, "turret");
+        }
 
+        public static void rotateTurret(double position) {
+            turret.setPosition(position);
         }
 
         // calls the data
@@ -38,9 +44,7 @@ public class Launcher {
             telemetry.addData("flywheel speed" , flyWheel.getVelocity());
             telemetry.addData("ballIntake", ballIntake.getPower());
             telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
-
-
-
+            telemetry.addData("turret position", turret.getPosition());
         }
     }
     public static class Mentorbot {
@@ -49,6 +53,7 @@ public class Launcher {
             flyWheel = hardwareMap.get(DcMotorEx.class, "flyWheel");
             ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
             ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
+            turret = hardwareMap.get(Servo.class,"turret");
 
         }
         // calls the data
@@ -63,4 +68,3 @@ public class Launcher {
         }
     }
 }
-
