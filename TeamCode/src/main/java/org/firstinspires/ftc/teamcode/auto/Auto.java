@@ -53,7 +53,7 @@ public class Auto {
         public void run() {
             autoRunTime.reset();
             loader.setPosition(0.05);
-            turret.setPosition(0.5);
+//            turret.setPosition(0.5);
 // :)
 
             while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
