@@ -173,7 +173,9 @@ public class Teleop {
                     loader.setPosition(.325);
                 }
             }
-
+            /*------Color Sensor LOGIC----------- */
+            String detectedColor = ColorSensor.checkColor(telemetry);
+            telemetry.addData("Detected Color", detectedColor);
             /*------Spindexer Servo LOGIC-------- */
             // 2. BUTTON LOGIC (Change Targets)
 
@@ -239,6 +241,8 @@ public class Teleop {
             init_drive(hardwareMap);
             // Init Limelight
             init_limelight(hardwareMap);
+            // Init Color Sensor
+            ColorSensor.init_colorSensor(hardwareMap,telemetry);
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();

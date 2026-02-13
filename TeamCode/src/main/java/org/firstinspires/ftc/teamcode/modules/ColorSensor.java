@@ -11,12 +11,10 @@ import android.graphics.Color;
 
 public class ColorSensor {
     public static NormalizedColorSensor colorSensor;
-
-    public static void initColorSensor(HardwareMap hardwareMap, Telemetry telemetry) {
+    public static void init_colorSensor(HardwareMap hardwareMap, Telemetry telemetry) {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
         telemetry.addData("Color Sensor", "Initializing");
         telemetry.update();
-
     }
 
     public static String checkColor(Telemetry telemetry) {
@@ -28,21 +26,31 @@ public class ColorSensor {
         float sat = hsv[1];
         float val = hsv[2];
 
+        telemetry.addData("Hue",hue);
+        telemetry.addData("Sat", sat);
+        telemetry.addData("Val", val);
+
+        // Detects "No Color"
         if (sat < 0.3f || val < 0.1f) {
             telemetry.addData("Color Sensor", "none");
             telemetry.update();
             return "none";
         }
+
+        // Green
         if (hue >= 80  && hue <= 160) {
             telemetry.addData("Color Sensor", "green");
             telemetry.update();
             return "green";
         }
+
+        // Purple
         if (hue >= 270 && hue <= 320) {
             telemetry.addData("Color Sensor", "purple");
             telemetry.update();
             return "purple";
         }
+
         return "unknown";
     }
 }
