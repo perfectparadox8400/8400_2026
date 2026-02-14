@@ -95,18 +95,18 @@ public class Teleop {
             speedControl(gamepad1, gamepad2);
 
             // Hold start and release guide to disable field driving
-            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
-                rumbleBlip(gamepad1, 2);
-                rumbleBlip(gamepad2, 2);
-                fieldDriving = !fieldDriving;
-            }
-
-            // Resets the internal geography
-            if ((gamepad1.back && gamepad1.guideWasReleased()) || (gamepad2.back && gamepad2.guideWasReleased())) {
-                rumbleBlip(gamepad1, 4);
-                rumbleBlip(gamepad2, 4);
-                imu.resetYaw();
-            }
+//            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
+//                rumbleBlip(gamepad1, 2);
+//                rumbleBlip(gamepad2, 2);
+//                fieldDriving = !fieldDriving;
+//            }
+//
+//            // Resets the internal geography
+//            if ((gamepad1.back && gamepad1.guideWasReleased()) || (gamepad2.back && gamepad2.guideWasReleased())) {
+//                rumbleBlip(gamepad1, 4);
+//                rumbleBlip(gamepad2, 4);
+//                imu.resetYaw();
+//            }
 
 
             // Moves everything back to default position

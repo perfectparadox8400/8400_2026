@@ -40,10 +40,8 @@ public class Launcher {
         // calls the data
         public static void launcher_telemetry(Telemetry telemetry) {
             telemetry.addData("loader", loader.getPosition());
-            telemetry.addData("flyWheel power", flyWheel.getPower());
             telemetry.addData("flywheel speed" , flyWheel.getVelocity());
             telemetry.addData("ballIntake", ballIntake.getPower());
-            telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
             telemetry.addData("turret position", turret.getPosition());
         }
     }
