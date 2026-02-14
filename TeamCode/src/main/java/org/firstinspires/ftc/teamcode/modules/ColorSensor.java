@@ -11,47 +11,89 @@ import android.graphics.Color;
 
 public class ColorSensor {
     public static NormalizedColorSensor colorSensor;
-    public static void init_colorSensor(HardwareMap hardwareMap, Telemetry telemetry) {
+    public static void init_colorSensor(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
-        telemetry.addData("Color Sensor", "Initializing");
-        telemetry.update();
     }
 
-    public static String checkColor(Telemetry telemetry) {
+
+    public static boolean isPurple(float hue) {
+        return hue >= 260 && hue <= 290;
+    }
+
+    public static boolean isGreen(float hue) {
+        return hue >= 100 && hue <= 140;
+    }
+
+    public static String getColor () {
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
         float[] hsv = new float[3];
-        Color.colorToHSV(colors.toColor(), hsv);
+        Color.colorToHSV(Color.argb(255,
+                (int)(colors.red * 255),
+                (int)(colors.green * 255),
+                (int)(colors.blue * 255)), hsv);
+        float hue = hsv[0];
+        if (isPurple(hue)) {
+            return "purple";
+        } else if (isGreen(hue)) {
+            return "green";
+        } else {
+            return "unknown";
+        }
+    }
 
+    public static void rotatePositions(String [] spindexerSlots, int type){
+        String temp = "";
+        if (type == 0) {
+            temp = spindexerSlots[0];
+            for (int i = 0; i < 2; i++) {
+                spindexerSlots[i] = spindexerSlots[i + 1];
+            }
+            spindexerSlots[2] = temp;
+        } else if (type == 1) {
+            temp = spindexerSlots[3];
+            for (int i = 3; i < 5; i++) {
+                spindexerSlots[i] = spindexerSlots[i - 1];
+            }
+            spindexerSlots[5] = temp;
+        }
+    }
+    public static void colorSensor_telemetry (Telemetry telemetry, String[]spindexerSlots,String spindexerMode){
+        if (colorSensor == null){
+            telemetry.addData("ColorSensor", "Not initialized");
+            telemetry.update();
+            return;
+        }
+
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        float[] hsv = new float[3];
+        Color.colorToHSV(Color.argb(255,
+                (int)(colors.red * 255),
+                (int)(colors.green * 255),
+                (int)(colors.blue * 255)), hsv);
         float hue = hsv[0];
         float sat = hsv[1];
         float val = hsv[2];
 
-        telemetry.addData("Hue",hue);
-        telemetry.addData("Sat", sat);
-        telemetry.addData("Val", val);
+        telemetry.addData("Hue", hue);
+        telemetry.addData("Saturation", sat);
 
-        // Detects "No Color"
-        if (sat < 0.3f || val < 0.1f) {
-            telemetry.addData("Color Sensor", "none");
-            telemetry.update();
-            return "none";
+        for (int i = 0; i < spindexerSlots.length; i++) {
+            telemetry.addData("Slot " + (i-1), spindexerSlots[i]);
         }
 
-        // Green
-        if (hue >= 80  && hue <= 160) {
-            telemetry.addData("Color Sensor", "green");
-            telemetry.update();
-            return "green";
+        telemetry.addData("Spindexer Mode",spindexerMode);
+
+        if (isPurple(hue)) {
+            telemetry.addData("Detected Color", "Purple");
+        } else if (isGreen(hue)) {
+            telemetry.addData("Detected Color", "Green");
+        } else {
+            telemetry.addData("Detected Color", "Unknown");
         }
 
-        // Purple
-        if (hue >= 270 && hue <= 320) {
-            telemetry.addData("Color Sensor", "purple");
-            telemetry.update();
-            return "purple";
-        }
 
-        return "unknown";
+        telemetry.update();
+
     }
 }
 
