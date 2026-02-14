@@ -36,14 +36,18 @@ import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_telemetry;
 
+import static java.lang.Math.abs;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -56,7 +60,12 @@ public class Teleop {
 
         public static int loadPosition = 0;
         public static int launchPosition = 3;
+        public static double flywheelVelocity = 0;
+        public static boolean flywheelActive = false;
         private static ElapsedTime runTime = new ElapsedTime();
+
+        // PID controller for flywheel velocity
+        private static PIDController flywheelPID = new PIDController(0.01, 0, 0.001);
 
         private static boolean previousGamepad2LeftBumper = false;
         private static boolean previousGamepad2RightBumper = false;
@@ -68,11 +77,12 @@ public class Teleop {
             init_drive(hardwareMap);
             // Init Limelight
             init_limelight(hardwareMap);
+            flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             // start telemetry
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();
-//            flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 //            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
         }
@@ -142,13 +152,39 @@ public class Teleop {
 
             /* --------FLY WHEEL LOGIC--------*/
             if (gamepad2.xWasPressed()) {
-                if (flyWheel.getVelocity() < 0) {
+                if (flywheelActive == true) {
 //                    flyWheel.setPower(0);
-                    flyWheel.setVelocity(0);
+                    flywheelActive = false;
                 } else {
 //                    flyWheel.setPower(-0.8);
-                    flyWheel.setVelocity(-2350);
+                    flywheelActive = true;
                 }
+            }
+
+            if(flywheelActive == true){
+                LLResult limelightResult = limelight.getLatestResult();
+                if (limelightResult != null && limelightResult.isValid()) {
+                    // Calculate target velocity based on Limelight data
+                    double targetVelocity = (-limelightResult.getTy()) + 20;
+
+                    // Get current velocity
+                    double currentVelocity = flyWheel.getVelocity();
+
+                    // Use PID to calculate power
+                    double pidOutput = flywheelPID.calculate(currentVelocity, targetVelocity);
+
+                    // Set the power (clamp between -1 and 1)
+                    flyWheel.setPower(Range.clip(pidOutput, -1, 1));
+
+                    flywheelVelocity = targetVelocity;
+                } else {
+                    // No valid limelight data, maintain current power but don't increase
+                    flyWheel.setPower(0);
+                }
+            }
+            else{
+                flyWheel.setPower(0);
+                flywheelVelocity = 0;
             }
 
             /* -------BALL INTAKE LOGIC-------- */

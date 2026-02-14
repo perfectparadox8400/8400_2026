@@ -15,11 +15,11 @@ import org.firstinspires.ftc.teamcode.modules.Teleop;
 
 import java.util.List;
 
-    @TeleOp(name = "! Red Play Game")
+    @TeleOp(name = "! Play Game")
     public class PlayGame extends OpMode {
         private double turretPosition = 0.5;
         private boolean autoAim = true;
-        private double Kp = 0.001;
+        private double Kp = 0.00075;
         private int currentID = 20;
 
 
@@ -73,9 +73,9 @@ import java.util.List;
             // Manual control via triggers always overrides auto-aim
             // Using gamepad2 triggers as defined in Teleop.Nancy.loop
             if (gamepad2.left_trigger > 0.1) {
-                turretPosition -= 0.005;
-            } else if (gamepad2.right_trigger > 0.1) {
                 turretPosition += 0.005;
+            } else if (gamepad2.right_trigger > 0.1) {
+                turretPosition -= 0.005;
             } else if (autoAim) {
                 LLResult result = Limelight.limelight.getLatestResult();
                 if (result != null && result.isValid()) {

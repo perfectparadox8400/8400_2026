@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.flywheelVelocity;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -40,7 +42,8 @@ public class Launcher {
         // calls the data
         public static void launcher_telemetry(Telemetry telemetry) {
             telemetry.addData("loader", loader.getPosition());
-            telemetry.addData("flywheel speed" , flyWheel.getVelocity());
+            telemetry.addData("flywheel speed" , flywheelVelocity);
+            telemetry.addData("flywheel real speed", flyWheel.getVelocity());
             telemetry.addData("ballIntake", ballIntake.getPower());
             telemetry.addData("turret position", turret.getPosition());
         }
