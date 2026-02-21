@@ -15,14 +15,14 @@ import org.firstinspires.ftc.teamcode.modules.Teleop;
 
 import java.util.List;
 
-    @TeleOp(name = "! Red Play Game")
+    @TeleOp(name = "! Play Game")
     public class PlayGame extends OpMode {
         private double turretPosition = 0.5;
         private boolean autoAim = true;
-        private double Kp = 0.001;
+        private double Kp = 0.00075;
         private int currentID = 20;
 
-
+        private boolean previousLeftTrigger = false;
 
         @Override
         public void init() {
@@ -62,20 +62,20 @@ import java.util.List;
         }
 
         private void handleTurret() {
-            // Toggle auto-aim master switch (X=ON, Y=OFF) on gamepad1 for testing
-            // Note: You might want to move these to specific buttons if they conflict with PlayGame
-            if (gamepad1.x) {
-                autoAim = true;
-            } else if (gamepad1.y) {
-                autoAim = false;
+            // Toggle auto-aim with gamepad1 left trigger
+            boolean currentLeftTrigger = gamepad1.left_trigger > 0.5;
+            if (currentLeftTrigger && !previousLeftTrigger) {
+                autoAim = !autoAim;
+                rumbleBlip(gamepad1, 1);
             }
+            previousLeftTrigger = currentLeftTrigger;
 
             // Manual control via triggers always overrides auto-aim
             // Using gamepad2 triggers as defined in Teleop.Nancy.loop
             if (gamepad2.left_trigger > 0.1) {
-                turretPosition -= 0.005;
-            } else if (gamepad2.right_trigger > 0.1) {
                 turretPosition += 0.005;
+            } else if (gamepad2.right_trigger > 0.1) {
+                turretPosition -= 0.005;
             } else if (autoAim) {
                 LLResult result = Limelight.limelight.getLatestResult();
                 if (result != null && result.isValid()) {
