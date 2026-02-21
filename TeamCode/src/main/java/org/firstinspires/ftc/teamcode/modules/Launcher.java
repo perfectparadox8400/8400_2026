@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
+@Config
 public class Launcher {
     //loader will input artifacts into the launcher
     public static Servo loader = null;
@@ -22,6 +23,8 @@ public class Launcher {
     public static CRServo ballIntakeRear = null;
     public static Servo turret = null;
 
+    public static double m = 10; // Multiplier
+    public static double b = 2200; // Base value
 
     public static class Nancy {
 

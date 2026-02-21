@@ -9,6 +9,7 @@ public class Spindexer {
 
     // The single static instance of the axon helper
     public static RTPAxon axon;
+    private static int spinmode = 0;
 
     // A static class to handle initialization and operation, similar to your other modules
     public static class Nancy {
@@ -56,7 +57,12 @@ public class Spindexer {
             setRotationSpeed(5);
         }
 
+        public static int getSpinPos() {
+            return spinmode;
+        }
+//        public static double spinoffset = -60;
         public static void setPosition(int position) {
+            spinmode = position;
             if (axon != null) {
                 switch (position) {
                     /* This function is called using setPosition(x);
@@ -73,6 +79,20 @@ public class Spindexer {
                     case 2: setTargetRotation(126);
                         break;
                     case 3: setTargetRotation(246);
+//                        break;
+
+
+//                    case 4: setTargetRotation(351);
+//                        break;
+//                    case 5: setTargetRotation(110);
+//                        break;
+//                    case 6: setTargetRotation(225);
+//                        break;
+//                    case 1: setTargetRotation(284);
+//                        break;
+//                    case 2: setTargetRotation(50);
+//                        break;
+//                    case 3: setTargetRotation(172);
                         break;
                 }
             }
