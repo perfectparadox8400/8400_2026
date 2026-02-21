@@ -17,11 +17,11 @@ public class ColorSensor {
 
 
     public static boolean isPurple(float hue) {
-        return hue >= 260 && hue <= 290;
+        return hue >= 240 && hue <= 270;
     }
 
     public static boolean isGreen(float hue) {
-        return hue >= 100 && hue <= 140;
+        return hue >= 140 && hue <= 170;
     }
 
     public static String getColor () {
@@ -41,21 +41,13 @@ public class ColorSensor {
         }
     }
 
-    public static void rotatePositions(String [] spindexerSlots, int type){
+    public static void rotatePositions(String [] spindexerSlots){
         String temp = "";
-        if (type == 0) {
-            temp = spindexerSlots[0];
-            for (int i = 0; i < 2; i++) {
-                spindexerSlots[i] = spindexerSlots[i + 1];
-            }
-            spindexerSlots[2] = temp;
-        } else if (type == 1) {
-            temp = spindexerSlots[3];
-            for (int i = 3; i < 5; i++) {
-                spindexerSlots[i] = spindexerSlots[i - 1];
-            }
-            spindexerSlots[5] = temp;
+        temp = spindexerSlots[0];
+        for (int i = 0; i < 2; i++) {
+            spindexerSlots[i] = spindexerSlots[i + 1];
         }
+        spindexerSlots[2] = temp;
     }
     public static void colorSensor_telemetry (Telemetry telemetry, String[]spindexerSlots,String spindexerMode){
         if (colorSensor == null){
@@ -78,7 +70,7 @@ public class ColorSensor {
         telemetry.addData("Saturation", sat);
 
         for (int i = 0; i < spindexerSlots.length; i++) {
-            telemetry.addData("Slot " + (i-1), spindexerSlots[i]);
+            telemetry.addData("Slot " + (i + 1), spindexerSlots[i]);
         }
 
         telemetry.addData("Spindexer Mode",spindexerMode);

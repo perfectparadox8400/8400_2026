@@ -61,9 +61,12 @@ public class Teleop {
 
         public static int loadPosition = 0;
         public static int launchPosition = 3;
-        private static String[] spindexerSlots = new String[] {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty"};
+        private static String[] spindexerSlots = new String[] {"Empty", "Empty", "Empty"};
         private static String spindexerMode = "load"; // Can be "load" or "launch"
-        private static int currentSpindexerPosition = 0;
+        private static int currentSpindexerPosition = 1;
+        private static boolean spindexerFull = false;
+
+
 
 
         private static ElapsedTime runTime = new ElapsedTime();
@@ -146,11 +149,13 @@ public class Teleop {
             if (gamepad2.aWasPressed()) {
                 loader.setPosition(0.0);
                 if (spindexerMode.equals("launch")) {
-                    spindexerSlots[currentSpindexerPosition-1] = "empty";
+                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
+                        spindexerSlots[currentSpindexerPosition - 1] = "empty";
+                    }
                 }
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 500){
+            if (runTime.milliseconds() > 500) {
                 loader.setPosition(0.325);
             }
 
@@ -176,7 +181,7 @@ public class Teleop {
                     loader.setPosition(.325);
                 }
             }
-
+            // Reverse intake
             if (gamepad1.bWasPressed()) {
                 if (ballIntake.getPower() > 0) {
                     ballIntake.setPower(0);
@@ -189,10 +194,25 @@ public class Teleop {
             }
 
             /*------Color Sensor LOGIC ---------- */
-            if (spindexerMode.equals("load")){
-                spindexerSlots[currentSpindexerPosition-1] = getColor();
+            if (spindexerMode.equals("load")) {
+                if (!getColor().equals("unknown")) {
+                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
+                        spindexerSlots[currentSpindexerPosition - 1] = getColor();
+                    }
+                }
             }
-
+            for (String slot : spindexerSlots) {
+                if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
+                    spindexerFull = false;
+                    break;
+                }
+            }
+            if (spindexerFull) {
+                telemetry.addData("Full: ","Spindexer is full");
+                ballIntake.setPower(1);
+            } else {
+                telemetry.addData("Full: ", "No");
+            }
 
 
             /*------Spindexer Servo LOGIC-------- */
@@ -207,16 +227,16 @@ public class Teleop {
                 setPosition(loadPosition);
                 currentSpindexerPosition = loadPosition;
                 spindexerMode = "load";
-                rotatePositions(spindexerSlots,0);
+                rotatePositions(spindexerSlots);
             }
             if (!gamepad2.right_bumper && previousGamepad2RightBumper) {
                 if (launchPosition > 5)
                     launchPosition = 4;
                 else launchPosition++;
                 setPosition(launchPosition);
-                currentSpindexerPosition = launchPosition;
+                currentSpindexerPosition = launchPosition-3;
                 spindexerMode = "launch";
-                rotatePositions(spindexerSlots,1);
+                rotatePositions(spindexerSlots);
             }
             previousGamepad2LeftBumper = gamepad2.left_bumper;
             previousGamepad2RightBumper = gamepad2.right_bumper;
