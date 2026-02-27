@@ -185,13 +185,13 @@ public class Drive {
 
     public static void drive_telemetry(Telemetry telemetry) {
         //Wheel Telemetry
-        telemetry.addData("LF POW", left_front.getPower());
-        telemetry.addData("LB POW", left_back.getPower());
-        telemetry.addData("RF POW", right_front.getPower());
-        telemetry.addData("RB POW", right_back.getPower());
-        telemetry.addData("Driving", driving);
-        telemetry.addData("Field Drive", fieldDriving);
-        telemetry.addData("Brake Mode", brakeMode);
+//        telemetry.addData("LF POW", left_front.getPower());
+//        telemetry.addData("LB POW", left_back.getPower());
+//        telemetry.addData("RF POW", right_front.getPower());
+//        telemetry.addData("RB POW", right_back.getPower());
+//        telemetry.addData("Driving", driving);
+//        telemetry.addData("Field Drive", fieldDriving);
+//        telemetry.addData("Brake Mode", brakeMode);
     }
 
     public static void auto_telemetry(Telemetry telemetry, MecanumDrive drive) {
