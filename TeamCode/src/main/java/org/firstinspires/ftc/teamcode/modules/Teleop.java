@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.getColor;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.rotatePositions;
 import static org.firstinspires.ftc.teamcode.modules.Controller.controllerChange;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumble;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumbleBlip;
@@ -30,8 +32,10 @@ import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spinRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.init_limelight;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.init_colorSensor;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelightTelemetry;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.colorSensor_telemetry;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateRight;
@@ -56,11 +60,20 @@ public class Teleop {
     public static Telemetry telemetry;
     public static final FtcDashboard dashboard = FtcDashboard.getInstance();
 
+
     public static class Nancy {
         private static boolean start = false;
 
         public static int loadPosition = 0;
         public static int launchPosition = 3;
+        private static String[] spindexerSlots = new String[] {"Empty", "Empty", "Empty"};
+        private static String spindexerMode = "load"; // Can be "load" or "launch"
+        private static int currentSpindexerPosition = 1;
+        private static boolean spindexerFull = false;
+
+
+
+
         public static double flywheelTargetVelocity = 0;
         public static boolean flywheelActive = false;
         private static ElapsedTime runTime = new ElapsedTime();
@@ -82,6 +95,8 @@ public class Teleop {
             init_drive(hardwareMap);
             // Init Limelight
             init_limelight(hardwareMap);
+            // Init Colorsensor
+            init_colorSensor(hardwareMap);
             
             // Flywheel setup
             flyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -104,6 +119,26 @@ public class Teleop {
             // Speed Control
             speedControl(gamepad1, gamepad2);
 
+            // Hold start and release guide to disable field driving
+            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
+                rumbleBlip(gamepad1, 2);
+                rumbleBlip(gamepad2, 2);
+                fieldDriving = !fieldDriving;
+            }
+
+            // Resets the internal geography
+            if ((gamepad1.back && gamepad1.guideWasReleased()) || (gamepad2.back && gamepad2.guideWasReleased())) {
+                rumbleBlip(gamepad1, 4);
+                rumbleBlip(gamepad2, 4);
+                imu.resetYaw();
+            }
+
+
+            // Moves everything back to default position
+//            if (gamepad1.guideWasPressed() || gamepad2.guideWasPressed()) {
+//                rumble(gamepad2, 750, 1, 1);
+//            }
+
             // fieldDrive is the field centric driving, drive is normal driving
             if (fieldDriving) {
                 fieldDrive(gamepad1, DrivePower);
@@ -115,9 +150,14 @@ public class Teleop {
             /* -------LOADER LOGIC-------*/
             if (gamepad2.aWasPressed()) {
                 loader.setPosition(0.0);
+                if (spindexerMode.equals("launch")) {
+                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
+                        spindexerSlots[currentSpindexerPosition - 1] = "empty";
+                    }
+                }
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 500){
+            if (runTime.milliseconds() > 500) {
                 loader.setPosition(0.325);
             }
 
@@ -225,7 +265,7 @@ public class Teleop {
                     loader.setPosition(.325);
                 }
             }
-
+            // Reverse intake
             if (gamepad1.bWasPressed()) {
                 if (ballIntake.getPower() > 0) {
                     ballIntake.setPower(0);
@@ -237,12 +277,37 @@ public class Teleop {
                 }
             }
 
+            /*------Color Sensor LOGIC ---------- */
+            if (spindexerMode.equals("load")) {
+                if (!getColor().equals("unknown")) {
+                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
+                        spindexerSlots[currentSpindexerPosition - 1] = getColor();
+                    }
+                }
+            }
+            for (String slot : spindexerSlots) {
+                if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
+                    spindexerFull = false;
+                    break;
+                }
+            }
+            if (spindexerFull) {
+                telemetry.addData("Full: ","Spindexer is full");
+                ballIntake.setPower(1);
+            } else {
+                telemetry.addData("Full: ", "No");
+            }
+
+
             /*------Spindexer Servo LOGIC-------- */
             if (!gamepad2.left_bumper && previousGamepad2LeftBumper) {
                 if (loadPosition > 2)
                     loadPosition = 1;
                 else loadPosition++;
                 setPosition(loadPosition);
+                currentSpindexerPosition = loadPosition;
+                spindexerMode = "load";
+                rotatePositions(spindexerSlots);
             }
 
             if (!gamepad2.right_bumper && previousGamepad2RightBumper) {
@@ -250,6 +315,9 @@ public class Teleop {
                     launchPosition = 4;
                 else launchPosition++;
                 setPosition(launchPosition);
+                currentSpindexerPosition = launchPosition-3;
+                spindexerMode = "launch";
+                rotatePositions(spindexerSlots);
             }
             previousGamepad2LeftBumper = gamepad2.left_bumper;
             previousGamepad2RightBumper = gamepad2.right_bumper;
@@ -262,6 +330,13 @@ public class Teleop {
             Launcher.Nancy.launcher_telemetry(telemetry);
             spindexer_telemetry(telemetry);
             limelightTelemetry(telemetry);
+            colorSensor_telemetry(telemetry,spindexerSlots,spindexerMode);
+//            telemetry.addData("Start", start);
+//            telemetry.addData("loader", loader);
+//            telemetry.addData("flyWheel", flyWheel);
+//            telemetry.addData("ballIntake", ballIntake);
+            telemetry.addData("loadPosition", loadPosition);
+            telemetry.addData("launchPosition", launchPosition);
             telemetry.addData("Flywheel Target", flywheelTargetVelocity);
             telemetry.addData("Flywheel Actual", flyWheel.getVelocity());
 //            telemetry.addData("Launcher.b (Base Velocity)", Launcher.b);
@@ -297,8 +372,8 @@ public class Teleop {
             speedControl(gamepad1, gamepad2);
 
             if (gamepad1.aWasPressed()) {
-                    loader.setPosition(0.15);
-                    runTime.reset();
+                loader.setPosition(0.15);
+                runTime.reset();
             }
             if (runTime.milliseconds() > 250){
                 loader.setPosition(0.325);
