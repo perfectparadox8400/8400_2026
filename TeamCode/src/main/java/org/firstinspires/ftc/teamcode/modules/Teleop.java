@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.centerLED;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.getColor;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.leftLED;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.rightLED;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.rotatePositions;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.setLEDColor;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.updateLEDs;
 import static org.firstinspires.ftc.teamcode.modules.Controller.controllerChange;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumble;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumbleBlip;
@@ -21,7 +26,6 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.setBrakeMode;
 import static org.firstinspires.ftc.teamcode.modules.Drive.strafeFactor;
 import static org.firstinspires.ftc.teamcode.modules.Drive.turnFactor;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
-import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.turret;
@@ -105,6 +109,8 @@ public class Teleop {
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();
+//            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+//            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
         }
 
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
@@ -298,6 +304,9 @@ public class Teleop {
                 telemetry.addData("Full: ", "No");
             }
 
+            // Constant LED update
+            updateLEDs(spindexerSlots);
+
 
             /*------Spindexer Servo LOGIC-------- */
             if (!gamepad2.left_bumper && previousGamepad2LeftBumper) {
@@ -390,12 +399,10 @@ public class Teleop {
             if (gamepad1.yWasPressed()) {
                 if (ballIntake.getPower() == -1) {
                     ballIntake.setPower(0);
-                    ballIntakeRear.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
                     ballIntake.setPower(-1);
-                    ballIntakeRear.setPower(-1);
                     loader.setPosition(.325);
                 }
             }
