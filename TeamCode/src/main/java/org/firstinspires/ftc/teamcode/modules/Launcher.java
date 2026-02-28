@@ -20,11 +20,10 @@ public class Launcher {
     public static Servo loader = null;
     public static DcMotorEx flyWheel = null;
     public static DcMotor ballIntake = null;
-    public static CRServo ballIntakeRear = null;
     public static Servo turret = null;
 
-    public static double m = 10; // Multiplier
-    public static double b = 2200; // Base value
+    public static double m = 13; // Multiplier
+    public static double b = 2070; // Base value
 
     public static class Nancy {
 
@@ -32,7 +31,6 @@ public class Launcher {
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotorEx.class, "flyWheel");
             ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
-            ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
             turret = hardwareMap.get(Servo.class, "turret");
         }
 
@@ -53,7 +51,6 @@ public class Launcher {
             loader = hardwareMap.get(Servo.class, "loader");
             flyWheel = hardwareMap.get(DcMotorEx.class, "flyWheel");
             ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
-            ballIntakeRear = hardwareMap.get(CRServo.class, "ballIntakeRear");
             turret = hardwareMap.get(Servo.class,"turret");
 
         }
@@ -62,7 +59,6 @@ public class Launcher {
             telemetry.addData("loader", loader.getPosition());
             telemetry.addData("flyWheel" , flyWheel.getPower());
             telemetry.addData("ballIntake" , ballIntake.getPower());
-            telemetry.addData("ballIntakeRear", ballIntakeRear.getPower());
 
 
 

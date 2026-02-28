@@ -21,7 +21,6 @@ import static org.firstinspires.ftc.teamcode.modules.Drive.setBrakeMode;
 import static org.firstinspires.ftc.teamcode.modules.Drive.strafeFactor;
 import static org.firstinspires.ftc.teamcode.modules.Drive.turnFactor;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
-import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntakeRear;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.flyWheel;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.loader;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.turret;
@@ -34,19 +33,21 @@ import static org.firstinspires.ftc.teamcode.modules.Spindexer.axon;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.init_limelight;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.init_colorSensor;
 import static org.firstinspires.ftc.teamcode.modules.Limelight.limelight;
-import static org.firstinspires.ftc.teamcode.modules.Limelight.limelightTelemetry;
+import static org.firstinspires.ftc.teamcode.modules.Limelight.limelightTelemetry;;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.colorSensor_telemetry;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop; // Import the loop
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateLeft;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.rotateRight;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_telemetry;
 
+
+
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -84,8 +85,10 @@ public class Teleop {
 
         private static boolean previousGamepad2LeftBumper = false;
         private static boolean previousGamepad2RightBumper = false;
-//        private static boolean previousGamepad1LeftTrigger = false;
-//        private static boolean previousGamepad1RightTrigger = false;
+        private static boolean previousGamepad1DpadLeft = false;
+        private static boolean previousGamepad1DpadRight = false;
+        private static boolean previousGamepad1DpadUp = false;
+        private static boolean previousGamepad1DpadDown = false;
 
         public static void init(HardwareMap hardwareMap, Telemetry telemetryOld) {
             // Init the launcher
@@ -110,7 +113,7 @@ public class Teleop {
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
             loader.setPosition(0.325);
             start = true;
-            ballIntake.setPower(-1);
+            ballIntake.setPower(1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
         }
@@ -133,12 +136,6 @@ public class Teleop {
                 imu.resetYaw();
             }
 
-
-            // Moves everything back to default position
-//            if (gamepad1.guideWasPressed() || gamepad2.guideWasPressed()) {
-//                rumble(gamepad2, 750, 1, 1);
-//            }
-
             // fieldDrive is the field centric driving, drive is normal driving
             if (fieldDriving) {
                 fieldDrive(gamepad1, DrivePower);
@@ -157,7 +154,7 @@ public class Teleop {
                 }
                 runTime.reset();
             }
-            if (runTime.milliseconds() > 500) {
+            if (runTime.milliseconds() > 300) {
                 loader.setPosition(0.325);
             }
 
@@ -166,36 +163,38 @@ public class Teleop {
                 tripleShotIsActive = true;
                 runTimetripleshot.reset();
             }
-            if(tripleShotIsActive){
-                if(runTimetripleshot.milliseconds() <  500){
-                    if(getSpinPos() < 4){
-                        setPosition(4);
+            if (tripleShotIsActive) {
+                if (runTimetripleshot.milliseconds() < 1000) {//changed from 500
+                    if (getSpinPos() < 4) {
+                        setPosition(5);
                     }
-                    if (runTimetripleshot.milliseconds() > 300){loader.setPosition(0.0);}
+                    if (runTimetripleshot.milliseconds() > 500) {//changed from 300
+                        loader.setPosition(0.0);
+                    }
                     startingShotPosition = getSpinPos();
                 }
-                if(runTimetripleshot.milliseconds() > 600 && runTimetripleshot.milliseconds() < 1500){
+                if (runTimetripleshot.milliseconds() > 1000 && runTimetripleshot.milliseconds() < 3000) {//changed from 600
                     loader.setPosition(0.325);
 
-                    if (runTimetripleshot.milliseconds() > 700){
-                        if (startingShotPosition == 4){
+                    if (runTimetripleshot.milliseconds() > 1500) {//changed from 700
+                        if (startingShotPosition == 4) {
                             setPosition(5);
                         }
-                        if (startingShotPosition == 5){
+                        if (startingShotPosition == 5) {
                             setPosition(6);
                         }
-                        if (startingShotPosition == 6){
+                        if (startingShotPosition == 6) {
                             setPosition(4);
                         }
                     }
-                    if (runTimetripleshot.milliseconds() > 1300){
+                    if (runTimetripleshot.milliseconds() > 2000) {//changed from 1300
                         loader.setPosition(0.0);
                     }
                 }
-                if(runTimetripleshot.milliseconds() > 1500){
+                if (runTimetripleshot.milliseconds() > 2500) {//changed from 1500
                     loader.setPosition(0.325);
 
-                    if (runTimetripleshot.milliseconds() > 2000) {
+                    if (runTimetripleshot.milliseconds() > 3000) {//changed from 2000
                         if (startingShotPosition == 4) {
                             setPosition(6);
                         }
@@ -206,13 +205,13 @@ public class Teleop {
                             setPosition(5);
                         }
                     }
-                    if (runTimetripleshot.milliseconds() > 2500){
+                    if (runTimetripleshot.milliseconds() > 3500) {//changed from 2500
                         loader.setPosition(0.0);
                     }
-                    if (runTimetripleshot.milliseconds() > 2700){
+                    if (runTimetripleshot.milliseconds() > 4000) {//changed from 2700
                         loader.setPosition(0.325);
                     }
-                    if (runTimetripleshot.milliseconds() > 3000){
+                    if (runTimetripleshot.milliseconds() > 4500) {//changed from 3000
                         tripleShotIsActive = false;
                     }
                 }
@@ -225,20 +224,9 @@ public class Teleop {
                 flywheelActive = !flywheelActive;
             }
 
-            // Gamepad 1 bumper logic to adjust base velocity 'b'
-//            if (gamepad1.left_trigger && !previousGamepad1LeftTrigger) {
-//                Launcher.b -= .5; // Decrease base velocity
-//                rumbleBlip(gamepad1, 1);
-//            }
-//            if (gamepad1.right_trigger && !previousGamepad1RightTrigger) {
-//                Launcher.b += .5; // Increase base velocity
-//                rumbleBlip(gamepad1, 1);
-//            }
-//            previousGamepad1LeftTrigger = gamepad1.left_trigger;
-//            previousGamepad1RightTrigger = gamepad1.right_trigger;
-
-            if(flywheelActive){
-                LLResult limelightResult = limelight.getLatestResult();
+            LLResult limelightResult = null;
+            if (flywheelActive) {
+                limelightResult = Limelight.limelight.getLatestResult();
                 if (limelightResult != null && limelightResult.isValid()) {
                     // Formula: velocity = (m * y) + b
                     double ty = -limelightResult.getTy();
@@ -256,23 +244,23 @@ public class Teleop {
 
             /* -------BALL INTAKE LOGIC-------- */
             if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() < 0) {
-                    ballIntake.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(-1);
-                    loader.setPosition(.325);
-                }
-            }
-            // Reverse intake
-            if (gamepad1.bWasPressed()) {
                 if (ballIntake.getPower() > 0) {
                     ballIntake.setPower(0);
                     if (loader.getPosition() != .325)
                         loader.setPosition(.325);
                 } else {
                     ballIntake.setPower(1);
+                    loader.setPosition(.325);
+                }
+            }
+            // Reverse intake
+            if (gamepad1.bWasPressed()) {
+                if (ballIntake.getPower() < 0) {
+                    ballIntake.setPower(0);
+                    if (loader.getPosition() != .325)
+                        loader.setPosition(.325);
+                } else {
+                    ballIntake.setPower(-1);
                     loader.setPosition(.325);
                 }
             }
@@ -292,14 +280,44 @@ public class Teleop {
                 }
             }
             if (spindexerFull) {
-                telemetry.addData("Full: ","Spindexer is full");
-                ballIntake.setPower(1);
+                telemetry.addData("Full: ", "Spindexer is full");
+                ballIntake.setPower(-1);
             } else {
                 telemetry.addData("Full: ", "No");
             }
 
 
             /*------Spindexer Servo LOGIC-------- */
+            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
+                Launcher.b += 10;
+            }
+            if (!gamepad1.dpad_down && previousGamepad1DpadDown) {
+                Launcher.b -= 10;
+            }
+            if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
+                Launcher.m += 1;
+            }
+            if (!gamepad1.dpad_left && previousGamepad1DpadLeft) {
+                Launcher.m -= 10;
+            }
+//            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
+//                RTPAxon.kD += .1;
+//            }
+//            if (!gamepad1.dpad_down && previousGamepad1DpadDown) {
+//                RTPAxon.kD -= .1;
+//            }
+//            if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
+//                RTPAxon.kP += .1;
+//            }
+//            if (!gamepad1.dpad_left && previousGamepad1DpadLeft) {
+//                RTPAxon.kP -= .1;
+//            }
+            previousGamepad1DpadUp = gamepad1.dpad_up;
+            previousGamepad1DpadDown = gamepad1.dpad_down;
+            previousGamepad1DpadRight = gamepad1.dpad_right;
+            previousGamepad1DpadLeft = gamepad1.dpad_left;
+
+
             if (!gamepad2.left_bumper && previousGamepad2LeftBumper) {
                 if (loadPosition > 2)
                     loadPosition = 1;
@@ -315,7 +333,7 @@ public class Teleop {
                     launchPosition = 4;
                 else launchPosition++;
                 setPosition(launchPosition);
-                currentSpindexerPosition = launchPosition-3;
+                currentSpindexerPosition = launchPosition - 3;
                 spindexerMode = "launch";
                 rotatePositions(spindexerSlots);
             }
@@ -326,25 +344,23 @@ public class Teleop {
             spindexer_loop();
 
             /* ------- TELEMETRY --------*/
-            drive_telemetry(telemetry);
+//            drive_telemetry(telemetry);
             Launcher.Nancy.launcher_telemetry(telemetry);
             spindexer_telemetry(telemetry);
             limelightTelemetry(telemetry);
-            colorSensor_telemetry(telemetry,spindexerSlots,spindexerMode);
-//            telemetry.addData("Start", start);
-//            telemetry.addData("loader", loader);
-//            telemetry.addData("flyWheel", flyWheel);
-//            telemetry.addData("ballIntake", ballIntake);
-            telemetry.addData("loadPosition", loadPosition);
-            telemetry.addData("launchPosition", launchPosition);
+            colorSensor_telemetry(telemetry, spindexerSlots, spindexerMode);
             telemetry.addData("Flywheel Target", flywheelTargetVelocity);
             telemetry.addData("Flywheel Actual", flyWheel.getVelocity());
-//            telemetry.addData("Launcher.b (Base Velocity)", Launcher.b);
-            telemetry.addData( "Launcher.m (multiplier", Launcher.m);
-//            telemetry.addData("loadPosition", loadPosition);
-//            telemetry.addData("launchPosition", launchPosition);
+            telemetry.addData("Launcher.B (Base velocity)", Launcher.b);
+            telemetry.addData("Launcher.m (multiplier", Launcher.m);
+            telemetry.addData("launchPosition", launchPosition);
+            telemetry.addData("loadPosition", loadPosition);
             telemetry.addData("tripleshot timer", runTimetripleshot.milliseconds());
             telemetry.addData("curent spinmode", getSpinPos());
+            telemetry.addData("KP Value", RTPAxon.kP);
+            telemetry.addData("KD Value", RTPAxon.kD);
+            telemetry.addData("Error Value", RTPAxon.lastError);
+
             telemetry.update();
         }
     }
@@ -372,33 +388,20 @@ public class Teleop {
             speedControl(gamepad1, gamepad2);
 
             if (gamepad1.aWasPressed()) {
-                loader.setPosition(0.15);
+                loader.setPosition(0.0);
                 runTime.reset();
             }
             if (runTime.milliseconds() > 250){
                 loader.setPosition(0.325);
             }
 
-            if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == .1) {
-                    flyWheel.setPower(0);
-                } else {
-                    flyWheel.setPower(.1);
-                }
-            }
-
-            if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
-                    ballIntake.setPower(0);
-                    ballIntakeRear.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(-1);
-                    ballIntakeRear.setPower(-1);
-                    loader.setPosition(.325);
-                }
-            }
+//            if (gamepad1.xWasPressed()) {
+//                if (flyWheel.getPower() == .1) {
+//                    flyWheel.setPower(0);
+//                } else {
+//                    flyWheel.setPower(.1);
+//                }
+//            }
 
             drive_telemetry(telemetry);
             Launcher.Mentorbot.launcher_telemetry(telemetry);
