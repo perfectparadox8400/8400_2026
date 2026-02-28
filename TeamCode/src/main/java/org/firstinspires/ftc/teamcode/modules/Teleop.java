@@ -292,6 +292,7 @@ public class Teleop {
                 }
             }
             for (String slot : spindexerSlots) {
+                spindexerFull = true;
                 if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
                     spindexerFull = false;
                     break;

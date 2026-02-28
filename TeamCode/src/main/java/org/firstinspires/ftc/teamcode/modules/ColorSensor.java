@@ -17,8 +17,8 @@ public class ColorSensor {
     public static Servo leftLED;
     public static Servo centerLED;
     public static Servo rightLED;
-    public static final double PURPLE = 0.733;
-    public static final double GREEN = 0.480;
+    public static final double PURPLE = 0.722;
+    public static final double GREEN = 0.500;
     public static final double OFF = 0.0;
     public static void init_colorSensor(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
@@ -46,7 +46,7 @@ public class ColorSensor {
     }
 
     public static boolean isGreen(float hue) {
-        return hue >= 140 && hue <= 170;
+        return hue >= 120 && hue <= 180;
     }
 
     public static String getColor () {
@@ -64,9 +64,9 @@ public class ColorSensor {
     }
 
     public static void updateLEDs(String[] spindexerSlots) {
-        setLEDColor(leftLED,   spindexerSlots[0]);
-        setLEDColor(centerLED, spindexerSlots[1]);
-        setLEDColor(rightLED,  spindexerSlots[2]);
+        if (!spindexerSlots[0].equals("empty")) setLEDColor(leftLED,   spindexerSlots[0]);
+        if (!spindexerSlots[1].equals("empty")) setLEDColor(centerLED, spindexerSlots[1]);
+        if (!spindexerSlots[2].equals("empty")) setLEDColor(rightLED,  spindexerSlots[2]);
     }
 
     public static void rotatePositions(String[] spindexerSlots) {
@@ -94,6 +94,7 @@ public class ColorSensor {
         for (int i = 0; i < spindexerSlots.length; i++) {
             telemetry.addData("Slot " + (i + 1), spindexerSlots[i]);
         }
+        telemetry.addData("Current Color:",getColor());
         telemetry.addData("Spindexer Mode", spindexerMode);
     }
 
