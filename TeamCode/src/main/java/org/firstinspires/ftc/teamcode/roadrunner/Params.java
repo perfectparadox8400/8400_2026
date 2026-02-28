@@ -35,9 +35,9 @@ public class Params {
         public double kV = 0.0;
         public double kA = 0.0;
 
-        public double maxWheelVel = 50.0;
+        public double maxWheelVel = 100.0;
         public double minProfileAccel = -30.0;
-        public double maxProfileAccel = 50.0;
+        public double maxProfileAccel = 100.0;
 
         public double maxAngVel = Math.PI;
         public double maxAngAccel = Math.PI;
@@ -61,19 +61,19 @@ public class Params {
             usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
             // drive model parameters
-            inPerTick = 0.0020398912058024;
-            lateralInPerTick = 0.0015366414307509274;
-            trackWidthTicks = 6842.574924748621;
+            inPerTick = 0.0019842363445957;
+            lateralInPerTick = 0.0014046608983622295;
+            trackWidthTicks = 6631.157287240214;
 
             // feedforward parameters (in tick units)
-            kS = 0.9954579502770668;
-            kV = 0.00032997435610453564;
-            kA = 0.000001;
+            kS = 1.2969489095036004;
+            kV = 0.00031512634329382766;
+            kA = 0.000005;
 
             // path profile parameters (in inches)
             maxWheelVel = 100;
             minProfileAccel = -30;
-            maxProfileAccel = 80;
+            maxProfileAccel = 100;
 
             // turn profile parameters (in radians)
             maxAngVel = Math.PI;
@@ -89,9 +89,9 @@ public class Params {
             headingVelGain = 0.0; // shared with turn
 
             // Three Dead Wheels
-            par0YTicks = -3090.4060516250215; // y position of the first parallel encoder (in tick units)
-            par1YTicks = 2952.090518832225; // y position of the second parallel encoder (in tick units)
-            perpXTicks = -3276.931060189824; // x position of the perpendicular encoder (in tick units)
+            par0YTicks =  -3815.804467353441; // y position of the first parallel encoder (in tick units)
+            par1YTicks = 3717.937045211586; // y position of the second parallel encoder (in tick units)
+            perpXTicks = -2919.8198081013456; // x position of the perpendicular encoder (in tick units)
         }
     }
 

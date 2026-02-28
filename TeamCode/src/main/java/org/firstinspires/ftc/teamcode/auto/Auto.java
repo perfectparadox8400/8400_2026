@@ -121,7 +121,7 @@ public class Auto {
     public static class StartIntake implements InstantFunction {
         @Override
         public void run() {
-            ballIntake.setPower(-1);
+            ballIntake.setPower(1);
 //            ballIntakeRear.setPower(-1);
         }
     }
@@ -130,7 +130,8 @@ public class Auto {
     public static class StartFlyWheel implements InstantFunction {
         @Override
         public void run() {
-            flyWheel.setVelocity(-2350);
+            flyWheel.setVelocity(-2280);
+            turret.setPosition(0.5);
         }
     }
 

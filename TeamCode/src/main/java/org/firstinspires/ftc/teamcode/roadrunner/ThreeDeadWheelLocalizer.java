@@ -36,14 +36,14 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         if (Robot.robotName().equals("ophelia") || Robot.robotName().equals("mentorbot")) {
             par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_back")));
             par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_front")));
-            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_back")));
+            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "ballIntake")));
             perp.setDirection(DcMotorSimple.Direction.REVERSE);
         } else {
             par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left_deadwheel")));
             par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_deadwheel")));
-            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right_front")));
-            par1.setDirection(DcMotorSimple.Direction.REVERSE);
-            par0.setDirection(DcMotorSimple.Direction.REVERSE);
+            perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "ballIntake")));
+//            par1.setDirection(DcMotorSimple.Direction.REVERSE);
+//            par0.setDirection(DcMotorSimple.Direction.REVERSE);
             perp.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
