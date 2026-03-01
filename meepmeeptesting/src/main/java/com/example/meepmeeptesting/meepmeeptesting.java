@@ -27,31 +27,31 @@ public class meepmeeptesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55.5,-45.5, 0.942478))
-                .lineToX(-30)
-                .turnTo(Math.toRadians(234))
-                .waitSeconds(1)
-                .waitSeconds(0.5)
-                .waitSeconds(1)
-                .waitSeconds(0.5)
-                .waitSeconds(1)
-                .turnTo(Math.toRadians(180))
-                .lineToX(-11.5)
-                .turnTo(Math.toRadians(270))
-                .lineToY(-36)
-                .lineToY(-42)
-                .lineToY(-55)
-                .lineToY(-10)
-                .turnTo(Math.toRadians(180))
-                .lineToX(-30)
-                .turnTo(Math.toRadians(234))
-                .waitSeconds(1)
-                .waitSeconds(1)
-                .waitSeconds(1)
-                .waitSeconds(1)
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(10, -16))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,14.5, 3.142))
 
+                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+
+                .strafeToLinearHeading(new Vector2d(61.5, 62.5), Math.toRadians(90))
+
+                // pickup
+
+                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+
+                .waitSeconds(1)
+                //shoot
+
+                .strafeToLinearHeading(new Vector2d(35, 20.5), Math.toRadians(90))
+
+                .strafeToLinearHeading(new Vector2d(35, 62.5), Math.toRadians(90))
+
+                // pickup
+
+                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+
+                .waitSeconds(1)
+                //shoot
+
+                .lineToX(35)
 
                 .build());
 

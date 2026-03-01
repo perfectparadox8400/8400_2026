@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.auto.Auto;
 import org.firstinspires.ftc.teamcode.modules.Spindexer;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="rLongShot", group = "auto")
+@Autonomous(name="rcorner", group = "auto")
 public class rcorner extends LinearOpMode {
 
 
@@ -37,48 +38,73 @@ public class rcorner extends LinearOpMode {
                     .stopAndAdd(new Auto.StartFlyWheel())
                     .stopAndAdd(new Auto.setSpindexerPos4())
                     .stopAndAdd(new Auto.loaderDown())
-                    .lineToX(55)
-                    .turnTo(Math.toRadians(159))
-                    .waitSeconds(1)
+
+                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(162))
+                    .waitSeconds(0.25)
+                    // shoot
+//                    .stopAndAdd(new Auto.setSpindexerPos4())
+//                    .waitSeconds(1)
                     .stopAndAdd(new Auto.Shoot())
-                    .waitSeconds(0.5)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.setSpindexerPos5())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.Shoot())
-                    .waitSeconds(0.5)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.setSpindexerPos6())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.Shoot())
-                    .lineToX(35)
-                    .turnTo(Math.toRadians(90))
                     .stopAndAdd(new Auto.setSpindexerPos1())
-                    .lineToY(36)
+
+                    .strafeToLinearHeading(new Vector2d(58, 62.5), Math.toRadians(90))
+
+                    // pickup
                     .stopAndAdd(new Auto.setSpindexerPos2())
-                    .lineToY(42)
+                    .waitSeconds(0.5)
+                    .strafeToLinearHeading(new Vector2d(61.5, 62.5), Math.toRadians(90))
+                    .waitSeconds(0.25)
                     .stopAndAdd(new Auto.setSpindexerPos3())
-                    .lineToY(62.5)
-                    .lineToY(14.5)
-                    .turnTo(Math.toRadians(180))
-                    .lineToX(55)
-                    .turnTo(Math.toRadians(159))
+
+                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+
+                    //shoot
                     .stopAndAdd(new Auto.setSpindexerPos4())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.Shoot())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.setSpindexerPos5())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.Shoot())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.setSpindexerPos6())
-                    .waitSeconds(1)
+                    .waitSeconds(0.75)
                     .stopAndAdd(new Auto.Shoot())
+                    .stopAndAdd(new Auto.setSpindexerPos1())
+
+                    .strafeToLinearHeading(new Vector2d(35, 20.5), Math.toRadians(90))
+
+                    .strafeToLinearHeading(new Vector2d(35, 62.5), Math.toRadians(90))
+
+                    // pickup
+                    .stopAndAdd(new Auto.setSpindexerPos2())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.setSpindexerPos3())
+
+                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+
+                    //shoot
+                    .stopAndAdd(new Auto.setSpindexerPos4())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.Shoot())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.setSpindexerPos5())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.Shoot())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.setSpindexerPos6())
+                    .waitSeconds(0.75)
+                    .stopAndAdd(new Auto.Shoot())
+
                     .lineToX(35);
-//                    .lineToX(12)
-//                    .turnTo(Math.toRadians(90))
-//                    .lineToY(62.5)
-//                    .lineToY(14.5)
-//                    .turnTo(Math.toRadians(180))
-//                    .lineToX(40);
 
 
             waitForStart();
