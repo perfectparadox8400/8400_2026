@@ -27,31 +27,42 @@ public class meepmeeptesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5,14.5, 3.142))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55.5,-45.5, 0.942478))
 
-                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
 
-                .strafeToLinearHeading(new Vector2d(61.5, 62.5), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
 
-                // pickup
+                //SHOOT
 
-                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+                .strafeToLinearHeading(new Vector2d(-11.5, -30), Math.toRadians(270))
 
-                .waitSeconds(1)
-                //shoot
+                .strafeToLinearHeading(new Vector2d(-11.5, -55), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(35, 20.5), Math.toRadians(90))
+                //PICKUP
 
-                .strafeToLinearHeading(new Vector2d(35, 62.5), Math.toRadians(90))
+                .setReversed(true)
 
-                // pickup
+                .splineToLinearHeading(new Pose2d(-2, -56.5, Math.toRadians(180)), Math.toRadians(360))
 
-                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
 
-                .waitSeconds(1)
-                //shoot
+                //SHOOT
 
-                .lineToX(35)
+                .strafeToLinearHeading(new Vector2d(12.5, -30), Math.toRadians(270))
+
+                .strafeToLinearHeading(new Vector2d(12.5, -55), Math.toRadians(270))
+
+                //PICKUP
+
+                .setReversed(true)
+
+                .splineToLinearHeading(new Pose2d(-30, -14.5, Math.toRadians(234)), Math.toRadians(180))
+
+                //SHOOT
+
+                .strafeToLinearHeading(new Vector2d(-9, -30), Math.toRadians(0))
+
+
 
                 .build());
 

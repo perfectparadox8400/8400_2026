@@ -135,6 +135,14 @@ public class Auto {
         }
     }
 
+    public static class StartFlyWheelLow implements InstantFunction {
+        @Override
+        public void run() {
+            flyWheel.setVelocity(-2230);
+            turret.setPosition(0.5);
+        }
+    }
+
 
     public static class SetPose implements Action {
         private final MecanumDrive drive;
