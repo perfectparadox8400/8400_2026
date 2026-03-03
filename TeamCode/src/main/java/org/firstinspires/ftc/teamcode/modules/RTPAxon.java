@@ -11,16 +11,17 @@ public class RTPAxon {
 
     // PID Coefficients
     // Low P to prevent oscillation (gyrating)
-    private double kP = 0.01;
-    private double kI = 0.000;
-    private double kD = 0.01;
+    public static double kP = .6;
+    public static double kI = 0.000;
+    public static double kD = .6;
+    public static double kFF = 5;
 
     private double targetAngle = 0.0;
     private double currentAngle = 0.0;
-    private double lastError = 0.0;
+    public static double lastError = 0.0;
     private double integralSum = 0.0;
 
-    private double maxPower = 1.0;
+    private double maxPower = 100.0;
     // Deadband: If we are within 5 degrees, stop moving.
     // This stops the servo from hunting back and forth endlessly.
     private double deadband = 2.0;
@@ -58,6 +59,7 @@ public class RTPAxon {
         lastError = error;
 
         double power = pOut + iOut + dOut;
+        power = power + kFF * Math.signum(power);
 
         // Deadband check
         if (Math.abs(error) < deadband) {
@@ -68,10 +70,10 @@ public class RTPAxon {
 
         // DIRECTION CHECK:
         // If the servo spins AWAY from the target continuously, remove the negative sign below.
-        servo.setPower(power);
+        servo.setPower(power/100);
     }
 
-    // --- THE FIX IS HERE ---
+
     public double getAbsolutePosition() {
         // We hardcode 3.3V because using encoder.getMaxVoltage() can sometimes
         // return 0.0 or fluctuate, causing massive math spikes that make the servo gyrate.
@@ -94,6 +96,8 @@ public class RTPAxon {
     public double getTargetAngle() { return targetAngle; }
     public double getCurrentAngle() { return currentAngle; }
     public double getRawVoltage() { return encoder.getVoltage(); }
+
+
     // Add this to the bottom of RTPAxon.java
 
 }

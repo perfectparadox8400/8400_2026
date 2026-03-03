@@ -68,17 +68,17 @@ public class Spindexer {
                     /* This function is called using setPosition(x);
                     * Below, it specifies the degrees to set the position to based on what it is.
                     * For example, if the position is 1, it sets it to 60 degrees.*/
-                    case 4: setTargetRotation(70);
+                    case 4: setTargetRotation(57);
                             break;
-                    case 5: setTargetRotation(186);
+                    case 5: setTargetRotation(177);
                         break;
-                    case 6: setTargetRotation(311);
+                    case 6: setTargetRotation(297);
                         break;
-                    case 1: setTargetRotation(12);
+                    case 1: setTargetRotation(353);
                         break;
-                    case 2: setTargetRotation(126);
+                    case 2: setTargetRotation(116);
                         break;
-                    case 3: setTargetRotation(246);
+                    case 3: setTargetRotation(235);
 //                        break;
 
 
