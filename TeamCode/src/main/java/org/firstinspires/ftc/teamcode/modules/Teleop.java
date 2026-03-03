@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.centerLED;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.getColor;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.leftLED;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.rightLED;
 import static org.firstinspires.ftc.teamcode.modules.ColorSensor.rotatePositions;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.setLEDColor;
+import static org.firstinspires.ftc.teamcode.modules.ColorSensor.updateLEDs;
 import static org.firstinspires.ftc.teamcode.modules.Controller.controllerChange;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumble;
 import static org.firstinspires.ftc.teamcode.modules.Controller.rumbleBlip;
@@ -108,6 +113,8 @@ public class Teleop {
             telemetry = new MultipleTelemetry(telemetryOld, dashboard.getTelemetry());
             telemetry.addData("Press", "Start");
             telemetry.update();
+//            RevBlinkinLedDriver blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+//            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
         }
 
         public static void start(Gamepad gamepad1, Gamepad gamepad2) {
@@ -274,6 +281,7 @@ public class Teleop {
                 }
             }
             for (String slot : spindexerSlots) {
+                spindexerFull = true;
                 if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
                     spindexerFull = false;
                     break;
@@ -285,6 +293,9 @@ public class Teleop {
             } else {
                 telemetry.addData("Full: ", "No");
             }
+
+            // Constant LED update
+            updateLEDs(spindexerSlots);
 
 
             /*------Spindexer Servo LOGIC-------- */
@@ -395,13 +406,24 @@ public class Teleop {
                 loader.setPosition(0.325);
             }
 
-//            if (gamepad1.xWasPressed()) {
-//                if (flyWheel.getPower() == .1) {
-//                    flyWheel.setPower(0);
-//                } else {
-//                    flyWheel.setPower(.1);
-//                }
-//            }
+            if (gamepad1.xWasPressed()) {
+                if (flyWheel.getPower() == .1) {
+                    flyWheel.setPower(0);
+                } else {
+                    flyWheel.setPower(.1);
+                }
+            }
+
+            if (gamepad1.yWasPressed()) {
+                if (ballIntake.getPower() == -1) {
+                    ballIntake.setPower(0);
+                    if (loader.getPosition() != .325)
+                        loader.setPosition(.325);
+                } else {
+                    ballIntake.setPower(-1);
+                    loader.setPosition(.325);
+                }
+            }
 
             drive_telemetry(telemetry);
             Launcher.Mentorbot.launcher_telemetry(telemetry);
