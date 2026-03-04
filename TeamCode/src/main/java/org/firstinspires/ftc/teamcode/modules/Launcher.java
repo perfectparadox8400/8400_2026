@@ -22,8 +22,8 @@ public class Launcher {
     public static DcMotor ballIntake = null;
     public static Servo turret = null;
 
-    public static double m = 13; // Multiplier
-    public static double b = 2070; // Base value
+    public static double m = 23; // Multiplier
+    public static double b = 1920; // Base value
 
     public static class Nancy {
 
