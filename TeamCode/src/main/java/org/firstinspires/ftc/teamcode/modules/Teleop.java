@@ -273,13 +273,13 @@ public class Teleop {
             }
 
             /*------Color Sensor LOGIC ---------- */
-            if (spindexerMode.equals("load")) {
-                if (!getColor().equals("unknown")) {
-                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
-                        spindexerSlots[currentSpindexerPosition - 1] = getColor();
-                    }
-                }
-            }
+//            if (spindexerMode.equals("load")) {
+//                if (!getColor().equals("unknown")) {
+//                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
+//                        spindexerSlots[currentSpindexerPosition - 1] = getColor();
+//                    }
+//                }
+//            }
 //            for (String slot : spindexerSlots) {
 //                spindexerFull = true;
 //                if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
@@ -295,7 +295,7 @@ public class Teleop {
 //            }
 
             // Constant LED update
-            updateLEDs(spindexerSlots);
+//            updateLEDs(spindexerSlots);
 
 
             /*------Spindexer Servo LOGIC-------- */
@@ -406,24 +406,24 @@ public class Teleop {
                 loader.setPosition(0.325);
             }
 
-            if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == .1) {
-                    flyWheel.setPower(0);
-                } else {
-                    flyWheel.setPower(.1);
-                }
-            }
-
-            if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
-                    ballIntake.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(-1);
-                    loader.setPosition(.325);
-                }
-            }
+//            if (gamepad1.xWasPressed()) {
+//                if (flyWheel.getPower() == .1) {
+//                    flyWheel.setPower(0);
+//                } else {
+//                    flyWheel.setPower(.1);
+//                }
+//            }
+//
+//            if (gamepad1.yWasPressed()) {
+//                if (ballIntake.getPower() == -1) {
+//                    ballIntake.setPower(0);
+//                    if (loader.getPosition() != .325)
+//                        loader.setPosition(.325);
+//                } else {
+//                    ballIntake.setPower(-1);
+//                    loader.setPosition(.325);
+//                }
+//            }
 
             drive_telemetry(telemetry);
             Launcher.Mentorbot.launcher_telemetry(telemetry);
