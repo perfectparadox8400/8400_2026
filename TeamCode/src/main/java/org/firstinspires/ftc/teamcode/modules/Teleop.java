@@ -244,12 +244,13 @@ public class Teleop {
                 if (limelightResult != null && limelightResult.isValid()) {
                     // Formula: velocity = (m * y) + b
                     double ty = -limelightResult.getTy();
-                    if(ty < 11.5){
-                       flywheelTargetVelocity = (Launcher.shortM * ty) + Launcher.b;
+                    if(ty < 9){
+//                       flywheelTargetVelocity = (Launcher.shortM * ty) + Launcher.b;
+                        flywheelTargetVelocity = 2080;
 
                     } else {
 //                        flywheelTargetVelocity = (Launcher.longM * ty) + Launcher.b;
-                        flywheelTargetVelocity = 2300;
+                        flywheelTargetVelocity = 2310;
                     }
                 } else {
                     // If no valid target is found, don't update velocity to keep it steady
