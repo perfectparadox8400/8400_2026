@@ -46,7 +46,7 @@ public class ColorSensor {
     }
 
     public static boolean isGreen(float hue) {
-        return hue >= 120 && hue <= 180;
+        return hue >= 120 && hue <= 140;
     }
 
     public static String getColor () {
@@ -65,15 +65,23 @@ public class ColorSensor {
 
     public static void updateLEDs(String[] spindexerSlots) {
         if (!spindexerSlots[0].equals("empty")) setLEDColor(leftLED,   spindexerSlots[0]);
+        else {
+            setLEDColor(leftLED, "off");
+        }
         if (!spindexerSlots[1].equals("empty")) setLEDColor(centerLED, spindexerSlots[1]);
+        else {
+            setLEDColor(centerLED, "off");
+        }
         if (!spindexerSlots[2].equals("empty")) setLEDColor(rightLED,  spindexerSlots[2]);
+        else {
+            setLEDColor(rightLED, "off");
+        }
     }
 
     public static void rotatePositions(String[] spindexerSlots) {
         String temp = spindexerSlots[0];
-        for (int i = 0; i < 2; i++) {
-            spindexerSlots[i] = spindexerSlots[i + 1];
-        }
+        spindexerSlots[0] = spindexerSlots[1];
+        spindexerSlots[1] = spindexerSlots[2];
         spindexerSlots[2] = temp;
     }
 

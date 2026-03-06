@@ -51,7 +51,7 @@ public class Auto {
         @Override
         public void run() {
             autoRunTime.reset();
-            loader.setPosition(0.05);
+            loader.setPosition(0.00);
 //            turret.setPosition(0.5);
 // :)
 
@@ -130,7 +130,7 @@ public class Auto {
     public static class StartFlyWheel implements InstantFunction {
         @Override
         public void run() {
-            flyWheel.setVelocity(-2280);
+            flyWheel.setVelocity(-2300);
             turret.setPosition(0.5);
         }
     }
@@ -138,7 +138,7 @@ public class Auto {
     public static class StartFlyWheelLow implements InstantFunction {
         @Override
         public void run() {
-            flyWheel.setVelocity(-2230);
+            flyWheel.setVelocity(-1980);
             turret.setPosition(0.5);
         }
     }

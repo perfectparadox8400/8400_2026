@@ -27,10 +27,10 @@ public class meepmeeptesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55.5,-45.5, 0.942478))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37,-55, Math.toRadians(90)))
 
 
-                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
+                .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT
 
@@ -44,7 +44,7 @@ public class meepmeeptesting {
 
                 .splineToLinearHeading(new Pose2d(-2, -56.5, Math.toRadians(180)), Math.toRadians(360))
 
-                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
+                .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT
 
@@ -56,7 +56,7 @@ public class meepmeeptesting {
 
                 .setReversed(true)
 
-                .splineToLinearHeading(new Pose2d(-30, -14.5, Math.toRadians(234)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-8, -14.5, Math.toRadians(217)), Math.toRadians(180))
 
                 //SHOOT
 

@@ -17,11 +17,9 @@ public class Controller {
             rumble(gamepad1, 250, 0.2, 0.2);
         }
         if ((controllerChange(gamepad1, gamepad2) && gamepad1.b) || gamepad1.right_bumper){
-            DrivePower = 1.0;
-        } else if ((controllerChange(gamepad1, gamepad2) && gamepad1.a) || gamepad1.left_bumper){
             DrivePower = DriveSlowPower;
         } else {
-            DrivePower = 0.6;
+            DrivePower = 1;
         }
     }
 
