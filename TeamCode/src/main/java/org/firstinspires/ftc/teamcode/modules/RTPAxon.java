@@ -1,24 +1,27 @@
 package org.firstinspires.ftc.teamcode.modules;
 
-import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.Range;
 
 public class RTPAxon {
 
     private CRServo servo;
-    public AnalogInput encoder;
+    private DcMotorEx encoder;
+
+    private static final double COUNTS_PER_REV = 8192.0;
 
     // PID Coefficients
     // Low P to prevent oscillation (gyrating)
-    public static double kP = .6;
-    public static double kI = 0.000;
-    public static double kD = .6;
-    public static double kFF = 5;
+    public double kP = .6;
+    public double kI = 0.000;
+    public double kD = .6;
+    public double kFF = 5;
 
     private double targetAngle = 0.0;
     private double currentAngle = 0.0;
-    public static double lastError = 0.0;
+    private double lastError = 0.0;
     private double integralSum = 0.0;
 
     private double maxPower = 100.0;
@@ -26,11 +29,13 @@ public class RTPAxon {
     // This stops the servo from hunting back and forth endlessly.
     private double deadband = 2.0;
 
-    public RTPAxon(CRServo servo, AnalogInput encoder) {
+    public RTPAxon(CRServo servo, DcMotorEx encoder) {
         this.servo = servo;
         this.encoder = encoder;
+        this.encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // Set initial target to current position so it doesn't snap violently on start
-        this.targetAngle = getAbsolutePosition();
+        this.targetAngle = this.getAbsolutePosition();
     }
 
     public void update() {
@@ -70,36 +75,32 @@ public class RTPAxon {
 
         // DIRECTION CHECK:
         // If the servo spins AWAY from the target continuously, remove the negative sign below.
-        servo.setPower(power/100);
+        servo.setPower(power / 100);
     }
 
-
     public double getAbsolutePosition() {
-        // We hardcode 3.3V because using encoder.getMaxVoltage() can sometimes
-        // return 0.0 or fluctuate, causing massive math spikes that make the servo gyrate.
-        // Axon encoders on the REV Hub reliably map 0V-3.3V to 0-360 degrees.
-        return (encoder.getVoltage() / 3.3) * 360.0;
+        double degrees = (encoder.getCurrentPosition() / COUNTS_PER_REV) * 360.0;
+        degrees = degrees % 360.0;
+        if (degrees < 0) degrees += 360.0;
+        return degrees;
     }
 
     public void setTargetAngle(double angle) {
         this.targetAngle = angle;
         // Normalize target to 0-360
-//        while (this.targetAngle > 360) this.targetAngle -= 360;
-//        while (this.targetAngle < 0)   this.targetAngle += 360;
+//		while (this.targetAngle > 360) this.targetAngle -= 360;
+//		while (this.targetAngle < 0)   this.targetAngle += 360;
     }
 
     public void changeTargetRotation(double delta) {
-        setTargetAngle(delta);
+        setTargetAngle(this.targetAngle + delta);
     }
 
     // Getters for Telemetry
-    public double getTargetAngle() { return targetAngle; }
+    public double getTargetAngle()  { return targetAngle; }
     public double getCurrentAngle() { return currentAngle; }
-    public double getRawVoltage() { return encoder.getVoltage(); }
-
+    public double getRawCounts()    { return encoder.getCurrentPosition(); }
 
     // Add this to the bottom of RTPAxon.java
 
 }
-
-

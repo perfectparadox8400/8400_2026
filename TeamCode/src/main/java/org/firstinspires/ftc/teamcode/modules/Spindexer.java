@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
-import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,7 +21,7 @@ public class Spindexer {
             // Get hardware from config
             // MAKE SURE CONFIG NAMES MATCH: "spindexerServo" and "spindexerEncoder"
             CRServo servo = hardwareMap.get(CRServo.class, "spindexerServo");
-            AnalogInput encoder = hardwareMap.get(AnalogInput.class, "spindexerEncoder");
+            DcMotorEx encoder = hardwareMap.get(DcMotorEx.class, "spindexerEncoder");
 
             // Initialize the RTPAxon wrapper
             axon = new RTPAxon(servo, encoder);
@@ -34,11 +34,9 @@ public class Spindexer {
             }
         }
 
-
-
-        public static void setTargetRotation(double rot){
-//            if (axon != null) axon.changeTargetRotation(-axon.getAbsolutePosition()); //TODO This may be an issue, if the getAbsolutePosition wouldn't work.
-            if (axon != null){ axon.changeTargetRotation(rot);}
+        public static void setTargetRotation(double rot) {
+//			if (axon != null) axon.changeTargetRotation(-axon.getAbsolutePosition()); //TODO This may be an issue, if the getAbsolutePosition wouldn't work.
+            if (axon != null) { axon.changeTargetRotation(rot); }
         }
 
         public static void rotateLeft() {
@@ -60,16 +58,16 @@ public class Spindexer {
         public static int getSpinPos() {
             return spinmode;
         }
-//        public static double spinoffset = -60;
+        //		public static double spinoffset = -60;
         public static void setPosition(int position) {
             spinmode = position;
             if (axon != null) {
                 switch (position) {
                     /* This function is called using setPosition(x);
-                    * Below, it specifies the degrees to set the position to based on what it is.
-                    * For example, if the position is 1, it sets it to 60 degrees.*/
+                     * Below, it specifies the degrees to set the position to based on what it is.
+                     * For example, if the position is 1, it sets it to 60 degrees.*/
                     case 4: setTargetRotation(57);
-                            break;
+                        break;
                     case 5: setTargetRotation(177);
                         break;
                     case 6: setTargetRotation(297);
@@ -79,20 +77,20 @@ public class Spindexer {
                     case 2: setTargetRotation(116);
                         break;
                     case 3: setTargetRotation(235);
-//                        break;
+//						break;
 
 
-//                    case 4: setTargetRotation(351);
-//                        break;
-//                    case 5: setTargetRotation(110);
-//                        break;
-//                    case 6: setTargetRotation(225);
-//                        break;
-//                    case 1: setTargetRotation(284);
-//                        break;
-//                    case 2: setTargetRotation(50);
-//                        break;
-//                    case 3: setTargetRotation(172);
+//					case 4: setTargetRotation(351);
+//						break;
+//					case 5: setTargetRotation(110);
+//						break;
+//					case 6: setTargetRotation(225);
+//						break;
+//					case 1: setTargetRotation(284);
+//						break;
+//					case 2: setTargetRotation(50);
+//						break;
+//					case 3: setTargetRotation(172);
                         break;
                 }
             }
@@ -103,10 +101,8 @@ public class Spindexer {
             if (axon != null) {
                 telemetry.addData("Axon Target", "%.1f", axon.getTargetAngle());
                 telemetry.addData("Axon Current", "%.1f", axon.getCurrentAngle());
-                telemetry.addData("Axon Raw Volts", "%.3f", axon.getRawVoltage());
-
+                telemetry.addData("Axon Raw Counts", "%.0f", axon.getRawCounts());
             }
-
         }
     }
 }

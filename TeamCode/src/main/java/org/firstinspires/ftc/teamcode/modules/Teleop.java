@@ -368,9 +368,9 @@ public class Teleop {
             telemetry.addData("loadPosition", loadPosition);
             telemetry.addData("tripleshot timer", runTimetripleshot.milliseconds());
             telemetry.addData("curent spinmode", getSpinPos());
-            telemetry.addData("KP Value", RTPAxon.kP);
-            telemetry.addData("KD Value", RTPAxon.kD);
-            telemetry.addData("Error Value", RTPAxon.lastError);
+            telemetry.addData("KP Value", axon.kP);
+            telemetry.addData("KD Value", axon.kD);
+            telemetry.addData("Error Value", axon.getCurrentAngle());
 
             telemetry.update();
         }
