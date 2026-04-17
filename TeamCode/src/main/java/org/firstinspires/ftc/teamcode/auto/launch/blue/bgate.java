@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 public class bgate extends LinearOpMode {
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(-55.5,-45.5, 0.942478);
+        Pose2d start = new Pose2d(-37,-55, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
         startSpindexer(hardwareMap);
@@ -31,7 +31,7 @@ public class bgate extends LinearOpMode {
                 .stopAndAdd(new Auto.setSpindexerPos4())
                 .stopAndAdd(new Auto.loaderDown())
 
-                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
+                .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT
                 .stopAndAdd(new Auto.Shoot())
@@ -58,7 +58,7 @@ public class bgate extends LinearOpMode {
 
                 .splineToLinearHeading(new Pose2d(-2, -56.5, Math.toRadians(180)), Math.toRadians(360))
 
-                .strafeToLinearHeading(new Vector2d(-30, -14.5), Math.toRadians(234))
+                .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT
                 .stopAndAdd(new Auto.setSpindexerPos4())
@@ -76,7 +76,7 @@ public class bgate extends LinearOpMode {
 
                 .strafeToLinearHeading(new Vector2d(12.5, -30), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(12.5, -55), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(12.5, -61.5), Math.toRadians(270))
 
                 //PICKUP
                 .stopAndAdd(new Auto.setSpindexerPos2())
@@ -85,7 +85,7 @@ public class bgate extends LinearOpMode {
 
                 .setReversed(true)
 
-                .splineToLinearHeading(new Pose2d(-30, -14.5, Math.toRadians(234)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-8, -14.5, Math.toRadians(217)), Math.toRadians(180))
 
                 //SHOOT
                 .stopAndAdd(new Auto.setSpindexerPos4())

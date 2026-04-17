@@ -73,8 +73,7 @@ public class Teleop {
         public static int loadPosition = 0;
         public static int launchPosition = 3;
         private static String[] spindexerSlots = new String[] {"Empty", "Empty", "Empty"};
-        private static String spindexerMode = "load"; // Can be "load" or "launch"
-        private static int currentSpindexerPosition = 1;
+        private static String spindexerMode = ""; // Can be "load" or "launch"
         private static boolean spindexerFull = false;
 
 
@@ -123,6 +122,9 @@ public class Teleop {
             ballIntake.setPower(1);
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
+            spindexerSlots[0] = "Empty";
+            spindexerSlots[1] = "Empty";
+            spindexerSlots[2] = "Empty";
         }
 
         public static void loop(Gamepad gamepad1, Gamepad gamepad2) {
@@ -154,11 +156,6 @@ public class Teleop {
             /* -------LOADER LOGIC-------*/
             if (gamepad2.aWasPressed()) {
                 loader.setPosition(0.0);
-                if (spindexerMode.equals("launch")) {
-                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
-                        spindexerSlots[currentSpindexerPosition - 1] = "empty";
-                    }
-                }
                 runTime.reset();
             }
             if (runTime.milliseconds() > 300) {
@@ -170,7 +167,12 @@ public class Teleop {
                 tripleShotIsActive = true;
                 runTimetripleshot.reset();
             }
+            if (gamepad2.bWasPressed()) {
+                tripleShotIsActive = false;
+                loader.setPosition(0.325);
+            }
             if (tripleShotIsActive) {
+                spindexerMode = "launch";
                 if (runTimetripleshot.milliseconds() < 1000) {//changed from 500
                     if (getSpinPos() < 4) {
                         setPosition(5);
@@ -220,6 +222,11 @@ public class Teleop {
                     }
                     if (runTimetripleshot.milliseconds() > 4500) {//changed from 3000
                         tripleShotIsActive = false;
+                        setPosition(1);
+                        spindexerMode = "load";
+                        spindexerSlots[0] = "Empty";
+                        spindexerSlots[1] = "Empty";
+                        spindexerSlots[2] = "Empty";
                     }
                 }
 
@@ -237,7 +244,14 @@ public class Teleop {
                 if (limelightResult != null && limelightResult.isValid()) {
                     // Formula: velocity = (m * y) + b
                     double ty = -limelightResult.getTy();
-                    flywheelTargetVelocity = (Launcher.m * ty) + Launcher.b;
+                    if(ty < 9){
+//                       flywheelTargetVelocity = (Launcher.shortM * ty) + Launcher.b;
+                        flywheelTargetVelocity = 2080;
+
+                    } else {
+//                        flywheelTargetVelocity = (Launcher.longM * ty) + Launcher.b;
+                        flywheelTargetVelocity = 2310;
+                    }
                 } else {
                     // If no valid target is found, don't update velocity to keep it steady
                     // or default to base velocity b
@@ -275,24 +289,31 @@ public class Teleop {
             /*------Color Sensor LOGIC ---------- */
             if (spindexerMode.equals("load")) {
                 if (!getColor().equals("unknown")) {
-                    if (currentSpindexerPosition >= 0 && currentSpindexerPosition < spindexerSlots.length) {
-                        spindexerSlots[currentSpindexerPosition - 1] = getColor();
+                    int spinIndex = loadPosition - 1;
+                    if(spinIndex < 0) {
+                        spinIndex = 0;
+                    }
+                    if(spinIndex > 2) {
+                        spinIndex = 2;
+                    }
+                    if(spindexerSlots[spinIndex].equals("Empty")) {
+                        spindexerSlots[spinIndex] = getColor();
                     }
                 }
             }
-            for (String slot : spindexerSlots) {
-                spindexerFull = true;
-                if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
-                    spindexerFull = false;
-                    break;
-                }
-            }
-            if (spindexerFull) {
-                telemetry.addData("Full: ", "Spindexer is full");
-                ballIntake.setPower(-1);
-            } else {
-                telemetry.addData("Full: ", "No");
-            }
+//            for (String slot : spindexerSlots) {
+//                spindexerFull = true;
+//                if (!slot.equalsIgnoreCase("green") && !slot.equalsIgnoreCase("purple")) {
+//                    spindexerFull = false;
+//                    break;
+//                }
+//            }
+//            if (spindexerFull) {
+//                telemetry.addData("Full: ", "Spindexer is full");
+//                ballIntake.setPower(-1);
+//            } else {
+//                telemetry.addData("Full: ", "No");
+//            }
 
             // Constant LED update
             updateLEDs(spindexerSlots);
@@ -306,10 +327,12 @@ public class Teleop {
                 Launcher.b -= 10;
             }
             if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
-                Launcher.m += 1;
+                Launcher.shortM += 1;
+                Launcher.longM += 1;
             }
             if (!gamepad1.dpad_left && previousGamepad1DpadLeft) {
-                Launcher.m -= 10;
+                Launcher.shortM -= 10;
+                Launcher.longM -= 10;
             }
 //            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
 //                RTPAxon.kD += .1;
@@ -334,7 +357,6 @@ public class Teleop {
                     loadPosition = 1;
                 else loadPosition++;
                 setPosition(loadPosition);
-                currentSpindexerPosition = loadPosition;
                 spindexerMode = "load";
                 rotatePositions(spindexerSlots);
             }
@@ -344,7 +366,6 @@ public class Teleop {
                     launchPosition = 4;
                 else launchPosition++;
                 setPosition(launchPosition);
-                currentSpindexerPosition = launchPosition - 3;
                 spindexerMode = "launch";
                 rotatePositions(spindexerSlots);
             }
@@ -363,7 +384,7 @@ public class Teleop {
             telemetry.addData("Flywheel Target", flywheelTargetVelocity);
             telemetry.addData("Flywheel Actual", flyWheel.getVelocity());
             telemetry.addData("Launcher.B (Base velocity)", Launcher.b);
-            telemetry.addData("Launcher.m (multiplier", Launcher.m);
+            telemetry.addData("Launcher.m (multiplier", Launcher.shortM + ", " + Launcher.longM);
             telemetry.addData("launchPosition", launchPosition);
             telemetry.addData("loadPosition", loadPosition);
             telemetry.addData("tripleshot timer", runTimetripleshot.milliseconds());
@@ -406,24 +427,24 @@ public class Teleop {
                 loader.setPosition(0.325);
             }
 
-            if (gamepad1.xWasPressed()) {
-                if (flyWheel.getPower() == .1) {
-                    flyWheel.setPower(0);
-                } else {
-                    flyWheel.setPower(.1);
-                }
-            }
-
-            if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() == -1) {
-                    ballIntake.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(-1);
-                    loader.setPosition(.325);
-                }
-            }
+//            if (gamepad1.xWasPressed()) {
+//                if (flyWheel.getPower() == .1) {
+//                    flyWheel.setPower(0);
+//                } else {
+//                    flyWheel.setPower(.1);
+//                }
+//            }
+//
+//            if (gamepad1.yWasPressed()) {
+//                if (ballIntake.getPower() == -1) {
+//                    ballIntake.setPower(0);
+//                    if (loader.getPosition() != .325)
+//                        loader.setPosition(.325);
+//                } else {
+//                    ballIntake.setPower(-1);
+//                    loader.setPosition(.325);
+//                }
+//            }
 
             drive_telemetry(telemetry);
             Launcher.Mentorbot.launcher_telemetry(telemetry);
