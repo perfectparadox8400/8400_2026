@@ -145,13 +145,20 @@ public class Teleop {
                 imu.resetYaw();
             }
 
-            // fieldDrive is the field centric driving, drive is normal driving
+//             fieldDrive is the field centric driving, drive is normal driving
             if (fieldDriving) {
                 fieldDrive(gamepad1, DrivePower);
                 fieldDrive(gamepad2, DrivePower);
             } else {
                 drive(gamepad1, DrivePower);
             }
+//
+//            if (gamepad2.touchpadWasPressed()){
+//                drive(gamepad1,DriveSlowPower);
+//            }
+//            else{
+//                drive(gamepad1, DrivePower);
+//            }
 
             /* -------LOADER LOGIC-------*/
             if (gamepad2.aWasPressed()) {
