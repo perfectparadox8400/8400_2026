@@ -64,10 +64,10 @@ import java.util.List;
         private void handleTurret() {
             // Toggle auto-aim with gamepad1 left trigger
             boolean currentLeftTrigger = gamepad1.left_trigger > 0.5;
-            if (currentLeftTrigger && !previousLeftTrigger) {
-                autoAim = !autoAim;
-                rumbleBlip(gamepad1, 1);
-            }
+            //if (currentLeftTrigger && !previousLeftTrigger) {
+            //    autoAim = !autoAim;
+            //    rumbleBlip(gamepad1, 1);
+            //}
             previousLeftTrigger = currentLeftTrigger;
 
             // Manual control via triggers always overrides auto-aim

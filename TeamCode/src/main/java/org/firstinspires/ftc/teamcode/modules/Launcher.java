@@ -25,7 +25,7 @@ public class Launcher {
     public static double shortM = 23;
 
     public static double longM = 26.5;// Multipliers
-    public static double b = 1920; // Base value
+    public static double b = 0; // Base value
 
     public static class Nancy {
 

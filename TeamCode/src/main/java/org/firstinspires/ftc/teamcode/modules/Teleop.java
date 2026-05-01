@@ -145,13 +145,20 @@ public class Teleop {
                 imu.resetYaw();
             }
 
-            // fieldDrive is the field centric driving, drive is normal driving
+//             fieldDrive is the field centric driving, drive is normal driving
             if (fieldDriving) {
                 fieldDrive(gamepad1, DrivePower);
                 fieldDrive(gamepad2, DrivePower);
             } else {
                 drive(gamepad1, DrivePower);
             }
+//
+//            if (gamepad2.touchpadWasPressed()){
+//                drive(gamepad1,DriveSlowPower);
+//            }
+//            else{
+//                drive(gamepad1, DrivePower);
+//            }
 
             /* -------LOADER LOGIC-------*/
             if (gamepad2.aWasPressed()) {
@@ -173,64 +180,69 @@ public class Teleop {
             }
             if (tripleShotIsActive) {
                 spindexerMode = "launch";
-                if (runTimetripleshot.milliseconds() < 1000) {//changed from 500
+                //if (runTimetripleshot.milliseconds() < 500) {//changed from 1000
+                    //if (getSpinPos() < 4) {
+                    //    setPosition(5);
+                    //}
+                if (runTimetripleshot.milliseconds() < 200) {//changed from 300
                     if (getSpinPos() < 4) {
                         setPosition(5);
+                    loader.setPosition(0.0);
                     }
-                    if (runTimetripleshot.milliseconds() > 500) {//changed from 300
+
+                    else {
                         loader.setPosition(0.0);
                     }
                     startingShotPosition = getSpinPos();
                 }
-                if (runTimetripleshot.milliseconds() > 1000 && runTimetripleshot.milliseconds() < 3000) {//changed from 600
+                if (runTimetripleshot.milliseconds() > 200 && runTimetripleshot.milliseconds() < 400) {//changed from 1000
                     loader.setPosition(0.325);
-
-                    if (runTimetripleshot.milliseconds() > 1500) {//changed from 700
-                        if (startingShotPosition == 4) {
-                            setPosition(5);
-                        }
-                        if (startingShotPosition == 5) {
-                            setPosition(6);
-                        }
-                        if (startingShotPosition == 6) {
-                            setPosition(4);
-                        }
+                }
+                if (runTimetripleshot.milliseconds() > 400 && runTimetripleshot.milliseconds() < 800) {//changed from 1500
+                    if (startingShotPosition == 4) {
+                        setPosition(5);
                     }
-                    if (runTimetripleshot.milliseconds() > 2000) {//changed from 1300
-                        loader.setPosition(0.0);
+                    if (startingShotPosition == 5) {
+                        setPosition(6);
+                    }
+                    if (startingShotPosition == 6) {
+                        setPosition(4);
                     }
                 }
-                if (runTimetripleshot.milliseconds() > 2500) {//changed from 1500
+                if (runTimetripleshot.milliseconds() > 800 && runTimetripleshot.milliseconds() < 1000) {//changed from 2000
+                    loader.setPosition(0.0);
+                }
+                if (runTimetripleshot.milliseconds() > 1000 && runTimetripleshot.milliseconds() < 1200) {//changed from 2500
                     loader.setPosition(0.325);
-
-                    if (runTimetripleshot.milliseconds() > 3000) {//changed from 2000
-                        if (startingShotPosition == 4) {
-                            setPosition(6);
-                        }
-                        if (startingShotPosition == 5) {
-                            setPosition(4);
-                        }
-                        if (startingShotPosition == 6) {
-                            setPosition(5);
-                        }
+                }
+                if (runTimetripleshot.milliseconds() > 1200 && runTimetripleshot.milliseconds() < 1600) {//changed from 3000
+                    if (startingShotPosition == 4) {
+                        setPosition(6);
                     }
-                    if (runTimetripleshot.milliseconds() > 3500) {//changed from 2500
-                        loader.setPosition(0.0);
+                    if (startingShotPosition == 5) {
+                        setPosition(4);
                     }
-                    if (runTimetripleshot.milliseconds() > 4000) {//changed from 2700
-                        loader.setPosition(0.325);
-                    }
-                    if (runTimetripleshot.milliseconds() > 4500) {//changed from 3000
-                        tripleShotIsActive = false;
-                        setPosition(1);
-                        spindexerMode = "load";
-                        spindexerSlots[0] = "Empty";
-                        spindexerSlots[1] = "Empty";
-                        spindexerSlots[2] = "Empty";
+                    if (startingShotPosition == 6) {
+                        setPosition(5);
                     }
                 }
-
+                if (runTimetripleshot.milliseconds() > 1600 && runTimetripleshot.milliseconds() < 1800) {//changed from 3500
+                    loader.setPosition(0.0);
+                }
+                if (runTimetripleshot.milliseconds() > 1800 && runTimetripleshot.milliseconds() < 2000) {//changed from 4000
+                    loader.setPosition(0.325);
+                }
+                if (runTimetripleshot.milliseconds() > 2000 && runTimetripleshot.milliseconds() < 2200) {//changed from 4500
+                    tripleShotIsActive = false;
+                    setPosition(1);
+                    spindexerMode = "load";
+                    spindexerSlots[0] = "Empty";
+                    spindexerSlots[1] = "Empty";
+                    spindexerSlots[2] = "Empty";
+                }
             }
+
+
 
 
             /* --------FLY WHEEL LOGIC--------*/
@@ -245,17 +257,17 @@ public class Teleop {
                     // Formula: velocity = (m * y) + b
                     double ty = -limelightResult.getTy();
                     if(ty < 9){
-//                       flywheelTargetVelocity = (Launcher.shortM * ty) + Launcher.b;
-                        flywheelTargetVelocity = 2080;
+//                      flywheelTargetVelocity = (Launcher.shortM * ty) + Launcher.b;
+                        flywheelTargetVelocity = 2080 + Launcher.b;
 
                     } else {
-//                        flywheelTargetVelocity = (Launcher.longM * ty) + Launcher.b;
-                        flywheelTargetVelocity = 2310;
+//                      flywheelTargetVelocity = (Launcher.longM * ty) + Launcher.b;
+                        flywheelTargetVelocity = 2310 + Launcher.b;
                     }
                 } else {
                     // If no valid target is found, don't update velocity to keep it steady
                     // or default to base velocity b
-                    flywheelTargetVelocity = Launcher.b;
+                    flywheelTargetVelocity = 2310 + Launcher.b;
                 }
                 flyWheel.setVelocity(-flywheelTargetVelocity);
             } else {

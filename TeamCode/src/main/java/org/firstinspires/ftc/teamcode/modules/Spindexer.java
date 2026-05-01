@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -22,9 +23,12 @@ public class Spindexer {
             // MAKE SURE CONFIG NAMES MATCH: "spindexerServo" and "spindexerEncoder"
             CRServo servo = hardwareMap.get(CRServo.class, "spindexerServo");
             AnalogInput encoder = hardwareMap.get(AnalogInput.class, "spindexerEncoder");
+            
+            // secondaryEncoder is now a DcMotorEx for ABI Quadrature mode
+            DcMotorEx secondaryEncoder = hardwareMap.get(DcMotorEx.class, "left_back");
 
             // Initialize the RTPAxon wrapper
-            axon = new RTPAxon(servo, encoder);
+            axon = new RTPAxon(servo, encoder, secondaryEncoder);
         }
 
         public static void spindexer_loop() {
@@ -104,9 +108,12 @@ public class Spindexer {
                 telemetry.addData("Axon Target", "%.1f", axon.getTargetAngle());
                 telemetry.addData("Axon Current", "%.1f", axon.getCurrentAngle());
                 telemetry.addData("Axon Raw Volts", "%.3f", axon.getRawVoltage());
-
+                
+                if (axon.secondaryEncoder != null) {
+                    telemetry.addData("Secondary Angle (Quad)", "%.1f", axon.getSecondaryAbsolutePosition());
+                    telemetry.addData("Secondary Ticks", "%.0f", axon.getSecondaryTicks());
+                }
             }
-
         }
     }
 }
