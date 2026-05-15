@@ -83,21 +83,20 @@ public class Spindexer {
                     case 2: setTargetRotation(116);
                         break;
                     case 3: setTargetRotation(235);
-//                        break;
-
-
-//                    case 4: setTargetRotation(351);
-//                        break;
-//                    case 5: setTargetRotation(110);
-//                        break;
-//                    case 6: setTargetRotation(225);
-//                        break;
-//                    case 1: setTargetRotation(284);
-//                        break;
-//                    case 2: setTargetRotation(50);
-//                        break;
-//                    case 3: setTargetRotation(172);
                         break;
+
+//                    case 4: setTargetRotation(304);
+//                        break;
+//                    case 5: setTargetRotation(68);
+//                        break;
+//                    case 6: setTargetRotation(187);
+//                        break;
+//                    case 1: setTargetRotation(350);
+//                        break;
+//                    case 2: setTargetRotation(110);
+//                        break;
+//                    case 3: setTargetRotation(244);
+//                        break;
                 }
             }
         }
@@ -107,12 +106,12 @@ public class Spindexer {
             if (axon != null) {
                 telemetry.addData("Axon Target", "%.1f", axon.getTargetAngle());
                 telemetry.addData("Axon Current", "%.1f", axon.getCurrentAngle());
-                telemetry.addData("Axon Raw Volts", "%.3f", axon.getRawVoltage());
+                //telemetry.addData("Axon Raw Volts", "%.3f", axon.getRawVoltage());
                 
-                if (axon.secondaryEncoder != null) {
-                    telemetry.addData("Secondary Angle (Quad)", "%.1f", axon.getSecondaryAbsolutePosition());
-                    telemetry.addData("Secondary Ticks", "%.0f", axon.getSecondaryTicks());
-                }
+//                if (axon.secondaryEncoder != null) {
+//                    telemetry.addData("Secondary Angle (Quad)", "%.1f", axon.getSecondaryAbsolutePosition());
+//                    telemetry.addData("Secondary Ticks", "%.0f", axon.getSecondaryTicks());
+//                }
             }
         }
     }

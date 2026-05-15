@@ -98,12 +98,12 @@ public class ColorSensor {
                 (int)(colors.green * 255),
                 (int)(colors.blue * 255)), hsv);
 
-        telemetry.addData("Hue", hsv[0]);
+        //telemetry.addData("Hue", hsv[0]);
         for (int i = 0; i < spindexerSlots.length; i++) {
             telemetry.addData("Slot " + (i + 1), spindexerSlots[i]);
         }
-        telemetry.addData("Current Color:",getColor());
-        telemetry.addData("Spindexer Mode", spindexerMode);
+        //telemetry.addData("Current Color:",getColor());
+        //telemetry.addData("Spindexer Mode", spindexerMode);
     }
 
 }

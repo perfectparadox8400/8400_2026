@@ -107,8 +107,8 @@ import java.util.List;
             turretPosition = Range.clip(turretPosition, 0, 1);
             Launcher.turret.setPosition(turretPosition);
 
-            telemetry.addData("Auto Aim", autoAim ? "ON" : "OFF");
-            telemetry.addData("Turret target Position", turretPosition);
+            //telemetry.addData("Auto Aim", autoAim ? "ON" : "OFF");
+            //telemetry.addData("Turret target Position", turretPosition);
         }
     }
 

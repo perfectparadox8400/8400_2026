@@ -26,8 +26,8 @@ public class Limelight {
         if (result != null && result.isValid()) {
             telemetry.addData("LL tx", result.getTx());
             telemetry.addData("LL ty", result.getTy());
-            telemetry.addData("LL ta", result.getTa());
-            telemetry.addData("LL Pipeline", result.getPipelineIndex());
+            //telemetry.addData("LL ta", result.getTa());
+            //telemetry.addData("LL Pipeline", result.getPipelineIndex());
             
             // Access fiducial (AprilTag) results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();

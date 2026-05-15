@@ -338,14 +338,14 @@ public class Teleop {
             if (!gamepad1.dpad_down && previousGamepad1DpadDown) {
                 Launcher.b -= 10;
             }
-            if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
-                Launcher.shortM += 1;
-                Launcher.longM += 1;
-            }
-            if (!gamepad1.dpad_left && previousGamepad1DpadLeft) {
-                Launcher.shortM -= 10;
-                Launcher.longM -= 10;
-            }
+//            if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
+//                Launcher.shortM += 1;
+//                Launcher.longM += 1;
+//            }
+//            if (!gamepad1.dpad_left && previousGamepad1DpadLeft) {
+//                Launcher.shortM -= 10;
+//                Launcher.longM -= 10;
+//            }
 //            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
 //                RTPAxon.kD += .1;
 //            }
@@ -395,15 +395,15 @@ public class Teleop {
             colorSensor_telemetry(telemetry, spindexerSlots, spindexerMode);
             telemetry.addData("Flywheel Target", flywheelTargetVelocity);
             telemetry.addData("Flywheel Actual", flyWheel.getVelocity());
-            telemetry.addData("Launcher.B (Base velocity)", Launcher.b);
-            telemetry.addData("Launcher.m (multiplier", Launcher.shortM + ", " + Launcher.longM);
-            telemetry.addData("launchPosition", launchPosition);
-            telemetry.addData("loadPosition", loadPosition);
-            telemetry.addData("tripleshot timer", runTimetripleshot.milliseconds());
-            telemetry.addData("curent spinmode", getSpinPos());
-            telemetry.addData("KP Value", RTPAxon.kP);
-            telemetry.addData("KD Value", RTPAxon.kD);
-            telemetry.addData("Error Value", RTPAxon.lastError);
+            telemetry.addData("Flywheel (Velocity +,-)", Launcher.b);
+            //telemetry.addData("Launcher.m (multiplier", Launcher.shortM + ", " + Launcher.longM);
+            //telemetry.addData("launchPosition", launchPosition);
+            //telemetry.addData("loadPosition", loadPosition);
+            //telemetry.addData("tripleshot timer", runTimetripleshot.milliseconds());
+            telemetry.addData("Spindexer Position", getSpinPos());
+            //telemetry.addData("KP Value", RTPAxon.kP);
+            //telemetry.addData("KD Value", RTPAxon.kD);
+            //telemetry.addData("Error Value", RTPAxon.lastError);
 
             telemetry.update();
         }
