@@ -33,7 +33,7 @@ public class rgate extends LinearOpMode {
                 .stopAndAdd(new Auto.setSpindexerPos4())
                 .stopAndAdd(new Auto.loaderDown())
 
-                .strafeToLinearHeading(new Vector2d(-8, 14.5), Math.toRadians(143))
+                .strafeToLinearHeading(new Vector2d(-30, 14.5), Math.toRadians(126))
 
                 //SHOOT
                 .stopAndAdd(new Auto.Shoot())
@@ -60,7 +60,7 @@ public class rgate extends LinearOpMode {
 
                 .splineToLinearHeading(new Pose2d(-2, 56.5, Math.toRadians(180)), Math.toRadians(360))
 
-                .strafeToLinearHeading(new Vector2d(-8, 14.5), Math.toRadians(143))
+                .strafeToLinearHeading(new Vector2d(-30, 14.5), Math.toRadians(126))
 
                 //SHOOT
                 .stopAndAdd(new Auto.setSpindexerPos4())
@@ -87,7 +87,7 @@ public class rgate extends LinearOpMode {
 
                 .setReversed(true)
 
-                .splineToLinearHeading(new Pose2d(-8, 14.5, Math.toRadians(143)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, 14.5, Math.toRadians(126)), Math.toRadians(180))
 
                 //SHOOT
                 .stopAndAdd(new Auto.setSpindexerPos4())
