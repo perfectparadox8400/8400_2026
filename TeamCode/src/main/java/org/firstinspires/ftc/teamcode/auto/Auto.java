@@ -6,70 +6,81 @@ import static org.firstinspires.ftc.teamcode.modules.Launcher.ballIntake;
 import static org.firstinspires.ftc.teamcode.modules.Launcher.turret;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.setPosition;
 import static org.firstinspires.ftc.teamcode.modules.Spindexer.Nancy.spindexer_loop;
-import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.launchPosition;
-import static org.firstinspires.ftc.teamcode.modules.Teleop.Nancy.loadPosition;
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.InstantFunction;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.modules.Launcher;
 import org.firstinspires.ftc.teamcode.modules.Spindexer;
-import org.firstinspires.ftc.teamcode.modules.Teleop;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-
-import java.time.temporal.Temporal;
 
 public class Auto {
     public static final double Wait = 5;
     public static final double None = 0;
-    private static ElapsedTime autoRunTime = new ElapsedTime();
-    private static ElapsedTime autoRunTimeSpindexer = new ElapsedTime();
 
-    /* -----------LAUNCHER AUTO LOGIC--------------*/
     public static void startLauncher(HardwareMap hardwareMap) {
         Launcher.Nancy.init_launcher(hardwareMap);
-//        loader.setPosition(0);
-//        flyWheel.setPower(1);
-//        ballIntake.setPower(-1);
     }
     public static void startSpindexer(HardwareMap hardwareMap) {
         Spindexer.Nancy.init_spindexer(hardwareMap);
     }
 
-    /* --------SHOOT IN AUTO LOGIC---------*/
+    /* --------NON-BLOCKING SHOOT ACTION---------*/
+    public static class Shoot implements Action {
+        private ElapsedTime timer = null;
 
-    public static class Shoot implements InstantFunction {
         @Override
-        public void run() {
-            autoRunTime.reset();
-            loader.setPosition(0.00);
-//            turret.setPosition(0.5);
-// :)
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (timer == null) {
+                timer = new ElapsedTime();
+                loader.setPosition(0.00);
+            }
 
-            while (autoRunTime.milliseconds() <= 250) {/*waiting for 250 ms before lowering loader*/}
-            loader.setPosition(0.325);
+
+            if (timer.milliseconds() < 250) {
+                return true;
+            } else if (timer.milliseconds() < 1000) {
+                loader.setPosition(0.325);
+                setPosition(5);
+                return true;
+            } else if (timer.milliseconds() < 1750) {
+                loader.setPosition(0.00);
+                return true;
+            } else if (timer.milliseconds() < 2000) {
+                loader.setPosition(0.325);
+                setPosition(6);
+                return true;
+            } else if (timer.milliseconds() < 2750) {
+                loader.setPosition(0.00);
+                return true;
+            } else {
+                loader.setPosition(0.325);
+                return false;
+            }
+
+//            if (timer.milliseconds() < 250) {
+//                return true; // Still waiting
+//            } else {
+//                loader.setPosition(0.325);
+//                new setSpindexerPos1();
+//                return false; // Finished
+//            }
         }
-
     }
 
-    public static class loaderDown implements InstantFunction {
+    public static class loaderDown implements Action {
         @Override
-        public void run() {
+        public boolean run(@NonNull TelemetryPacket packet) {
             loader.setPosition(0.325);
-    }
+            return false;
+        }
     }
 
     /*---------Spindexer Logic---------*/
-
     public static class UpdateSpindexer implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet){
@@ -78,86 +89,74 @@ public class Auto {
         }
     }
 
-    public static class setSpindexerPos1 implements InstantFunction {
+    public static class setSpindexerPos1 implements Action {
         @Override
-        public void run() {
-            setPosition(1);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(1); return false; }
     }
-    public static class setSpindexerPos2 implements InstantFunction {
+    public static class setSpindexerPos2 implements Action {
         @Override
-        public void run() {
-            setPosition(2);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(2); return false; }
     }
-    public static class setSpindexerPos3 implements InstantFunction {
+    public static class setSpindexerPos3 implements Action {
         @Override
-        public void run() {
-            setPosition(3);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(3); return false; }
     }
-    public static class setSpindexerPos4 implements InstantFunction {
+    public static class setSpindexerPos4 implements Action {
         @Override
-        public void run() {
-            setPosition(4);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(4); return false; }
     }
-    public static class setSpindexerPos5 implements InstantFunction {
+    public static class setSpindexerPos5 implements Action {
         @Override
-        public void run() {
-            setPosition(5);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(5); return false; }
     }
-    public static class setSpindexerPos6 implements InstantFunction {
+    public static class setSpindexerPos6 implements Action {
         @Override
-        public void run() {
-            setPosition(6);
-        }
+        public boolean run(@NonNull TelemetryPacket packet) { setPosition(6); return false; }
     }
-
 
     /* --------INTAKE AUTO LOGIC---------*/
-
-    public static class StartIntake implements InstantFunction {
+    public static class StartIntake implements Action {
         @Override
-        public void run() {
+        public boolean run(@NonNull TelemetryPacket packet) {
             ballIntake.setPower(1);
-//            ballIntakeRear.setPower(-1);
+            return false;
         }
     }
-
-    /*----------- FLYWHEEL AUTO LOGIC ----------*/
-    public static class StartFlyWheel implements InstantFunction {
+    public static class ReverseIntake implements Action {
         @Override
-        public void run() {
+        public boolean run(@NonNull TelemetryPacket packet) {
+            ballIntake.setPower(-1);
+            return false;
+        }
+    }
+    /*----------- FLYWHEEL AUTO LOGIC ----------*/
+    public static class StartFlyWheel implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
             flyWheel.setVelocity(-2300);
             turret.setPosition(0.5);
+            return false;
         }
     }
 
-    public static class StartFlyWheelLow implements InstantFunction {
+    public static class StartFlyWheelLow implements Action {
         @Override
-        public void run() {
+        public boolean run(@NonNull TelemetryPacket packet) {
             flyWheel.setVelocity(-1980);
             turret.setPosition(0.5);
+            return false;
         }
     }
-
 
     public static class SetPose implements Action {
         private final MecanumDrive drive;
-
-        public SetPose(MecanumDrive drive) {
-            this.drive = drive;
-        }
-
+        public SetPose(MecanumDrive drive) { this.drive = drive; }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             PoseStorage.currentPose = drive.localizer.getPose();
             return true;
         }
     }
-
 
     public static Action setPose(MecanumDrive drive) {
         return new SetPose(drive);

@@ -29,7 +29,7 @@ public class meepmeeptesting {
                 .build();
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37,-55, Math.toRadians(90)))
 
-
+                .strafeToLinearHeading(new Vector2d(-37,-34), Math.toRadians(90))
                 .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT

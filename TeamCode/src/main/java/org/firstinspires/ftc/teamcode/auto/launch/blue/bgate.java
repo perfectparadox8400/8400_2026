@@ -31,6 +31,7 @@ public class bgate extends LinearOpMode {
                 .stopAndAdd(new Auto.setSpindexerPos4())
                 .stopAndAdd(new Auto.loaderDown())
 
+                .strafeToLinearHeading(new Vector2d(-37,-34), Math.toRadians(90))
                 .strafeToLinearHeading(new Vector2d(-8, -14.5), Math.toRadians(217))
 
                 //SHOOT

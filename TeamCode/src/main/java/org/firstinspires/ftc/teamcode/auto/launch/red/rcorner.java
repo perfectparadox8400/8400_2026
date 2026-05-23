@@ -55,12 +55,12 @@ public class rcorner extends LinearOpMode {
                     .stopAndAdd(new Auto.Shoot())
                     .stopAndAdd(new Auto.setSpindexerPos1())
 
-                    .strafeToLinearHeading(new Vector2d(58, 62.5), Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(58, 60.5), Math.toRadians(90))
 
                     // pickup
                     .stopAndAdd(new Auto.setSpindexerPos2())
                     .waitSeconds(0.5)
-                    .strafeToLinearHeading(new Vector2d(61.5, 62.5), Math.toRadians(90))
+                    .strafeToLinearHeading(new Vector2d(61.5, 60.5), Math.toRadians(90))
                     .waitSeconds(0.25)
                     .stopAndAdd(new Auto.setSpindexerPos3())
 
