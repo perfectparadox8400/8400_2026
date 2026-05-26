@@ -41,12 +41,13 @@ public class rShortTest extends LinearOpMode {
                     .waitSeconds(0.2)
                     .stopAndAdd(new Auto.Shoot())
 
-                    // 5. Pickup 2 from next line (X = -12)
+                    // 5. Pickup from line 2
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.RedLine2, Auto.RedLoadAngle)
-                    .strafeToLinearHeading(Auto.RedPickup2, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedMid2, Auto.RedLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos2())
-                    .afterTime(0.5, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.RedPickup2, Auto.RedLoadAngle)
+                    .afterTime(0.25, new Auto.setSpindexerPos3())
                     .waitSeconds(0.5)
 
                     // 6. Open Gate maneuver 1
@@ -67,9 +68,10 @@ public class rShortTest extends LinearOpMode {
                     // 2. Pickup from line 1
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.RedLine1, Auto.RedLoadAngle)
-                    .strafeToLinearHeading(Auto.RedPickup1, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedMid1, Auto.RedLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos2())
-                    .afterTime(0.5, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.RedPickup1, Auto.RedLoadAngle)
+                    .afterTime(0.25, new Auto.setSpindexerPos3())
                     .waitSeconds(0.5)
 
 

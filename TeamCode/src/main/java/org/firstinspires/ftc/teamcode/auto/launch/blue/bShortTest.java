@@ -44,9 +44,10 @@ public class bShortTest extends LinearOpMode {
                     // 5. Pickup from line 2
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.BlueLine2, Auto.BlueLoadAngle)
-                    .strafeToLinearHeading(Auto.BluePickup2, Auto.BlueLoadAngle)
+                    .strafeToLinearHeading(Auto.BlueMid2, Auto.BlueLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos2())
-                    .afterTime(0.5, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.BluePickup2, Auto.BlueLoadAngle)
+                    .afterTime(0.25, new Auto.setSpindexerPos3())
                     .waitSeconds(0.5)
 
                     // 6. Open Gate maneuver 1
@@ -66,8 +67,9 @@ public class bShortTest extends LinearOpMode {
                     // 2. Pickup from line 1
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.BlueLine1, Auto.BlueLoadAngle)
-                    .strafeToLinearHeading(Auto.BluePickup1, Auto.BlueLoadAngle)
+                    .strafeToLinearHeading(Auto.BlueMid1, Auto.BlueLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos2())
+                    .strafeToLinearHeading(Auto.BluePickup1, Auto.BlueLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos3())
                     .waitSeconds(0.5)
 

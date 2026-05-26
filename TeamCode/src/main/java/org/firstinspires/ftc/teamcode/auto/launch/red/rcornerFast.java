@@ -66,15 +66,13 @@ public class rcornerFast extends LinearOpMode {
                     .stopAndAdd(new Auto.Shoot())
 
 
-//                   LOAD 2: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
+//                   LOAD 2
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
                     .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos2())
-                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
+                    .stopAndAdd(new Auto.setSpindexerPos2())
                     .afterTime(.25, new Auto.setSpindexerPos3())
-
-                    .waitSeconds(.5)
+                    .strafeToLinearHeading(Auto.RedCornerCorner, Math.toRadians(90))
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -90,9 +88,9 @@ public class rcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
                     .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos2())
-                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos3())
+                    .stopAndAdd(new Auto.setSpindexerPos2())
+                    .afterTime(.25, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.RedCornerCorner, Math.toRadians(90))
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())

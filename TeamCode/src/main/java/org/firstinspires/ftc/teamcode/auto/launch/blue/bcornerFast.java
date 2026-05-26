@@ -22,7 +22,7 @@ public class bcornerFast extends LinearOpMode {
 
     @Override
     public void runOpMode()  {
-        // Mirrored start pose for Blue Corner
+        // MirroBlue start pose for Blue Corner
         Pose2d start = Auto.startBlueLong;
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
@@ -36,7 +36,7 @@ public class bcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.loaderDown())
                     .afterTime(0, new Auto.setSpindexerPos4())
 
-                    // Drive to shooting position (Mirrored Heading 180-162 = 18)
+                    // Drive to shooting position (MirroBlue Heading 180-162 = 18)
                     .strafeToLinearHeading(Auto.shootBlueLong, Auto.shootBlueLongAngle)
                     .waitSeconds(0.25)
 
@@ -46,7 +46,7 @@ public class bcornerFast extends LinearOpMode {
                     // LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
 
-                    // Mirrored pickup trajectories
+                    // MirroBlue pickup trajectories
                     .strafeToLinearHeading(Auto.BlueCornerPrep, Math.toRadians(90))
                     .strafeToLinearHeading(Auto.BlueCornerGoto, Math.toRadians(90))
                     .afterTime(.25, new Auto.setSpindexerPos2())
@@ -69,11 +69,9 @@ public class bcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.BlueCornerPrep2, Math.toRadians(90))
                     .strafeToLinearHeading(Auto.BlueCornerBackup, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos2())
-                    .strafeToLinearHeading(Auto.BlueCornerSlide, Math.toRadians(90))
+                    .stopAndAdd(new Auto.setSpindexerPos2())
                     .afterTime(.25, new Auto.setSpindexerPos3())
-
-                    .waitSeconds(.5)
+                    .strafeToLinearHeading(Auto.BlueCornerCorner, Math.toRadians(90))
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -88,9 +86,9 @@ public class bcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.BlueCornerPrep2, Math.toRadians(90))
                     .strafeToLinearHeading(Auto.BlueCornerBackup, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos2())
-                    .strafeToLinearHeading(Auto.BlueCornerSlide, Math.toRadians(90))
-                    .afterTime(.5, new Auto.setSpindexerPos3())
+                    .stopAndAdd(new Auto.setSpindexerPos2())
+                    .afterTime(.25, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.BlueCornerCorner, Math.toRadians(90))
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())

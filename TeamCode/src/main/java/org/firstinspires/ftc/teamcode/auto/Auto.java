@@ -29,7 +29,7 @@ import java.util.List;
 
 public class Auto {
     // ----- RED -------
-    public static final Pose2d startRedShort = new Pose2d(-40, 58, Math.toRadians(270));
+    public static final Pose2d startRedShort = new Pose2d(-40, 56, Math.toRadians(270));
     public static final Vector2d shootRedShort = new Vector2d(-16, 14);
     public static final double shootRedShortAngle = Math.toRadians(135);
     public static final Pose2d startRedLong = new Pose2d(-61.5, 14.5, 3.142);
@@ -37,10 +37,13 @@ public class Auto {
     public static final double shootRedLongAngle = Math.toRadians(162);
     public static final Vector2d RedLine1 = new Vector2d(-12,25);
     public static final Vector2d RedPickup1 = new Vector2d(-12,54);
+    public static final Vector2d RedMid1 = new Vector2d(-12, 40);
     public static final Vector2d RedLine2 = new Vector2d(15,25);
     public static final Vector2d RedPickup2 = new Vector2d(15,60);
+    public static final Vector2d RedMid2 = new Vector2d(15, 40);
     public static final Vector2d RedLine3 = new Vector2d(36,25);
     public static final Vector2d RedPickup3 = new Vector2d(36,60);
+    public static final Vector2d RedMid3 = new Vector2d(36, 40);
     public static final double RedLoadAngle = Math.toRadians(90);
     public static final Vector2d moveToRedGate = new Vector2d(-6,45);
     public static final Vector2d openRedGate = new Vector2d(5,53);
@@ -52,7 +55,8 @@ public class Auto {
     public static final Vector2d RedCornerGoto = new Vector2d(58, 60);
     public static final Vector2d RedCornerSlide = new Vector2d(65, 59.5);
     public static final Vector2d RedCornerPrep2 = new Vector2d(-65, 40);
-    public static final Vector2d RedCornerBackup = new Vector2d(-61.5, 61);
+    public static final Vector2d RedCornerCorner = new Vector2d(-65, 60);
+    public static final Vector2d RedCornerBackup = new Vector2d(-65, 58);
     public static final int LongRedEndPosit = -35;
     // ----- BLUE -------
     public static final Pose2d startBlueShort = new Pose2d(-40, -56, Math.toRadians(90));
@@ -63,10 +67,13 @@ public class Auto {
     public static final double shootBlueLongAngle = Math.toRadians(18);
     public static final Vector2d BlueLine1 = new Vector2d(-12,-25);
     public static final Vector2d BluePickup1 = new Vector2d(-12,-54);
+    public static final Vector2d BlueMid1 = new Vector2d(-12, -40);
     public static final Vector2d BlueLine2 = new Vector2d(15,-25);
     public static final Vector2d BluePickup2 = new Vector2d(15,-60);
+    public static final Vector2d BlueMid2 = new Vector2d(15, -40);
     public static final Vector2d BlueLine3 = new Vector2d(36,-25);
     public static final Vector2d BluePickup3 = new Vector2d(36,-60);
+    public static final Vector2d BlueMid3 = new Vector2d(36, -40);
     public static final double BlueLoadAngle = Math.toRadians(270);
     public static final Vector2d moveToBlueGate = new Vector2d(-6,-45);
     public static final Vector2d openBlueGate = new Vector2d(5,-53);
@@ -78,7 +85,8 @@ public class Auto {
     public static final Vector2d BlueCornerPrep2 = new Vector2d(-65, 40);
     public static final Vector2d BlueCornerGoto = new Vector2d(-58, 60);
     public static final Vector2d BlueCornerSlide = new Vector2d(-65, 59.5);
-    public static final Vector2d BlueCornerBackup = new Vector2d(-61.5, 61);
+    public static final Vector2d BlueCornerCorner = new Vector2d (-65, 60);
+    public static final Vector2d BlueCornerBackup = new Vector2d(-65, 58);
     public static final int LongBlueEndPosit = -35;
     public static final double Wait = 5;
     public static final double None = 0;
