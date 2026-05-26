@@ -13,14 +13,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.auto.Auto;
+import org.firstinspires.ftc.teamcode.modules.Launcher;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+
+
 
 @Autonomous(name="rcornerFast", group = "auto")
 public class rcornerFast extends LinearOpMode {
 
     @Override
     public void runOpMode()  {
-        Pose2d start = new Pose2d(61.5,14.5, 3.142);
+        Pose2d start = Auto.startRedLong;
         MecanumDrive drive = new MecanumDrive(hardwareMap, start);
         startLauncher(hardwareMap);
         startSpindexer(hardwareMap);
@@ -34,91 +37,87 @@ public class rcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.setSpindexerPos4())
 
                     // Drive to shooting position
-                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(162))
-                    .waitSeconds(0.1) 
+                    .strafeToLinearHeading(Auto.shootRedLong, Auto.shootRedLongAngle)
+                    .waitSeconds(0.25)
 
                     // SHOOT 1 Sequence
                     .stopAndAdd(new Auto.Shoot())
-//                    .stopAndAdd(new Auto.setSpindexerPos5()) // Rotate while waiting
-//                    .waitSeconds(0.4)
-//                    .stopAndAdd(new Auto.Shoot())
-//                    .stopAndAdd(new Auto.setSpindexerPos6()) // Rotate while waiting
-//                    .waitSeconds(0.4)
-//                    .stopAndAdd(new Auto.Shoot())
                     
                     // LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(new Vector2d(58, 61), Math.toRadians(90))
 
-                    //.waitSeconds(0.2)
-                    .stopAndAdd(new Auto.setSpindexerPos2())
-                    .waitSeconds(1)
-                    .strafeToLinearHeading(new Vector2d(61.5, 61), Math.toRadians(90))
-                    .stopAndAdd(new Auto.setSpindexerPos3())
-                    .waitSeconds(1)
-                    //.waitSeconds(0.8) // Wait for rings to load
+                    // New pickup
+                    .strafeToLinearHeading(Auto.RedCornerPrep, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerGoto, Math.toRadians(90))
+                    .afterTime(.25, new Auto.setSpindexerPos2())
+                    .waitSeconds(.25)
+                    .afterTime(.5, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
+
+                    .waitSeconds(.5)
 
                     // Return: Prep launch pos and clear intake WHILE driving
-                    .afterTime(0, new Auto.setSpindexerPos4())
-                    .afterTime(.5, new Auto.ReverseIntake())
-                    .afterTime(.6, new Auto.StartIntake())
-                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+                    .afterTime(.5, new Auto.setSpindexerPos4())
+//                    .afterTime(.6, new Auto.ReverseIntake())
+//                    .afterTime(.7, new Auto.StartIntake())
+                    .strafeToLinearHeading(Auto.shootRedLong, Auto.shootRedLongAngle)
 
                     // SHOOT 2 Sequence
                     .stopAndAdd(new Auto.Shoot())
 
 
-// LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
+//                   LOAD 2: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(new Vector2d(58, 61), Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
+                    .afterTime(.5, new Auto.setSpindexerPos2())
+                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
+                    .afterTime(.25, new Auto.setSpindexerPos3())
 
-                    //.waitSeconds(0.2)
-                    .stopAndAdd(new Auto.setSpindexerPos2())
-                    .waitSeconds(1)
-                    .strafeToLinearHeading(new Vector2d(61.5, 61), Math.toRadians(90))
-                    .stopAndAdd(new Auto.setSpindexerPos3())
-                    .waitSeconds(1)
-                    //.waitSeconds(0.8) // Wait for rings to load
+                    .waitSeconds(.5)
 
                     // Return: Prep launch pos and clear intake WHILE driving
-                    .afterTime(0, new Auto.setSpindexerPos4())
-                    .afterTime(.5, new Auto.ReverseIntake())
-                    .afterTime(.6, new Auto.StartIntake())
-                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+                    .afterTime(.5, new Auto.setSpindexerPos4())
+//                    .afterTime(.6, new Auto.ReverseIntake())
+//                    .afterTime(.7, new Auto.StartIntake())
+                    .strafeToLinearHeading(Auto.shootRedLong, Auto.shootRedLongAngle)
 
                     // SHOOT 3 Sequence
                     .stopAndAdd(new Auto.Shoot())
 
 
-// LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
+//                  LOAD 3: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(new Vector2d(58, 61), Math.toRadians(90))
-
-                    //.waitSeconds(0.2)
-                    .stopAndAdd(new Auto.setSpindexerPos2())
-                    .waitSeconds(1)
-                    .strafeToLinearHeading(new Vector2d(61.5, 61), Math.toRadians(90))
-                    .stopAndAdd(new Auto.setSpindexerPos3())
-                    .waitSeconds(1)
-                    //.waitSeconds(0.8) // Wait for rings to load
+                    .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
+                    .afterTime(.5, new Auto.setSpindexerPos2())
+                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
+                    .afterTime(.5, new Auto.setSpindexerPos3())
 
                     // Return: Prep launch pos and clear intake WHILE driving
-                    .afterTime(0, new Auto.setSpindexerPos4())
-                    .afterTime(.5, new Auto.ReverseIntake())
-                    .afterTime(.6, new Auto.StartIntake())
-                    .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(159))
+                    .afterTime(.5, new Auto.setSpindexerPos4())
+//                    .afterTime(.6, new Auto.ReverseIntake())
+//                    .afterTime(.7, new Auto.StartIntake())
+                    .strafeToLinearHeading(Auto.shootRedLong, Auto.shootRedLongAngle)
 
                     // SHOOT 4 Sequence
                     .stopAndAdd(new Auto.Shoot())
 
 
-                    .lineToX(35);
+                    .lineToX(Auto.LongRedEndPosit);
 
             waitForStart();
+            
+            // Center the turret at the START of the match
+            if (Launcher.turret != null) {
+                Launcher.turret.setPosition(0.5);
+            }
 
-            // Run the spindexer PID loop and the trajectory builder in parallel
+            // Run background loops and the trajectory builder in parallel
+            // Target ID 24 with 1 degree offset for red corner
             Actions.runBlocking(new RaceAction(
                     new Auto.UpdateSpindexer(), 
+                    new Auto.AutoTurretTrack(24, 2.0),
                     step1.build()               
             ));
         }
