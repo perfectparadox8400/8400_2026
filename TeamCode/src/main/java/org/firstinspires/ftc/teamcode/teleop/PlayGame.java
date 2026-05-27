@@ -21,7 +21,7 @@ import java.util.List;
         private boolean autoAim = true;
         private double Kp = 0.00075;
         private int currentID = 20;
-
+        private double offset = -1.0;
         private boolean previousLeftTrigger = false;
 
         @Override
@@ -85,7 +85,8 @@ import java.util.List;
                         if (fr.getFiducialId() == currentID
                         ) {
                             double tx = fr.getTargetXDegrees();
-                            turretPosition -= tx * Kp;
+                            double aimedTx = tx + offset;
+                            turretPosition -= aimedTx * Kp;
                             break;
                         }
                     }
@@ -95,11 +96,13 @@ import java.util.List;
             if (gamepad2.dpad_down){
                 rumbleBlip(gamepad2, 2);
                     currentID = 24;
+                    offset = 1.0;
                     gamepad2.setLedColor(255,0,0,999999999);
                 }
             if (gamepad2.dpad_up) {
                 rumbleBlip(gamepad2, 2);
                     currentID = 20;
+                    offset = -1.0;
                     gamepad2.setLedColor(0,0,255,999999999);
                 }
 
