@@ -44,17 +44,17 @@ public class rLong extends LinearOpMode {
                     .stopAndAdd(new Auto.Shoot())
 
                     // LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
-                    .afterTime(0, new Auto.setSpindexerPos1())
 
-                    // MirroRed pickup trajectories
-                    .strafeToLinearHeading(Auto.RedCornerPrep, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.RedCornerGoto, Math.toRadians(90))
+                    // 1st pickup corner
+                    // 5. Pickup from line 3
+
+                    .afterTime(0, new Auto.setSpindexerPos1())
+                    .strafeToLinearHeading(Auto.RedCornerPrep, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedCornerGoto, Auto.RedLoadAngle)
                     .afterTime(.25, new Auto.setSpindexerPos2())
                     .waitSeconds(.25)
                     .afterTime(.5, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
-
-                    .waitSeconds(.5)
+                    .strafeToLinearHeading(Auto.RedCornerSlide, Auto.RedLoadAngle)
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -65,7 +65,6 @@ public class rLong extends LinearOpMode {
                     // SHOOT 2 Sequence
                     .stopAndAdd(new Auto.Shoot())
 
-                    // 5. Pickup from line 3
                     .afterTime(0, new Auto.setSpindexerPos1())
                     .strafeToLinearHeading(Auto.RedLine3, Auto.RedLoadAngle)
                     .strafeToLinearHeading(Auto.RedMid3, Auto.RedLoadAngle)
@@ -73,6 +72,7 @@ public class rLong extends LinearOpMode {
                     .strafeToLinearHeading(Auto.RedPickup3, Auto.RedLoadAngle)
                     .afterTime(0.25, new Auto.setSpindexerPos3())
                     .waitSeconds(0.5)
+
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -85,11 +85,11 @@ public class rLong extends LinearOpMode {
 
                     // LOAD 2
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerPrep2, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedCornerBackup, Auto.RedLoadAngle)
                     .stopAndAdd(new Auto.setSpindexerPos2())
                     .afterTime(.25, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.RedCornerCorner, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerCorner, Auto.RedLoadAngle)
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -113,7 +113,7 @@ public class rLong extends LinearOpMode {
             // Target ID 20 with -1.0 degree offset for Red Corner middle aim
             Actions.runBlocking(new RaceAction(
                     new Auto.UpdateSpindexer(),
-                    new Auto.AutoTurretTrack(20, -2.0),
+                    new Auto.AutoTurretTrack(24, 2.0),
                     step1.build()
             ));
         }

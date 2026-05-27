@@ -46,15 +46,15 @@ public class bLong extends LinearOpMode {
                     // LOAD 1: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
 
-                    // MirroBlue pickup trajectories
-                    .strafeToLinearHeading(Auto.BlueCornerPrep, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.BlueCornerGoto, Math.toRadians(90))
-                    .afterTime(.25, new Auto.setSpindexerPos2())
-                    .waitSeconds(.25)
-                    .afterTime(.5, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.BlueCornerSlide, Math.toRadians(90))
+                    // 5 pickup from corner
+                    .strafeToLinearHeading(Auto.BlueCornerPrep2, Auto.BlueLoadAngle)
+                    .strafeToLinearHeading(Auto.BlueCornerBackup, Auto.BlueLoadAngle)
+                    .stopAndAdd(new Auto.setSpindexerPos2())
+                    .afterTime(.25, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.BlueCornerCorner, Auto.BlueLoadAngle)
 
-                    .waitSeconds(.5)
+
+
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -65,14 +65,16 @@ public class bLong extends LinearOpMode {
                     // SHOOT 2 Sequence
                     .stopAndAdd(new Auto.Shoot())
 
-                    // 5. Pickup from line 3
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(Auto.BlueLine3, Auto.BlueLoadAngle)
-                    .strafeToLinearHeading(Auto.BlueMid3, Auto.BlueLoadAngle)
-                    .afterTime(0.25, new Auto.setSpindexerPos2())
-                    .strafeToLinearHeading(Auto.BluePickup3, Auto.BlueLoadAngle)
-                    .afterTime(0.25, new Auto.setSpindexerPos3())
-                    .waitSeconds(0.5)
+                    .strafeToLinearHeading(Auto.BlueCornerPrep, Auto.BlueLoadAngle)
+                    .strafeToLinearHeading(Auto.BlueCornerGoto, Auto.BlueLoadAngle)
+                    .afterTime(.25, new Auto.setSpindexerPos2())
+                    .waitSeconds(.25)
+                    .afterTime(.5, new Auto.setSpindexerPos3())
+                    .strafeToLinearHeading(Auto.BlueCornerSlide, Auto.BlueLoadAngle)
+
+                    .waitSeconds(.5)
+
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -85,11 +87,12 @@ public class bLong extends LinearOpMode {
 
                     // LOAD 2
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(Auto.BlueCornerPrep2, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.BlueCornerBackup, Math.toRadians(90))
-                    .stopAndAdd(new Auto.setSpindexerPos2())
-                    .afterTime(.25, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.BlueCornerCorner, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.BlueLine3, Auto.BlueLoadAngle)
+                    .strafeToLinearHeading(Auto.BlueMid3, Auto.BlueLoadAngle)
+                    .afterTime(0.25, new Auto.setSpindexerPos2())
+                    .strafeToLinearHeading(Auto.BluePickup3, Auto.BlueLoadAngle)
+                    .afterTime(0.25, new Auto.setSpindexerPos3())
+                    .waitSeconds(0.5)
 
                     // Return
                     .afterTime(.5, new Auto.setSpindexerPos4())

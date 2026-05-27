@@ -76,7 +76,7 @@ public class bShortTest extends LinearOpMode {
 
                     // 3. Open Gate maneuver 2
                     .strafeToLinearHeading(Auto.moveToBlueGate, Auto.BlueLoadAngle)
-                    .strafeToLinearHeading(new Vector2d(3, -45), Math.toRadians(360))
+                    .strafeToLinearHeading(new Vector2d(3, -45), Auto.BlueLoadAngle)
                     .strafeToLinearHeading(Auto.openBlueGate, Auto.openBlueGateAngle)
 
                     // 7. Return and Launch
@@ -117,7 +117,7 @@ public class bShortTest extends LinearOpMode {
             // Run Spindexer PID, Limelight Tracking (ID 20, Offset -1.0), and Drivetrain path in parallel
             Actions.runBlocking(new RaceAction(
                     new Auto.UpdateSpindexer(), 
-                    new Auto.AutoTurretTrack(20, -1.0),
+                    new Auto.AutoTurretTrack(20, -2.0),
                     step1.build()               
             ));
         }

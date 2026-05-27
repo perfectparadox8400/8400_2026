@@ -52,7 +52,7 @@ public class rShortTest extends LinearOpMode {
 
                     // 6. Open Gate maneuver 1
 //                    .strafeToLinearHeading(Auto.moveToRedGate, Auto.RedLoadAngle)
-                    .strafeToLinearHeading(new Vector2d(15, 40), Auto.RedLoadAngle)
+                    .strafeToLinearHeading(new Vector2d(15, 30), Auto.openRedGateAngle)
                     .strafeToLinearHeading(Auto.openRedGate, Auto.openRedGateAngle)
 
                     // 4. Return to shooting pos
@@ -118,7 +118,7 @@ public class rShortTest extends LinearOpMode {
             // Run Spindexer PID, Limelight Tracking (ID 20, Offset -1.0), and Drivetrain path in parallel
             Actions.runBlocking(new RaceAction(
                     new Auto.UpdateSpindexer(), 
-                    new Auto.AutoTurretTrack(24, 1.0),
+                    new Auto.AutoTurretTrack(24, 2.0),
                     step1.build()               
             ));
         }

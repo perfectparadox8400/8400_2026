@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.modules.Launcher;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 
-
 @Autonomous(name="rcornerFast", group = "auto")
 public class rcornerFast extends LinearOpMode {
 
@@ -47,12 +46,12 @@ public class rcornerFast extends LinearOpMode {
                     .afterTime(0, new Auto.setSpindexerPos1())
 
                     // New pickup
-                    .strafeToLinearHeading(Auto.RedCornerPrep, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.RedCornerGoto, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerPrep, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedCornerGoto, Auto.RedLoadAngle)
                     .afterTime(.25, new Auto.setSpindexerPos2())
                     .waitSeconds(.25)
                     .afterTime(.5, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.RedCornerSlide, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerSlide, Auto.RedLoadAngle)
 
                     .waitSeconds(.5)
 
@@ -68,11 +67,11 @@ public class rcornerFast extends LinearOpMode {
 
 //                   LOAD 2
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerPrep2, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedCornerBackup, Auto.RedLoadAngle)
                     .stopAndAdd(new Auto.setSpindexerPos2())
                     .afterTime(.25, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.RedCornerCorner, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerCorner, Auto.RedLoadAngle)
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())
@@ -86,11 +85,11 @@ public class rcornerFast extends LinearOpMode {
 
 //                  LOAD 3: Strafe and rotate spindexer to Load Pos 1 at the SAME TIME
                     .afterTime(0, new Auto.setSpindexerPos1())
-                    .strafeToLinearHeading(Auto.RedCornerPrep2, Math.toRadians(90))
-                    .strafeToLinearHeading(Auto.RedCornerBackup, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerPrep2, Auto.RedLoadAngle)
+                    .strafeToLinearHeading(Auto.RedCornerBackup, Auto.RedLoadAngle)
                     .stopAndAdd(new Auto.setSpindexerPos2())
                     .afterTime(.25, new Auto.setSpindexerPos3())
-                    .strafeToLinearHeading(Auto.RedCornerCorner, Math.toRadians(90))
+                    .strafeToLinearHeading(Auto.RedCornerCorner, Auto.RedLoadAngle)
 
                     // Return: Prep launch pos and clear intake WHILE driving
                     .afterTime(.5, new Auto.setSpindexerPos4())

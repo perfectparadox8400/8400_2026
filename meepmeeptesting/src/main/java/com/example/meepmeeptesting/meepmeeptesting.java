@@ -21,10 +21,10 @@ public class meepmeeptesting {
                 .build();
 
         // Path matching bShortTest.java
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5, 14.5, 3.142))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61.5, -14.5, Math.toRadians(180)))
                 // 1. Initial drive to shooting position
-                .strafeToLinearHeading(new Vector2d(55, 14.5), Math.toRadians(162))
-                .strafeToLinearHeading(new Vector2d(58, 40), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(55, -14.5), Math.toRadians(198))
+                .strafeToLinearHeading(new Vector2d(58, -60), Math.toRadians(270))
                 .waitSeconds(1.5) // SHOOT 1 (Simulated)
 
                 .build());
