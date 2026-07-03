@@ -87,6 +87,8 @@ public class Teleop {
 
         private static boolean tripleShotIsActive = false;
 
+        private static boolean previousGamepad1LeftBumper = false;
+        private static boolean previousGamepad1RightBumper = false;
         private static boolean previousGamepad2LeftBumper = false;
         private static boolean previousGamepad2RightBumper = false;
         private static boolean previousGamepad1DpadLeft = false;
@@ -120,6 +122,7 @@ public class Teleop {
             loader.setPosition(0.325);
             start = true;
             ballIntake.setPower(1);
+            flywheelActive = true;
             rumbleBlip(gamepad1, 1);
             rumbleBlip(gamepad2, 2);
             spindexerSlots[0] = "Empty";
@@ -132,11 +135,11 @@ public class Teleop {
             speedControl(gamepad1, gamepad2);
 
             // Hold start and release guide to disable field driving
-            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
-                rumbleBlip(gamepad1, 2);
-                rumbleBlip(gamepad2, 2);
-                fieldDriving = !fieldDriving;
-            }
+//            if ((gamepad1.start && gamepad1.guideWasReleased()) || (gamepad2.start && gamepad2.guideWasReleased())) {
+//                rumbleBlip(gamepad1, 2);
+//                rumbleBlip(gamepad2, 2);
+//                fieldDriving = !fieldDriving;
+//            }
 
             // Resets the internal geography
             if ((gamepad1.back && gamepad1.guideWasReleased()) || (gamepad2.back && gamepad2.guideWasReleased())) {
@@ -161,7 +164,7 @@ public class Teleop {
 //            }
 
             /* -------LOADER LOGIC-------*/
-            if (gamepad2.aWasPressed()) {
+            if (gamepad1.aWasPressed()) {
                 loader.setPosition(0.0);
                 runTime.reset();
             }
@@ -170,24 +173,28 @@ public class Teleop {
             }
 
 
-            if (gamepad2.yWasPressed()) {
+            if (gamepad1.yWasPressed()) {
                 tripleShotIsActive = true;
                 runTimetripleshot.reset();
             }
-            if (gamepad2.bWasPressed()) {
+            if (gamepad1.bWasPressed()) {
                 tripleShotIsActive = false;
                 loader.setPosition(0.325);
             }
             if (tripleShotIsActive) {
                 spindexerMode = "launch";
+
                 //if (runTimetripleshot.milliseconds() < 500) {//changed from 1000
                     //if (getSpinPos() < 4) {
                     //    setPosition(5);
                     //}
                 if (runTimetripleshot.milliseconds() < 200) {//changed from 300
                     if (getSpinPos() < 4) {
-                        setPosition(5);
-                    loader.setPosition(0.0);
+                        setPosition(4);
+                        if (runTimetripleshot.milliseconds() > 200 && runTimetripleshot.milliseconds()  < 400) {//changed from 2000
+                            loader.setPosition(0.0);
+                        }
+
                     }
 
                     else {
@@ -195,10 +202,10 @@ public class Teleop {
                     }
                     startingShotPosition = getSpinPos();
                 }
-                if (runTimetripleshot.milliseconds() > 200 && runTimetripleshot.milliseconds() < 400) {//changed from 1000
+                if (runTimetripleshot.milliseconds() > 400 && runTimetripleshot.milliseconds() < 600) {//changed from 1000
                     loader.setPosition(0.325);
                 }
-                if (runTimetripleshot.milliseconds() > 400 && runTimetripleshot.milliseconds() < 800) {//changed from 1500
+                if (runTimetripleshot.milliseconds() > 600 && runTimetripleshot.milliseconds() < 1000) {//changed from 1500
                     if (startingShotPosition == 4) {
                         setPosition(5);
                     }
@@ -209,13 +216,13 @@ public class Teleop {
                         setPosition(4);
                     }
                 }
-                if (runTimetripleshot.milliseconds() > 800 && runTimetripleshot.milliseconds() < 1000) {//changed from 2000
+                if (runTimetripleshot.milliseconds() > 1000 && runTimetripleshot.milliseconds() < 1200) {//changed from 2000
                     loader.setPosition(0.0);
                 }
-                if (runTimetripleshot.milliseconds() > 1000 && runTimetripleshot.milliseconds() < 1200) {//changed from 2500
+                if (runTimetripleshot.milliseconds() > 1200 && runTimetripleshot.milliseconds() < 1400) {//changed from 2500
                     loader.setPosition(0.325);
                 }
-                if (runTimetripleshot.milliseconds() > 1200 && runTimetripleshot.milliseconds() < 1600) {//changed from 3000
+                if (runTimetripleshot.milliseconds() > 1400 && runTimetripleshot.milliseconds() < 1800) {//changed from 3000
                     if (startingShotPosition == 4) {
                         setPosition(6);
                     }
@@ -226,13 +233,13 @@ public class Teleop {
                         setPosition(5);
                     }
                 }
-                if (runTimetripleshot.milliseconds() > 1600 && runTimetripleshot.milliseconds() < 1800) {//changed from 3500
+                if (runTimetripleshot.milliseconds() > 1800 && runTimetripleshot.milliseconds() < 2000) {//changed from 3500
                     loader.setPosition(0.0);
                 }
-                if (runTimetripleshot.milliseconds() > 1800 && runTimetripleshot.milliseconds() < 2000) {//changed from 4000
+                if (runTimetripleshot.milliseconds() > 2000 && runTimetripleshot.milliseconds() < 2200) {//changed from 4000
                     loader.setPosition(0.325);
                 }
-                if (runTimetripleshot.milliseconds() > 2000 && runTimetripleshot.milliseconds() < 2200) {//changed from 4500
+                if (runTimetripleshot.milliseconds() > 2200 && runTimetripleshot.milliseconds() < 2400) {//changed from 4500
                     tripleShotIsActive = false;
                     setPosition(1);
                     spindexerMode = "load";
@@ -246,7 +253,7 @@ public class Teleop {
 
 
             /* --------FLY WHEEL LOGIC--------*/
-            if (gamepad2.xWasPressed()) {
+            if (gamepad1.xWasPressed()) {
                 flywheelActive = !flywheelActive;
             }
 
@@ -276,27 +283,27 @@ public class Teleop {
             }
 
             /* -------BALL INTAKE LOGIC-------- */
-            if (gamepad1.yWasPressed()) {
-                if (ballIntake.getPower() > 0) {
-                    ballIntake.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(1);
-                    loader.setPosition(.325);
-                }
-            }
-            // Reverse intake
-            if (gamepad1.bWasPressed()) {
-                if (ballIntake.getPower() < 0) {
-                    ballIntake.setPower(0);
-                    if (loader.getPosition() != .325)
-                        loader.setPosition(.325);
-                } else {
-                    ballIntake.setPower(-1);
-                    loader.setPosition(.325);
-                }
-            }
+//            if (gamepad1.yWasPressed()) {
+//                if (ballIntake.getPower() > 0) {
+//                    ballIntake.setPower(0);
+//                    if (loader.getPosition() != .325)
+//                        loader.setPosition(.325);
+//                } else {
+//                    ballIntake.setPower(1);
+//                    loader.setPosition(.325);
+//                }
+//            }
+//            // Reverse intake
+//            if (gamepad1.bWasPressed()) {
+//                if (ballIntake.getPower() < 0) {
+//                    ballIntake.setPower(0);
+//                    if (loader.getPosition() != .325)
+//                        loader.setPosition(.325);
+//                } else {
+//                    ballIntake.setPower(-1);
+//                    loader.setPosition(.325);
+//                }
+//            }
 
             /*------Color Sensor LOGIC ---------- */
             if (spindexerMode.equals("load")) {
@@ -332,12 +339,12 @@ public class Teleop {
 
 
             /*------Spindexer Servo LOGIC-------- */
-            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
-                Launcher.b += 10;
-            }
-            if (!gamepad1.dpad_down && previousGamepad1DpadDown) {
-                Launcher.b -= 10;
-            }
+//            if (!gamepad1.dpad_up && previousGamepad1DpadUp) {
+//                Launcher.b += 10;
+//            }
+//            if (!gamepad1.dpad_down && previousGamepad1DpadDown) {
+//                Launcher.b -= 10;
+//            }
 //            if (!gamepad1.dpad_right && previousGamepad1DpadRight) {
 //                Launcher.shortM += 1;
 //                Launcher.longM += 1;
@@ -364,7 +371,7 @@ public class Teleop {
             previousGamepad1DpadLeft = gamepad1.dpad_left;
 
 
-            if (!gamepad2.left_bumper && previousGamepad2LeftBumper) {
+            if (!gamepad1.left_bumper && previousGamepad1LeftBumper) {
                 if (loadPosition > 2)
                     loadPosition = 1;
                 else loadPosition++;
@@ -373,7 +380,7 @@ public class Teleop {
                 rotatePositions(spindexerSlots);
             }
 
-            if (!gamepad2.right_bumper && previousGamepad2RightBumper) {
+            if (!gamepad1.right_bumper && previousGamepad1RightBumper) {
                 if (launchPosition > 5)
                     launchPosition = 4;
                 else launchPosition++;
@@ -381,8 +388,8 @@ public class Teleop {
                 spindexerMode = "launch";
                 rotatePositions(spindexerSlots);
             }
-            previousGamepad2LeftBumper = gamepad2.left_bumper;
-            previousGamepad2RightBumper = gamepad2.right_bumper;
+            previousGamepad1LeftBumper = gamepad1.left_bumper;
+            previousGamepad1RightBumper = gamepad1.right_bumper;
 
             // 3. MANDATORY LOOP UPDATE (Calculates PID)
             spindexer_loop();

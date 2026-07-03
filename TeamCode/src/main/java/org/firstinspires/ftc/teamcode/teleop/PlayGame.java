@@ -44,7 +44,7 @@ import java.util.List;
                 Teleop.Nancy.start(gamepad1, gamepad2);
             }
             turretPosition = 0.5;
-            autoAim = true;
+            autoAim = false;
         }
 
         @Override
@@ -72,9 +72,9 @@ import java.util.List;
 
             // Manual control via triggers always overrides auto-aim
             // Using gamepad2 triggers as defined in Teleop.Nancy.loop
-            if (gamepad2.left_trigger > 0.1) {
+            if (gamepad1.left_trigger > 0.1) {
                 turretPosition += 0.005;
-            } else if (gamepad2.right_trigger > 0.1) {
+            } else if (gamepad1.right_trigger > 0.1) {
                 turretPosition -= 0.005;
             } else if (autoAim) {
                 LLResult result = Limelight.limelight.getLatestResult();
@@ -93,18 +93,18 @@ import java.util.List;
                 }
             }
 
-            if (gamepad2.dpad_down){
-                rumbleBlip(gamepad2, 2);
-                    currentID = 24;
-                    offset = 1.0;
-                    gamepad2.setLedColor(255,0,0,999999999);
-                }
-            if (gamepad2.dpad_up) {
-                rumbleBlip(gamepad2, 2);
-                    currentID = 20;
-                    offset = -1.0;
-                    gamepad2.setLedColor(0,0,255,999999999);
-                }
+//            if (gamepad1.dpad_down){
+//                rumbleBlip(gamepad1, 2);
+//                    currentID = 24;
+//                    offset = 1.0;
+//                    gamepad1.setLedColor(255,0,0,999999999);
+//                }
+//            if (gamepad1.dpad_up) {
+//                rumbleBlip(gamepad1, 2);
+//                    currentID = 20;
+//                    offset = -1.0;
+//                    gamepad1.setLedColor(0,0,255,999999999);
+//                }
 
 
             turretPosition = Range.clip(turretPosition, 0, 1);
